@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="原文地址 概要学完了Map的全部内容，我们再回头开开Map的框架图。这里写图片描述 第1部分 Map概括(01) Map 是“键值对”映射的抽象接口。(02) AbstractMap 实现了Map中的绝大部分函数接口。它减少了“Map的实现类”的重复编码。(03) SortedMap 有序的“键值对”映射接口。(04) NavigableMap 是继承于SortedMap的，支持导航函数的接口。(">
@@ -28,7 +28,7 @@
 <meta property="og:description" content="原文地址 概要学完了Map的全部内容，我们再回头开开Map的框架图。这里写图片描述 第1部分 Map概括(01) Map 是“键值对”映射的抽象接口。(02) AbstractMap 实现了Map中的绝大部分函数接口。它减少了“Map的实现类”的重复编码。(03) SortedMap 有序的“键值对”映射接口。(04) NavigableMap 是继承于SortedMap的，支持导航函数的接口。(">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-09-22T03:35:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:00:08.000Z">
+<meta property="article:modified_time" content="2021-07-22T08:53:35.381Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
@@ -119,14 +119,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -225,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 21:00:08" itemprop="dateModified" datetime="2021-02-23T21:00:08+08:00">2021-02-23</time>
+                <time title="修改时间：2021-07-22 16:53:35" itemprop="dateModified" datetime="2021-07-22T16:53:35+08:00">2021-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,20 +238,6 @@
             </span>
 
           
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2018/09/22/HashMap%E5%92%8CHashTable%E5%BC%82%E5%90%8C%EF%BC%88%E8%BD%AC%EF%BC%89/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2018/09/22/HashMap%E5%92%8CHashTable%E5%BC%82%E5%90%8C%EF%BC%88%E8%BD%AC%EF%BC%89/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
 
         </div>
       </header>
@@ -265,18 +251,20 @@
         <p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014952453#articleHeader11">原文地址</a></p>
 <h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>学完了Map的全部内容，我们再回头开开Map的框架图。<br>这里写图片描述</p>
 <p>第1部分 Map概括<br>(01) Map 是“键值对”映射的抽象接口。<br>(02) AbstractMap 实现了Map中的绝大部分函数接口。它减少了“Map的实现类”的重复编码。<br>(03) SortedMap 有序的“键值对”映射接口。<br>(04) NavigableMap 是继承于SortedMap的，支持导航函数的接口。<br>(05) HashMap, Hashtable, TreeMap, WeakHashMap这4个类是“键值对”映射的实现类。它们各有区别！</p>
+<span id="more"></span>
+
 <ul>
 <li>HashMap 是基于“拉链法”实现的散列表。一般用于单线程程序中。</li>
 <li>Hashtable 也是基于“拉链法”实现的散列表。它一般用于多线程程序中。</li>
 <li>WeakHashMap 也是基于“拉链法”实现的散列表，它一般也用于单线程程序中。相比HashMap，WeakHashMap中的键是“弱键”，当“弱键”被GC回收时，它对应的键值对也会被从WeakHashMap中删除；而HashMap中的键是强键。</li>
 <li>TreeMap 是有序的散列表，它是通过红黑树实现的。它一般用于单线程中存储有序的映射。</li>
 </ul>
-<h2 id="第2部分-HashMap和Hashtable异同"><a href="#第2部分-HashMap和Hashtable异同" class="headerlink" title="第2部分 HashMap和Hashtable异同"></a>第2部分 HashMap和Hashtable异同</h2><h3 id="1部分-HashMap和Hashtable的相同点"><a href="#1部分-HashMap和Hashtable的相同点" class="headerlink" title="1部分 HashMap和Hashtable的相同点"></a>1部分 HashMap和Hashtable的相同点</h3><p>HashMap和Hashtable都是存储“键值对(key-value)”的散列表，而且都是采用拉链法实现的。        </p>
+<h2 id="第2部分-HashMap和Hashtable异同"><a href="#第2部分-HashMap和Hashtable异同" class="headerlink" title="第2部分 HashMap和Hashtable异同"></a>第2部分 HashMap和Hashtable异同</h2><h3 id="1部分-HashMap和Hashtable的相同点"><a href="#1部分-HashMap和Hashtable的相同点" class="headerlink" title="1部分 HashMap和Hashtable的相同点"></a>1部分 HashMap和Hashtable的相同点</h3><p>HashMap和Hashtable都是存储“键值对(key-value)”的散列表，而且都是采用拉链法实现的。</p>
 <p>存储的思想都是：通过table数组存储，数组的每一个元素都是一个Entry；而一个Entry就是一个单向链表，Entry链表中的每一个节点就保存了key-value键值对数据。</p>
-<p>添加key-value键值对：首先，根据key值计算出哈希值，再计算出数组索引(即，该key-value在table中的索引)。然后，根据数组索引找到Entry(即，单向链表)，再遍历单向链表，将key和链表中的每一个节点的key进行对比。若key已经存在Entry链表中，则用该value值取代旧的value值；若key不存在Entry链表中，则新建一个key-value节点，并将该节点插入Entry链表的表头位置。        </p>
-<p>删除key-value键值对：删除键值对，相比于“添加键值对”来说，简单很多。首先，还是根据key计算出哈希值，再计算出数组索引(即，该key-value在table中的索引)。然后，根据索引找出Entry(即，单向链表)。若节点key-value存在与链表Entry中，则删除链表中的节点即可。        </p>
-<p>上面介绍了HashMap和Hashtable的相同点。正是由于它们都是散列表，我们关注更多的是“它们的区别，以及它们分别适合在什么情况下使用”。那接下来，我们先看看它们的区别。    </p>
-<h3 id="第2-2部分-HashMap和Hashtable的不同点"><a href="#第2-2部分-HashMap和Hashtable的不同点" class="headerlink" title="第2.2部分 HashMap和Hashtable的不同点"></a>第2.2部分 HashMap和Hashtable的不同点</h3><h4 id="1-继承和实现方式不同"><a href="#1-继承和实现方式不同" class="headerlink" title="1 继承和实现方式不同"></a>1 继承和实现方式不同</h4><p>HashMap 继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。<br>Hashtable 继承于Dictionary，实现了Map、Cloneable、java.io.Serializable接口。    </p>
+<p>添加key-value键值对：首先，根据key值计算出哈希值，再计算出数组索引(即，该key-value在table中的索引)。然后，根据数组索引找到Entry(即，单向链表)，再遍历单向链表，将key和链表中的每一个节点的key进行对比。若key已经存在Entry链表中，则用该value值取代旧的value值；若key不存在Entry链表中，则新建一个key-value节点，并将该节点插入Entry链表的表头位置。</p>
+<p>删除key-value键值对：删除键值对，相比于“添加键值对”来说，简单很多。首先，还是根据key计算出哈希值，再计算出数组索引(即，该key-value在table中的索引)。然后，根据索引找出Entry(即，单向链表)。若节点key-value存在与链表Entry中，则删除链表中的节点即可。</p>
+<p>上面介绍了HashMap和Hashtable的相同点。正是由于它们都是散列表，我们关注更多的是“它们的区别，以及它们分别适合在什么情况下使用”。那接下来，我们先看看它们的区别。</p>
+<h3 id="第2-2部分-HashMap和Hashtable的不同点"><a href="#第2-2部分-HashMap和Hashtable的不同点" class="headerlink" title="第2.2部分 HashMap和Hashtable的不同点"></a>第2.2部分 HashMap和Hashtable的不同点</h3><h4 id="1-继承和实现方式不同"><a href="#1-继承和实现方式不同" class="headerlink" title="1 继承和实现方式不同"></a>1 继承和实现方式不同</h4><p>HashMap 继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。<br>Hashtable 继承于Dictionary，实现了Map、Cloneable、java.io.Serializable接口。</p>
 <p>HashMap的定义:</p>
 <pre><code class="java">public class HashMap&lt;K,V&gt;
     extends AbstractMap&lt;K,V&gt;
@@ -288,13 +276,13 @@
     implements Map&lt;K,V&gt;, Cloneable, java.io.Serializable &#123; ... &#125;
 </code></pre>
 <p>从中，我们可以看出：</p>
-<h5 id="1-1-HashMap和Hashtable都实现了Map、Cloneable、java-io-Serializable接口"><a href="#1-1-HashMap和Hashtable都实现了Map、Cloneable、java-io-Serializable接口" class="headerlink" title="1.1 HashMap和Hashtable都实现了Map、Cloneable、java.io.Serializable接口"></a>1.1 HashMap和Hashtable都实现了Map、Cloneable、java.io.Serializable接口</h5><p>  实现了Map接口，意味着它们都支持key-value键值对操作。支持“添加key-value键值对”、“获取key”、“获取value”、“获取map大小”、“清空map”等基本的key-value键值对操作。<br>  实现了Cloneable接口，意味着它能被克隆。<br>  实现了java.io.Serializable接口，意味着它们支持序列化，能通过序列化去传输。</p>
-<h5 id="1-2-HashMap继承于AbstractMap，而Hashtable继承于Dictionary"><a href="#1-2-HashMap继承于AbstractMap，而Hashtable继承于Dictionary" class="headerlink" title="1.2 HashMap继承于AbstractMap，而Hashtable继承于Dictionary"></a>1.2 HashMap继承于AbstractMap，而Hashtable继承于Dictionary</h5><p>  Dictionary是一个抽象类，它直接继承于Object类，没有实现任何接口。Dictionary类是JDK 1.0的引入的。虽然Dictionary也支持“添加key-value键值对”、“获取value”、“获取大小”等基本操作，但它的API函数比Map少；而且Dictionary一般是通过Enumeration(枚举类)去遍历，Map则是通过Iterator(迭代器)去遍历。 然而‘由于Hashtable也实现了Map接口，所以，它即支持Enumeration遍历，也支持Iterator遍历。关于这点，后面还会进一步说明。        </p>
-<p>  AbstractMap是一个抽象类，它实现了Map接口的绝大部分API函数；为Map的具体实现类提供了极大的便利。它是JDK 1.2新增的类。    </p>
-<h4 id="2-线程安全不同"><a href="#2-线程安全不同" class="headerlink" title="2 线程安全不同"></a>2 线程安全不同</h4><p>Hashtable的几乎所有函数都是同步的，即它是线程安全的，支持多线程。<br>而HashMap的函数则是非同步的，它不是线程安全的。若要在多线程中使用HashMap，需要我们额外的进行同步处理。<br>对HashMap的同步处理可以使用Collections类提供的synchronizedMap静态方法，或者直接使用JDK 5.0之后提供的java.util.concurrent包里的ConcurrentHashMap类。        </p>
-<h4 id="3-对null值的处理不同"><a href="#3-对null值的处理不同" class="headerlink" title="3 对null值的处理不同"></a>3 对null值的处理不同</h4><p>HashMap的key、value都可以为null。<br>Hashtable的key、value都不可以为null。    </p>
+<h5 id="1-1-HashMap和Hashtable都实现了Map、Cloneable、java-io-Serializable接口"><a href="#1-1-HashMap和Hashtable都实现了Map、Cloneable、java-io-Serializable接口" class="headerlink" title="1.1 HashMap和Hashtable都实现了Map、Cloneable、java.io.Serializable接口"></a>1.1 HashMap和Hashtable都实现了Map、Cloneable、java.io.Serializable接口</h5><p>实现了Map接口，意味着它们都支持key-value键值对操作。支持“添加key-value键值对”、“获取key”、“获取value”、“获取map大小”、“清空map”等基本的key-value键值对操作。<br>实现了Cloneable接口，意味着它能被克隆。<br>实现了java.io.Serializable接口，意味着它们支持序列化，能通过序列化去传输。</p>
+<h5 id="1-2-HashMap继承于AbstractMap，而Hashtable继承于Dictionary"><a href="#1-2-HashMap继承于AbstractMap，而Hashtable继承于Dictionary" class="headerlink" title="1.2 HashMap继承于AbstractMap，而Hashtable继承于Dictionary"></a>1.2 HashMap继承于AbstractMap，而Hashtable继承于Dictionary</h5><p>Dictionary是一个抽象类，它直接继承于Object类，没有实现任何接口。Dictionary类是JDK 1.0的引入的。虽然Dictionary也支持“添加key-value键值对”、“获取value”、“获取大小”等基本操作，但它的API函数比Map少；而且Dictionary一般是通过Enumeration(枚举类)去遍历，Map则是通过Iterator(迭代器)去遍历。 然而‘由于Hashtable也实现了Map接口，所以，它即支持Enumeration遍历，也支持Iterator遍历。关于这点，后面还会进一步说明。</p>
+<p>AbstractMap是一个抽象类，它实现了Map接口的绝大部分API函数；为Map的具体实现类提供了极大的便利。它是JDK 1.2新增的类。</p>
+<h4 id="2-线程安全不同"><a href="#2-线程安全不同" class="headerlink" title="2 线程安全不同"></a>2 线程安全不同</h4><p>Hashtable的几乎所有函数都是同步的，即它是线程安全的，支持多线程。<br>而HashMap的函数则是非同步的，它不是线程安全的。若要在多线程中使用HashMap，需要我们额外的进行同步处理。<br>对HashMap的同步处理可以使用Collections类提供的synchronizedMap静态方法，或者直接使用JDK 5.0之后提供的java.util.concurrent包里的ConcurrentHashMap类。</p>
+<h4 id="3-对null值的处理不同"><a href="#3-对null值的处理不同" class="headerlink" title="3 对null值的处理不同"></a>3 对null值的处理不同</h4><p>HashMap的key、value都可以为null。<br>Hashtable的key、value都不可以为null。</p>
 <p>我们先看看HashMap和Hashtable “添加key-value”的方法<br>HashMap的添加key-value的方法</p>
-<pre><code class="java">  1 // 将“key-value”添加到HashMap中
+<pre><code class="java">1 // 将“key-value”添加到HashMap中
  2 public V put(K key, V value) &#123;
  3     // 若“key为null”，则将该键值对添加到table[0]中。
  4     if (key == null)
@@ -338,7 +326,7 @@
 42 &#125;
 </code></pre>
 <p>Hashtable的添加key-value的方法</p>
-<pre><code class="java"> 1 // 将“key-value”添加到Hashtable中
+<pre><code class="java">1 // 将“key-value”添加到Hashtable中
  2 public synchronized V put(K key, V value) &#123;
  3     // Hashtable中不能插入value为null的元素！！！
  4     if (value == null) &#123;
@@ -383,16 +371,16 @@
 42 &#125;
 </code></pre>
 <p>根据上面的代码，我们可以看出：</p>
-<p>Hashtable的key或value，都不能为null！否则，会抛出异常NullPointerException。        </p>
-<p>HashMap的key、value都可以为null。 当HashMap的key为null时，HashMap会将其固定的插入table[0]位置(即HashMap散列表的第一个位置)；而且table[0]处只会容纳一个key为null的值，当有多个key为null的值插入的时候，table[0]会保留最后插入的value。        </p>
-<h4 id="4-支持的遍历种类不同"><a href="#4-支持的遍历种类不同" class="headerlink" title="4 支持的遍历种类不同"></a>4 支持的遍历种类不同</h4><p>HashMap只支持Iterator(迭代器)遍历。<br>而Hashtable支持Iterator(迭代器)和Enumeration(枚举器)两种方式遍历。        </p>
-<p>Enumeration 是JDK 1.0添加的接口，只有hasMoreElements(), nextElement() 两个API接口，不能通过Enumeration()对元素进行修改 。<br>而Iterator 是JDK 1.2才添加的接口，支持hasNext(), next(), remove() 三个API接口。HashMap也是JDK 1.2版本才添加的，所以用Iterator取代Enumeration，HashMap只支持Iterator遍历。    </p>
-<h4 id="5-通过Iterator迭代器遍历时，遍历的顺序不同"><a href="#5-通过Iterator迭代器遍历时，遍历的顺序不同" class="headerlink" title="5 通过Iterator迭代器遍历时，遍历的顺序不同"></a>5 通过Iterator迭代器遍历时，遍历的顺序不同</h4><p>HashMap是“从前向后”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。        </p>
-<p>Hashtabl是“从后往前”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。    </p>
-<p>HashMap和Hashtable都实现Map接口，所以支持获取它们“key的集合”、“value的集合”、“key-value的集合”，然后通过Iterator对这些集合进行遍历。        </p>
-<p>由于“key的集合”、“value的集合”、“key-value的集合”的遍历原理都是一样的；下面，我以遍历“key-value的集合”来进行说明。    </p>
-<p>HashMap 和Hashtable 遍历”key-value集合”的方式是：(01) 通过entrySet()获取“Map.Entry集合”。 (02) 通过iterator()获取“Map.Entry集合”的迭代器，再进行遍历。    </p>
-<p>HashMap的实现方式：先“从前向后”的遍历数组；对数组具体某一项对应的链表，则从表头开始往后遍历。        </p>
+<p>Hashtable的key或value，都不能为null！否则，会抛出异常NullPointerException。</p>
+<p>HashMap的key、value都可以为null。 当HashMap的key为null时，HashMap会将其固定的插入table[0]位置(即HashMap散列表的第一个位置)；而且table[0]处只会容纳一个key为null的值，当有多个key为null的值插入的时候，table[0]会保留最后插入的value。</p>
+<h4 id="4-支持的遍历种类不同"><a href="#4-支持的遍历种类不同" class="headerlink" title="4 支持的遍历种类不同"></a>4 支持的遍历种类不同</h4><p>HashMap只支持Iterator(迭代器)遍历。<br>而Hashtable支持Iterator(迭代器)和Enumeration(枚举器)两种方式遍历。</p>
+<p>Enumeration 是JDK 1.0添加的接口，只有hasMoreElements(), nextElement() 两个API接口，不能通过Enumeration()对元素进行修改 。<br>而Iterator 是JDK 1.2才添加的接口，支持hasNext(), next(), remove() 三个API接口。HashMap也是JDK 1.2版本才添加的，所以用Iterator取代Enumeration，HashMap只支持Iterator遍历。</p>
+<h4 id="5-通过Iterator迭代器遍历时，遍历的顺序不同"><a href="#5-通过Iterator迭代器遍历时，遍历的顺序不同" class="headerlink" title="5 通过Iterator迭代器遍历时，遍历的顺序不同"></a>5 通过Iterator迭代器遍历时，遍历的顺序不同</h4><p>HashMap是“从前向后”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。</p>
+<p>Hashtabl是“从后往前”的遍历数组；再对数组具体某一项对应的链表，从表头开始进行遍历。</p>
+<p>HashMap和Hashtable都实现Map接口，所以支持获取它们“key的集合”、“value的集合”、“key-value的集合”，然后通过Iterator对这些集合进行遍历。</p>
+<p>由于“key的集合”、“value的集合”、“key-value的集合”的遍历原理都是一样的；下面，我以遍历“key-value的集合”来进行说明。</p>
+<p>HashMap 和Hashtable 遍历”key-value集合”的方式是：(01) 通过entrySet()获取“Map.Entry集合”。 (02) 通过iterator()获取“Map.Entry集合”的迭代器，再进行遍历。</p>
+<p>HashMap的实现方式：先“从前向后”的遍历数组；对数组具体某一项对应的链表，则从表头开始往后遍历。</p>
 <pre><code class="java">1 // 返回“HashMap的Entry集合”
  2 public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() &#123;
  3     return entrySet0();
@@ -471,7 +459,7 @@
 76 &#125;
 </code></pre>
 <p>Hashtable的实现方式：先从“后向往前”的遍历数组；对数组具体某一项对应的链表，则从表头开始往后遍历。</p>
-<pre><code class="java"> 1 public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() &#123;
+<pre><code class="java">1 public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() &#123;
  2     if (entrySet==null)
  3         entrySet = Collections.synchronizedSet(new EntrySet(), this);
  4     return entrySet;
@@ -559,7 +547,7 @@
 86 
 87 &#125;
 </code></pre>
-<p>6 容量的初始值 和 增加方式都不一样<br>HashMap默认的容量大小是16；增加容量时，每次将容量变为“原始容量x2”。        </p>
+<p>6 容量的初始值 和 增加方式都不一样<br>HashMap默认的容量大小是16；增加容量时，每次将容量变为“原始容量x2”。</p>
 <p>Hashtable默认的容量大小是11；增加容量时，每次将容量变为“原始容量x2 + 1”。</p>
 <p>HashMap默认的“加载因子”是0.75, 默认的容量大小是16。</p>
 <pre><code class="java">1 // 默认的初始容量是16，必须是2的幂。
@@ -574,7 +562,7 @@
 10 &#125;
 </code></pre>
 <p>当HashMap的 “实际容量” &gt;= “阈值”时，(阈值 = 总的容量 * 加载因子)，就将HashMap的容量翻倍。</p>
-<pre><code class="java"> 1 // 新增Entry。将“key-value”插入指定位置，bucketIndex是位置索引。
+<pre><code class="java">1 // 新增Entry。将“key-value”插入指定位置，bucketIndex是位置索引。
  2 void addEntry(int hash, K key, V value, int bucketIndex) &#123;
  3     // 保存“bucketIndex”位置的值到“e”中
  4     Entry&lt;K,V&gt; e = table[bucketIndex];
@@ -594,7 +582,7 @@
 5 &#125;
 </code></pre>
 <p>当Hashtable的 “实际容量” &gt;= “阈值”时，(阈值 = 总的容量 x 加载因子)，就将变为“原始容量x2 + 1”。</p>
-<pre><code class="java"> 1 // 调整Hashtable的长度，将长度变成原来的(2倍+1)
+<pre><code class="java">1 // 调整Hashtable的长度，将长度变成原来的(2倍+1)
  2 // (01) 将“旧的Entry数组”赋值给一个临时变量。
  3 // (02) 创建一个“新的Entry数组”，并赋值给“旧的Entry数组”
  4 // (03) 将“Hashtable”中的全部元素依次添加到“新的Entry数组”中
@@ -621,9 +609,9 @@
 25     &#125;
 26 &#125;
 </code></pre>
-<h4 id="7-添加key-value时的hash值算法不同"><a href="#7-添加key-value时的hash值算法不同" class="headerlink" title="7 添加key-value时的hash值算法不同"></a>7 添加key-value时的hash值算法不同</h4><p>HashMap添加元素时，是使用自定义的哈希算法。<br>Hashtable没有自定义哈希算法，而直接采用的key的hashCode()。    </p>
+<h4 id="7-添加key-value时的hash值算法不同"><a href="#7-添加key-value时的hash值算法不同" class="headerlink" title="7 添加key-value时的hash值算法不同"></a>7 添加key-value时的hash值算法不同</h4><p>HashMap添加元素时，是使用自定义的哈希算法。<br>Hashtable没有自定义哈希算法，而直接采用的key的hashCode()。</p>
 <p>HashMap添加元素时，是使用自定义的哈希算法。</p>
-<pre><code class="java"> 1 static int hash(int h) &#123;
+<pre><code class="java">1 static int hash(int h) &#123;
  2     h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);
  3     return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);
  4 &#125;
@@ -654,7 +642,7 @@
 29 &#125;
 </code></pre>
 <p>Hashtable没有自定义哈希算法，而直接采用的key的hashCode()。</p>
-<pre><code class="java"> 1 public synchronized V put(K key, V value) &#123;
+<pre><code class="java">1 public synchronized V put(K key, V value) &#123;
  2     // Hashtable中不能插入value为null的元素！！！
  3     if (value == null) &#123;
  4         throw new NullPointerException();
@@ -696,28 +684,25 @@
 39     return null;
 40 &#125;
 </code></pre>
-<p>8 部分API不同<br>Hashtable支持contains(Object value)方法，而且重写了toString()方法；<br>而HashMap不支持contains(Object value)方法，没有重写toString()方法。        </p>
+<p>8 部分API不同<br>Hashtable支持contains(Object value)方法，而且重写了toString()方法；<br>而HashMap不支持contains(Object value)方法，没有重写toString()方法。</p>
 <p>最后，再说说“HashMap和Hashtable”使用的情景。<br>其实，若了解它们之间的不同之处后，可以很容易的区分根据情况进行取舍。例如：</p>
 <ul>
 <li>若在单线程中，我们往往会选择HashMap；而在多线程中，则会选择Hashtable。</li>
 <li>若不能插入null元素，则选择Hashtable；否则，可以选择HashMap。</li>
 </ul>
 <p>但这个不是绝对的标准。例如，在多线程中，我们可以自己对HashMap进行同步，也可以选择ConcurrentHashMap。当HashMap和Hashtable都不能满足自己的需求时，还可以考虑新定义一个类，继承或重新实现散列表；当然，一般情况下是不需要的了。</p>
-<h3 id="第3部分-HashMap和WeakHashMap异同"><a href="#第3部分-HashMap和WeakHashMap异同" class="headerlink" title="第3部分 HashMap和WeakHashMap异同"></a>第3部分 HashMap和WeakHashMap异同</h3><h4 id="3-1-HashMap和WeakHashMap的相同点"><a href="#3-1-HashMap和WeakHashMap的相同点" class="headerlink" title="3.1 HashMap和WeakHashMap的相同点"></a>3.1 HashMap和WeakHashMap的相同点</h4><p>1 它们都是散列表，存储的是“键值对”映射。<br>2 它们都继承于AbstractMap，并且实现Map基础。<br>3 它们的构造函数都一样。<br>它们都包括4个构造函数，而且函数的参数都一样。<br>4 默认的容量大小是16，默认的加载因子是0.75。<br>5 它们的“键”和“值”都允许为null。<br>6 它们都是“非同步的”。    </p>
+<h3 id="第3部分-HashMap和WeakHashMap异同"><a href="#第3部分-HashMap和WeakHashMap异同" class="headerlink" title="第3部分 HashMap和WeakHashMap异同"></a>第3部分 HashMap和WeakHashMap异同</h3><h4 id="3-1-HashMap和WeakHashMap的相同点"><a href="#3-1-HashMap和WeakHashMap的相同点" class="headerlink" title="3.1 HashMap和WeakHashMap的相同点"></a>3.1 HashMap和WeakHashMap的相同点</h4><p>1 它们都是散列表，存储的是“键值对”映射。<br>2 它们都继承于AbstractMap，并且实现Map基础。<br>3 它们的构造函数都一样。<br>它们都包括4个构造函数，而且函数的参数都一样。<br>4 默认的容量大小是16，默认的加载因子是0.75。<br>5 它们的“键”和“值”都允许为null。<br>6 它们都是“非同步的”。</p>
 <h4 id="3-2-HashMap和WeakHashMap的不同点"><a href="#3-2-HashMap和WeakHashMap的不同点" class="headerlink" title="3.2 HashMap和WeakHashMap的不同点"></a>3.2 HashMap和WeakHashMap的不同点</h4><p>1 HashMap实现了Cloneable和Serializable接口，而WeakHashMap没有。<br>HashMap实现Cloneable，意味着它能通过clone()克隆自己。<br>HashMap实现Serializable，意味着它支持序列化，能通过序列化去传输。</p>
 <p>2 HashMap的“键”是“强引用(StrongReference)”，而WeakHashMap的键是“弱引用(WeakReference)”。<br>WeakReference的“弱键”能实现WeakReference对“键值对”的动态回收。当“弱键”不再被使用到时，GC会回收它，WeakReference也会将“弱键”对应的键值对删除。<br>这个“弱键”实现的动态回收“键值对”的原理呢？其实，通过WeakReference(弱引用)和ReferenceQueue(引用队列)实现的。 首先，我们需要了解WeakHashMap中：</p>
 <p>第一，“键”是WeakReference，即key是弱键。<br>第二，ReferenceQueue是一个引用队列，它是和WeakHashMap联合使用的。当弱引用所引用的对象被垃圾回收，Java虚拟机就会把这个弱引用加入到与之关联的引用队列中。 WeakHashMap中的ReferenceQueue是queue。<br>第三，WeakHashMap是通过数组实现的，我们假设这个数组是table。</p>
 <p>接下来，说说“动态回收”的步骤。</p>
 <ol>
-<li><p>新建WeakHashMap，将“键值对”添加到WeakHashMap中。<br>将“键值对”添加到WeakHashMap中时，添加的键都是弱键。实际上，WeakHashMap是通过数组table保存Entry(键值对)；每一个Entry实际上是一个单向链表，即Entry是键值对链表。</p>
-</li>
-<li><p>当某“弱键”不再被其它对象引用，并被GC回收时。在GC回收该“弱键”时，这个“弱键”也同时会被添加到queue队列中。<br>例如，当我们在将“弱键”key添加到WeakHashMap之后；后来将key设为null。这时，便没有外部外部对象再引用该了key。<br>接着，当Java虚拟机的GC回收内存时，会回收key的相关内存；同时，将key添加到queue队列中。</p>
-</li>
-<li><p>当下一次我们需要操作WeakHashMap时，会先同步table和queue。table中保存了全部的键值对，而queue中保存被GC回收的“弱键”；同步它们，就是删除table中被GC回收的“弱键”对应的键值对。        </p>
-</li>
+<li>新建WeakHashMap，将“键值对”添加到WeakHashMap中。<br>将“键值对”添加到WeakHashMap中时，添加的键都是弱键。实际上，WeakHashMap是通过数组table保存Entry(键值对)；每一个Entry实际上是一个单向链表，即Entry是键值对链表。</li>
+<li>当某“弱键”不再被其它对象引用，并被GC回收时。在GC回收该“弱键”时，这个“弱键”也同时会被添加到queue队列中。<br>例如，当我们在将“弱键”key添加到WeakHashMap之后；后来将key设为null。这时，便没有外部外部对象再引用该了key。<br>接着，当Java虚拟机的GC回收内存时，会回收key的相关内存；同时，将key添加到queue队列中。</li>
+<li>当下一次我们需要操作WeakHashMap时，会先同步table和queue。table中保存了全部的键值对，而queue中保存被GC回收的“弱键”；同步它们，就是删除table中被GC回收的“弱键”对应的键值对。</li>
 </ol>
 <p>例如，当我们“读取WeakHashMap中的元素或获取WeakReference的大小时”，它会先同步table和queue，目的是“删除table中被GC回收的‘弱键’对应的键值对”。删除的方法就是逐个比较“table中元素的‘键’和queue中的‘键’”，若它们相当，则删除“table中的该键值对”。</p>
-<h4 id="3-3-HashMap和WeakHashMap的比较测试程序"><a href="#3-3-HashMap和WeakHashMap的比较测试程序" class="headerlink" title="3.3 HashMap和WeakHashMap的比较测试程序"></a>3.3 HashMap和WeakHashMap的比较测试程序</h4><pre><code class="java"> 1 import java.util.HashMap;
+<h4 id="3-3-HashMap和WeakHashMap的比较测试程序"><a href="#3-3-HashMap和WeakHashMap的比较测试程序" class="headerlink" title="3.3 HashMap和WeakHashMap的比较测试程序"></a>3.3 HashMap和WeakHashMap的比较测试程序</h4><pre><code class="java">1 import java.util.HashMap;
   2 import java.util.Iterator;
   3 import java.util.Map;
   4 import java.util.WeakHashMap;
@@ -863,7 +848,7 @@
 144 &#125;
 </code></pre>
 <p>运行结果：</p>
-<pre><code class="java"> -- HashMap --
+<pre><code class="java">-- HashMap --
 map entry : H2 - h2
   map size:1
 
@@ -899,8 +884,8 @@ map entry : CompareHashmapAndWeakhashmap$Self@59de3f2d - s2
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2018/09/18/%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82-Facade-%E6%A8%A1%E5%BC%8F/" rel="prev" title="设计模式-外观(Facade)模式和最少知识原则">
-      <i class="fa fa-chevron-left"></i> 设计模式-外观(Facade)模式和最少知识原则
+    <a href="/2018/09/17/Spring%E4%B8%AD%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/" rel="prev" title="GET和POST请求Spring中文乱码问题">
+      <i class="fa fa-chevron-left"></i> GET和POST请求Spring中文乱码问题
     </a></div>
       <div class="post-nav-item">
     <a href="/2018/09/29/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8C%B9%E9%85%8D-%E7%AE%97%E6%B3%95/" rel="next" title="正则表达式匹配* .算法">
@@ -918,7 +903,6 @@ map entry : CompareHashmapAndWeakhashmap$Self@59de3f2d - s2
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -981,20 +965,20 @@ map entry : CompareHashmapAndWeakhashmap$Self@59de3f2d - s2
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1032,7 +1016,7 @@ map entry : CompareHashmapAndWeakhashmap$Self@59de3f2d - s2
   </span>
   <span class="author" itemprop="copyrightHolder">熊乾坤</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -1058,7 +1042,7 @@ map entry : CompareHashmapAndWeakhashmap$Self@59de3f2d - s2
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -1148,35 +1132,6 @@ map entry : CompareHashmapAndWeakhashmap$Self@59de3f2d - s2
     
 
   
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'o6g891hxXze8WG1xu174Bxc4-MdYXbMMI',
-      appKey     : 'HSOYHT8PzTeNo7stIuLIuYvO',
-      placeholder: "快来评论吧~",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : true,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>

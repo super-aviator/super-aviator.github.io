@@ -17,18 +17,18 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="参考博客对于POST请求，在@Controller注解的控制器中，可以使用@ResponseBody注解直接返回一个字符串，但是存在字符编码的问题。在得到的字符串中的中文全部是？表示。其解决的办法如下： POST请求的乱码原因因为在方法中我们返回的是字符串，所以Spring在通过AnnotationMethodHandlerAdapter去寻找对应的HttpMessageConverter时，会找">
+  <meta name="description" content="参考博客对于POST请求，在@Controller注解的控制器中，可以使用@ResponseBody注解直接返回一个字符串，但是存在字符编码的问题。在得到的字符串中的中文全部是？表示。其解决的办法如下：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GET和POST请求Spring中文乱码问题">
 <meta property="og:url" content="https://super-aviator.github.io/2018/09/17/Spring%E4%B8%AD%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="孤独飞行员">
-<meta property="og:description" content="参考博客对于POST请求，在@Controller注解的控制器中，可以使用@ResponseBody注解直接返回一个字符串，但是存在字符编码的问题。在得到的字符串中的中文全部是？表示。其解决的办法如下： POST请求的乱码原因因为在方法中我们返回的是字符串，所以Spring在通过AnnotationMethodHandlerAdapter去寻找对应的HttpMessageConverter时，会找">
+<meta property="og:description" content="参考博客对于POST请求，在@Controller注解的控制器中，可以使用@ResponseBody注解直接返回一个字符串，但是存在字符编码的问题。在得到的字符串中的中文全部是？表示。其解决的办法如下：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-09-17T00:15:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:00:12.000Z">
+<meta property="article:modified_time" content="2021-07-22T08:53:53.035Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
@@ -119,14 +119,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -225,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 21:00:12" itemprop="dateModified" datetime="2021-02-23T21:00:12+08:00">2021-02-23</time>
+                <time title="修改时间：2021-07-22 16:53:53" itemprop="dateModified" datetime="2021-07-22T16:53:53+08:00">2021-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,20 +238,6 @@
             </span>
 
           
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2018/09/17/Spring%E4%B8%AD%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2018/09/17/Spring%E4%B8%AD%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
 
         </div>
       </header>
@@ -263,6 +249,8 @@
 
       
         <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hehejason/article/details/52326842">参考博客</a><br>对于POST请求，在@Controller注解的控制器中，可以使用@ResponseBody注解直接返回一个字符串，但是存在字符编码的问题。在得到的字符串中的中文全部是？表示。其解决的办法如下：</p>
+<span id="more"></span>
+
 <h2 id="POST请求的乱码原因"><a href="#POST请求的乱码原因" class="headerlink" title="POST请求的乱码原因"></a>POST请求的乱码原因</h2><p>因为在方法中我们返回的是字符串，所以Spring在通过<code>AnnotationMethodHandlerAdapter</code>去寻找对应的<code>HttpMessageConverter</code>时，会找到<code>StringHttpMessageConverter</code>，通过查看源码得知，该类的默认编码格式是 ISO-8859-1，部分源码如下：</p>
 <pre><code class="java">public class StringHttpMessageConverter extends AbstractHttpMessageConverter
 &lt;String&gt;&#123;
@@ -329,7 +317,7 @@ public String fetchFlowPackage(@RequestParam(required = true) String param,
 <blockquote>
 <p>filter是请求到达前做一次处理，请求完成后再做一次处理，<br>而<code>httpResponse.setCharacterEncoding(encoding); </code>// encoding为utf-8<br><code>httpResponse.setContentType(&quot;text/html; charset=utf-8&quot;); </code> 必须在请求处理完成前设置才能有效的，所以用filter是不行的。</p>
 </blockquote>
-<p> 我想到的解决办法是在Controller中使用HttpServletResponse对象直接写入String，代码如下：</p>
+<p>我想到的解决办法是在Controller中使用HttpServletResponse对象直接写入String，代码如下：</p>
 <pre><code class="java">@Controller
 @RequestMapping(value = &quot;/user-info&quot;)
 public class GetUserInfo &#123;
@@ -373,8 +361,8 @@ public class GetUserInfo &#123;
       <i class="fa fa-chevron-left"></i> 跨域请求问题及其解决方法
     </a></div>
       <div class="post-nav-item">
-    <a href="/2018/09/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8-Adapter-%E6%A8%A1%E5%BC%8F/" rel="next" title="设计模式-适配器(Adapter)模式">
-      设计模式-适配器(Adapter)模式 <i class="fa fa-chevron-right"></i>
+    <a href="/2018/09/22/HashMap%E5%92%8CHashTable%E5%BC%82%E5%90%8C%EF%BC%88%E8%BD%AC%EF%BC%89/" rel="next" title="HashMap和HashTable异同（转）">
+      HashMap和HashTable异同（转） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -388,7 +376,6 @@ public class GetUserInfo &#123;
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -451,20 +438,20 @@ public class GetUserInfo &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -502,7 +489,7 @@ public class GetUserInfo &#123;
   </span>
   <span class="author" itemprop="copyrightHolder">熊乾坤</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -528,7 +515,7 @@ public class GetUserInfo &#123;
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -618,35 +605,6 @@ public class GetUserInfo &#123;
     
 
   
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'o6g891hxXze8WG1xu174Bxc4-MdYXbMMI',
-      appKey     : 'HSOYHT8PzTeNo7stIuLIuYvO',
-      placeholder: "快来评论吧~",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : true,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>

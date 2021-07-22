@@ -17,18 +17,18 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="JUnit4和JUnit5常用注解(Annotations) @BeforeClass(等价于JUnit5中的@BeforeAll)该注解作用于方法之上，含有此注解的方法在所有方法执行之前执行，方法必须使用public static void修饰，不能有参数，通常用来加载资源或配置文件。  @BeforeClass(等价于JUnit5中的@AfterAll)该注解作用于方法之上，含有此注解的方法在">
+  <meta name="description" content="JUnit4和JUnit5常用注解(Annotations) @BeforeClass(等价于JUnit5中的@BeforeAll)该注解作用于方法之上，含有此注解的方法在所有方法执行之前执行，方法必须使用public static void修饰，不能有参数，通常用来加载资源或配置文件。 @BeforeClass(等价于JUnit5中的@AfterAll)该注解作用于方法之上，含有此注解的方法在所">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUnit基础用法">
 <meta property="og:url" content="https://super-aviator.github.io/2019/02/01/JUnit%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="孤独飞行员">
-<meta property="og:description" content="JUnit4和JUnit5常用注解(Annotations) @BeforeClass(等价于JUnit5中的@BeforeAll)该注解作用于方法之上，含有此注解的方法在所有方法执行之前执行，方法必须使用public static void修饰，不能有参数，通常用来加载资源或配置文件。  @BeforeClass(等价于JUnit5中的@AfterAll)该注解作用于方法之上，含有此注解的方法在">
+<meta property="og:description" content="JUnit4和JUnit5常用注解(Annotations) @BeforeClass(等价于JUnit5中的@BeforeAll)该注解作用于方法之上，含有此注解的方法在所有方法执行之前执行，方法必须使用public static void修饰，不能有参数，通常用来加载资源或配置文件。 @BeforeClass(等价于JUnit5中的@AfterAll)该注解作用于方法之上，含有此注解的方法在所">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-02-01T08:05:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:00:06.000Z">
+<meta property="article:modified_time" content="2021-07-22T08:52:59.089Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="JUnit">
 <meta name="twitter:card" content="summary">
@@ -119,14 +119,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -225,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 21:00:06" itemprop="dateModified" datetime="2021-02-23T21:00:06+08:00">2021-02-23</time>
+                <time title="修改时间：2021-07-22 16:52:59" itemprop="dateModified" datetime="2021-07-22T16:52:59+08:00">2021-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,20 +238,6 @@
             </span>
 
           
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/02/01/JUnit%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/02/01/JUnit%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
 
         </div>
       </header>
@@ -263,20 +249,12 @@
 
       
         <h1 id="JUnit4和JUnit5常用注解-Annotations"><a href="#JUnit4和JUnit5常用注解-Annotations" class="headerlink" title="JUnit4和JUnit5常用注解(Annotations)"></a>JUnit4和JUnit5常用注解(Annotations)</h1><ul>
-<li><p>@BeforeClass(等价于JUnit5中的@BeforeAll)<br>该注解作用于方法之上，含有此注解的方法在<strong>所有方法执行之前</strong>执行，方法必须使用<code>public static void</code>修饰，不能有参数，通常用来加载资源或配置文件。</p>
-</li>
-<li><p>@BeforeClass(等价于JUnit5中的@AfterAll)<br>该注解作用于方法之上，含有此注解的方法在<strong>所有方法执行之后</strong>执行，方法必须使用<code>public static void</code>修饰，不能有参数，通常用来释放资源。</p>
-</li>
-<li><p>@Before(等价于JUnit5中的@BeforeEach)<br>该注解作用于方法之上，含有此注解的方法在**每个测试方法(@Test注解的方法)**执行之后执行，方法必须使用<code>public void</code>修饰，不能有参数。</p>
-</li>
-<li><p>@After(等价于JUnit5中的@AfterEach)<br>该注解作用于方法之上，含有此注解的方法在**每个测试方法(@Test注解的方法)**执行之后执行，方法必须使用<code>public void</code>修饰，不能有参数。</p>
-</li>
-<li><p>@Test<br>该注解作用于方法之上，表示该方法是一个<strong>测试方法</strong>，方法必须使用<code>public void</code>修饰，不能有参数。</p>
-</li>
-<li><p>@Ignore(等价于JUnit5中的@Disable)<br>该注解作用于@Test注解的测试方法之上，表示忽略此测试方法，此测试方法不会被执行，此注解不能作用在类上。</p>
-</li>
-</ul>
-<ul>
+<li>@BeforeClass(等价于JUnit5中的@BeforeAll)<br>该注解作用于方法之上，含有此注解的方法在<strong>所有方法执行之前</strong>执行，方法必须使用<code>public static void</code>修饰，不能有参数，通常用来加载资源或配置文件。</li>
+<li>@BeforeClass(等价于JUnit5中的@AfterAll)<br>该注解作用于方法之上，含有此注解的方法在<strong>所有方法执行之后</strong>执行，方法必须使用<code>public static void</code>修饰，不能有参数，通常用来释放资源。<span id="more"></span></li>
+<li>@Before(等价于JUnit5中的@BeforeEach)<br>该注解作用于方法之上，含有此注解的方法在**每个测试方法(@Test注解的方法)**执行之后执行，方法必须使用<code>public void</code>修饰，不能有参数。</li>
+<li>@After(等价于JUnit5中的@AfterEach)<br>该注解作用于方法之上，含有此注解的方法在**每个测试方法(@Test注解的方法)**执行之后执行，方法必须使用<code>public void</code>修饰，不能有参数。</li>
+<li>@Test<br>该注解作用于方法之上，表示该方法是一个<strong>测试方法</strong>，方法必须使用<code>public void</code>修饰，不能有参数。</li>
+<li>@Ignore(等价于JUnit5中的@Disable)<br>该注解作用于@Test注解的测试方法之上，表示忽略此测试方法，此测试方法不会被执行，此注解不能作用在类上。</li>
 <li>@DisplayName（JUnit5新增）<br>该注解可作用于类或者方法上，可以更改测试类的显示名称，例如使用<code>@DisplayName(&quot;Aviator&quot;)</code>则测试类名显示为Aviator，通过@DisplayName，开发人员可以为每个测试用例添加更具体的名字，更容易传达用例所要测试的内容。</li>
 </ul>
 <hr>
@@ -345,7 +323,8 @@
 <td>@ClassRule用于测试类中的静态变量，必须是TestRule接口的实例，且访问修饰符必须为public。</td>
 </tr>
 </tbody></table>
-<h1 id="JUnit4和5中的断言（Assertion）"><a href="#JUnit4和5中的断言（Assertion）" class="headerlink" title="JUnit4和5中的断言（Assertion）"></a>JUnit4和5中的断言（Assertion）</h1><p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/java/j-junit5/">点击查看原文地址</a><br>断言（assertions）是测试方法中的核心部分，用来对测试需要满足的条件进行验证。这些断言方法都是 <code>org.junit.jupiter.api.Assertions</code> 的静态方法。JUnit 5 内置的断言可以分成如下几个类别：</p>
+<p>JUnit4JUnit5说明@Test@Test表示该方法是一个测试方法。JUnit5与JUnit 4的@Test注解不同的是，它没有声明任何属性，因为JUnit Jupiter中的测试扩展是基于它们自己的专用注解来完成的。这样的方法会被继承，除非它们被覆盖；@BeforeClass@BeforeAll表示使用了该注解的方法应该在当前类中所有使用了@Test @RepeatedTest、@ParameterizedTest或者@TestFactory注解的方法之前 执行；@AfterClass@AfterAll表示使用了该注解的方法应该在当前类中所有使用了@Test、@RepeatedTest、@ParameterizedTest或者@TestFactory注解的方法之后执行；@Before@BeforeEach表示使用了该注解的方法应该在当前类中每一个使用了@Test、@RepeatedTest、@ParameterizedTest或者@TestFactory注解的方法之前 执行@After@AfterEach表示使用了该注解的方法应该在当前类中每一个使用了@Test、@RepeatedTest、@ParameterizedTest或者@TestFactory注解的方法之后 执行@Ignore@Disabled用于禁用一个测试类或测试方法@Category@Tag用于声明过滤测试的tags，该注解可以用在方法或类上；类似于TesgNG的测试组或JUnit 4的分类。@Parameters@ParameterizedTest表示该方法是一个参数化测试@RunWith@ExtendWith@Runwith就是放在测试类名之前，用来确定这个类怎么运行的@Rule@ExtendWithRule是一组实现了TestRule接口的共享类，提供了验证、监视TestCase和外部资源管理等能力@ClassRule@ExtendWith@ClassRule用于测试类中的静态变量，必须是TestRule接口的实例，且访问修饰符必须为public。# JUnit4和5中的断言（Assertion）</p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/java/j-junit5/">点击查看原文地址</a><br>断言（assertions）是测试方法中的核心部分，用来对测试需要满足的条件进行验证。这些断言方法都是 <code>org.junit.jupiter.api.Assertions</code> 的静态方法。JUnit 5 内置的断言可以分成如下几个类别：</p>
 <hr>
 <p>第一类是简单断言，用来对单个值进行简单的验证，常用的方法见表：</p>
 <table>
@@ -388,8 +367,8 @@
 <td>判断给定的对象引用是否不为 null</td>
 </tr>
 </tbody></table>
-<p>在<strong>JUnit5</strong>中这些方法都有多个重载方法(JUnit4不支持)，可以提供额外的消息来作为断言不满足时的提示消息(Message)，还可以接受 Java 8 中的函数式编程接口 Supplier来获取要判断的值和显示的消息。下面代码给出了简单断言的使用示例:</p>
-<pre><code class="java">    @Test
+<p>方法说明assertEquals判断两个对象或两个原始类型是否相等assertNotEquals判断两个对象或两个原始类型是否不相等assertSame判断两个对象引用是否指向同一个对象assertNotSame判断两个对象引用是否指向不同的对象assertTrue判断给定的布尔值是否为 trueassertFalse判断给定的布尔值是否为 falseassertNull判断给定的对象引用是否为 nullassertNotNull判断给定的对象引用是否不为 null在<strong>JUnit5</strong>中这些方法都有多个重载方法(JUnit4不支持)，可以提供额外的消息来作为断言不满足时的提示消息(Message)，还可以接受 Java 8 中的函数式编程接口 Supplier来获取要判断的值和显示的消息。下面代码给出了简单断言的使用示例:</p>
+<pre><code class="java">@Test
     @DisplayName(&quot;simple assertion&quot;)
     public void simple() &#123;
         assertEquals(3, 1 + 2, &quot;simple math&quot;);//接受String作为提示
@@ -413,7 +392,7 @@
 </code></pre>
 <hr>
 <p>第二类是通过 assertArrayEquals 方法来判断两个对象或原始类型的<strong>数组</strong>是否相等,或者通过assertIterableEquals方法来判断两个<strong>可迭代对象</strong>是否相等，如下所示：</p>
-<pre><code class="java">    @Test
+<pre><code class="java">@Test
     @DisplayName(&quot;array assertion&quot;)
     public void array() &#123;
         assertArrayEquals(new int[]&#123;1, 2&#125;, new int[] &#123;1, 2&#125;);//同样也可以指定消息或者使用Supplier接口。
@@ -428,7 +407,7 @@
 </code></pre>
 <hr>
 <p>第三类是通过assertAll方法来判断一组断言是否满足。assertAll 方法接受多个<code>org.junit.jupiter.api.Executable（方法签名为void-&gt;void）</code>函数式接口的实例作为要验证的断言，可以通过 lambda 表达式很容易的提供这些断言，assertAll的第一个参数是标题（heading），表示一组Executtable共有的属性，如下代码所示：</p>
-<pre><code class="java">    @Test
+<pre><code class="java">@Test
     @DisplayName(&quot;assert all&quot;)
     public void all() &#123;
         assertAll(&quot;Math&quot;,
@@ -439,7 +418,7 @@
 </code></pre>
 <hr>
 <p>第四类是通过 assertThrows 或 expectThrows 来判断是否抛出期望的异常类型。两个方法的参数都是所期望的异常类型和对应的 Executable 接口的实现对象，区别在于 expectThrows 方法会<strong>返回抛出的异常对象</strong>。在下面代码中，1/0 会抛出 ArithmeticException 异常，下面代码使用assertThrows 用来验证这一点。</p>
-<pre><code class="java">    @Test
+<pre><code class="java">@Test
     @DisplayName(&quot;throws exception&quot;)
     public void exception() &#123;
         assertThrows(ArithmeticException.class, () -&gt; System.out.println(1 / 0));
@@ -447,7 +426,7 @@
 </code></pre>
 <hr>
 <p>第五类是fail方法，用来直接使一个测试方法失败，如下代码所示：</p>
-<pre><code class="java">    @Test
+<pre><code class="java">@Test
     @DisplayName(&quot;fail&quot;)
     public void shouldFail() &#123;
         fail(&quot;This should fail&quot;);
@@ -455,23 +434,16 @@
 </code></pre>
 <h1 id="JUnit中测试异常-Exception-和超时-Timeout"><a href="#JUnit中测试异常-Exception-和超时-Timeout" class="headerlink" title="JUnit中测试异常(Exception)和超时(Timeout)"></a>JUnit中测试异常(Exception)和超时(Timeout)</h1><p>在<strong>JUnit4</strong>中（JUnit5不支持），可以对@Test注解进行扩展，使用expected和timeout属性，以便支持测试方法是否抛出特定异常和检测方法的运行时间。</p>
 <ul>
-<li><p>@Test(expected=xx.class)：xx.class表示想要抛出的异常类，表示测试的方法抛出此异常时，认为是正常的测试通过的，如果没有抛出特定异常，则测试不通过。</p>
-</li>
-<li><p>@Test(timeout=毫秒数)：测试方法执行时间是否符合预期，如果方法运行时间超过给定的毫秒数，则测试不通过，否则测试通过，一般用来测试方法的性能。</p>
-</li>
+<li>@Test(expected=xx.class)：xx.class表示想要抛出的异常类，表示测试的方法抛出此异常时，认为是正常的测试通过的，如果没有抛出特定异常，则测试不通过。</li>
+<li>@Test(timeout=毫秒数)：测试方法执行时间是否符合预期，如果方法运行时间超过给定的毫秒数，则测试不通过，否则测试通过，一般用来测试方法的性能。</li>
 </ul>
 <p>JUnit5中可以使用断言来测试异常和超时,,以下方法都有一个参数为<code>org.junit.jupiter.api.Executable（方法签名为void-&gt;void）</code>，同时可以指定一个String类型的message或者使用函数式接口Supplier来提供message,如下所示：</p>
 <ul>
-<li><p>assertThrows：断言所提供的可执行代码块的执行会引发expectedType的异常并返回异常。如果没有抛出异常，或者抛出了不同类型的异常，则此方法将失败。如果不想对异常实例执行其他检查，只需忽略返回值。</p>
-</li>
-<li><p>assertDoesNotThrow：断言所提供的可执行代码块的执行不会引发expectedType的异常并返回异常。如果抛出异常，则此方法将失败。</p>
-</li>
-<li><p>expectThrows：和assertThrows功能相同，区别在于 expectThrows 方法会返回抛出的异常对象。</p>
-</li>
-<li><p>assertTimeout：断言在超出给定超时之前，所提供的可执行代码块的执行完成。注意：可执行代码块将在与调用代码相同的线程中执行。因此，如果超过超时，则不会抢先中止执行可执行代码块，<strong>即如果发生超时方法不会立即结束</strong>。</p>
-</li>
-<li><p>assertTimeoutPreemptively：断言在超出给定超时之前，所提供的可执行代码块的执行完成。注意：可执行代码块将在与调用代码不同的线程中执行。此外，如果超时，则可抢占地执行可执行代码块，<strong>即如果超时方法会立即结束</strong>。</p>
-</li>
+<li>assertThrows：断言所提供的可执行代码块的执行会引发expectedType的异常并返回异常。如果没有抛出异常，或者抛出了不同类型的异常，则此方法将失败。如果不想对异常实例执行其他检查，只需忽略返回值。</li>
+<li>assertDoesNotThrow：断言所提供的可执行代码块的执行不会引发expectedType的异常并返回异常。如果抛出异常，则此方法将失败。</li>
+<li>expectThrows：和assertThrows功能相同，区别在于 expectThrows 方法会返回抛出的异常对象。</li>
+<li>assertTimeout：断言在超出给定超时之前，所提供的可执行代码块的执行完成。注意：可执行代码块将在与调用代码相同的线程中执行。因此，如果超过超时，则不会抢先中止执行可执行代码块，<strong>即如果发生超时方法不会立即结束</strong>。</li>
+<li>assertTimeoutPreemptively：断言在超出给定超时之前，所提供的可执行代码块的执行完成。注意：可执行代码块将在与调用代码不同的线程中执行。此外，如果超时，则可抢占地执行可执行代码块，<strong>即如果超时方法会立即结束</strong>。</li>
 </ul>
 <h1 id="参数化测试（Parameters）"><a href="#参数化测试（Parameters）" class="headerlink" title="参数化测试（Parameters）"></a>参数化测试（Parameters）</h1>
     </div>
@@ -511,7 +483,6 @@
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -558,7 +529,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JUnit4%E5%92%8CJUnit5%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3-Annotations"><span class="nav-text">JUnit4和JUnit5常用注解(Annotations)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JUnit4%E5%92%8C5%E4%B8%AD%E7%9A%84%E6%96%AD%E8%A8%80%EF%BC%88Assertion%EF%BC%89"><span class="nav-text">JUnit4和5中的断言（Assertion）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JUnit%E4%B8%AD%E6%B5%8B%E8%AF%95%E5%BC%82%E5%B8%B8-Exception-%E5%92%8C%E8%B6%85%E6%97%B6-Timeout"><span class="nav-text">JUnit中测试异常(Exception)和超时(Timeout)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%8C%96%E6%B5%8B%E8%AF%95%EF%BC%88Parameters%EF%BC%89"><span class="nav-text">参数化测试（Parameters）</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JUnit4%E5%92%8CJUnit5%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3-Annotations"><span class="nav-text">JUnit4和JUnit5常用注解(Annotations)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JUnit%E4%B8%AD%E6%B5%8B%E8%AF%95%E5%BC%82%E5%B8%B8-Exception-%E5%92%8C%E8%B6%85%E6%97%B6-Timeout"><span class="nav-text">JUnit中测试异常(Exception)和超时(Timeout)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%8C%96%E6%B5%8B%E8%AF%95%EF%BC%88Parameters%EF%BC%89"><span class="nav-text">参数化测试（Parameters）</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -574,20 +545,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -625,7 +596,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">熊乾坤</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -651,7 +622,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -741,35 +712,6 @@
     
 
   
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'o6g891hxXze8WG1xu174Bxc4-MdYXbMMI',
-      appKey     : 'HSOYHT8PzTeNo7stIuLIuYvO',
-      placeholder: "快来评论吧~",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : true,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>

@@ -17,19 +17,19 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="上周项目上线之后，遭受了无数次空指针异常的狂扁之后，这周新增的需求中又被类型转换错误狠狠的教训了一顿。（这可能就是上天对菜逼的惩罚），感觉组长已经对我的代码中这种异常产生了强大的免疫力了。。。 刚刚改完bug之后，决定开个坑，记录一下工作中踩过的坑，有点绕口惹。。。主要的目的是要保证犯过的错误不能再犯第二次。 NullPointerException基本类型的包装类的类型转换org.springf">
+  <meta name="description" content="上周项目上线之后，遭受了无数次空指针异常的狂扁之后，这周新增的需求中又被类型转换错误狠狠的教训了一顿。（这可能就是上天对菜逼的惩罚），感觉组长已经对我的代码中这种异常产生了强大的免疫力了。。。 刚刚改完bug之后，决定开个坑，记录一下工作中踩过的坑，有点绕口惹。。。主要的目的是要保证犯过的错误不能再犯第二次。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="那些你在工作中的踩过的坑（持续更新）">
 <meta property="og:url" content="https://super-aviator.github.io/2019/09/11/%E9%82%A3%E4%BA%9B%E4%BD%A0%E5%9C%A8%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/index.html">
 <meta property="og:site_name" content="孤独飞行员">
-<meta property="og:description" content="上周项目上线之后，遭受了无数次空指针异常的狂扁之后，这周新增的需求中又被类型转换错误狠狠的教训了一顿。（这可能就是上天对菜逼的惩罚），感觉组长已经对我的代码中这种异常产生了强大的免疫力了。。。 刚刚改完bug之后，决定开个坑，记录一下工作中踩过的坑，有点绕口惹。。。主要的目的是要保证犯过的错误不能再犯第二次。 NullPointerException基本类型的包装类的类型转换org.springf">
+<meta property="og:description" content="上周项目上线之后，遭受了无数次空指针异常的狂扁之后，这周新增的需求中又被类型转换错误狠狠的教训了一顿。（这可能就是上天对菜逼的惩罚），感觉组长已经对我的代码中这种异常产生了强大的免疫力了。。。 刚刚改完bug之后，决定开个坑，记录一下工作中踩过的坑，有点绕口惹。。。主要的目的是要保证犯过的错误不能再犯第二次。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://super-aviator.github.io/images/flyway.png">
 <meta property="article:published_time" content="2019-09-11T02:42:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:00:10.000Z">
+<meta property="article:modified_time" content="2021-07-22T08:48:24.553Z">
 <meta property="article:author" content="熊乾坤">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://super-aviator.github.io/images/flyway.png">
@@ -120,14 +120,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -226,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 21:00:10" itemprop="dateModified" datetime="2021-02-23T21:00:10+08:00">2021-02-23</time>
+                <time title="修改时间：2021-07-22 16:48:24" itemprop="dateModified" datetime="2021-07-22T16:48:24+08:00">2021-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,20 +239,6 @@
             </span>
 
           
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/09/11/%E9%82%A3%E4%BA%9B%E4%BD%A0%E5%9C%A8%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/11/%E9%82%A3%E4%BA%9B%E4%BD%A0%E5%9C%A8%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
 
         </div>
       </header>
@@ -265,8 +251,10 @@
       
         <p>上周项目上线之后，遭受了无数次空指针异常的狂扁之后，这周新增的需求中又被类型转换错误狠狠的教训了一顿。（这可能就是上天对菜逼的惩罚），感觉组长已经对我的代码中这种异常产生了强大的免疫力了。。。</p>
 <p>刚刚改完bug之后，决定开个坑，记录一下工作中踩过的坑，有点绕口惹。。。主要的目的是要保证犯过的错误不能再犯第二次。</p>
+<span id="more"></span>
+
 <h1 id="NullPointerException"><a href="#NullPointerException" class="headerlink" title="NullPointerException"></a>NullPointerException</h1><h1 id="基本类型的包装类的类型转换"><a href="#基本类型的包装类的类型转换" class="headerlink" title="基本类型的包装类的类型转换"></a>基本类型的包装类的类型转换</h1><h1 id="org-springframework-web-HttpMediaTypeNotAcceptableException-Could-not-find-acceptable-representation异常"><a href="#org-springframework-web-HttpMediaTypeNotAcceptableException-Could-not-find-acceptable-representation异常" class="headerlink" title="org.springframework.web.HttpMediaTypeNotAcceptableException: Could not find acceptable representation异常"></a>org.springframework.web.HttpMediaTypeNotAcceptableException: Could not find acceptable representation异常</h1><p>在新的需求的代码中，需要前端批量上传图片和视频，本来完美的解决方案是将图片和视频保存在本地，然后通过公司的海豚品台的nginx去代理图片的访问，但是我们的项目里面他喵的海豚没有挂在nginx，所以所有的图片和视频只能通过项目中的接口去访问，后台直接返回二进制流。海豚真是含棒棒惹。</p>
-<p>在访问图片和视频的接口中，我脑子进水一般的，在同一个接口中同时返回了JSON和二进制流的数据格式，分别对应的MediaType是application/json、application/octet-stream。<br>Controller层返回了Json对象：    </p>
+<p>在访问图片和视频的接口中，我脑子进水一般的，在同一个接口中同时返回了JSON和二进制流的数据格式，分别对应的MediaType是application/json、application/octet-stream。<br>Controller层返回了Json对象：</p>
 <pre><code class="java">@GetMapping(value = &quot;/&#123;fileName:\\S+\\.\\S+&#125;&quot;)
 public ResponseMessage updateTextMaterial(@PathVariable(&quot;fileName&quot;) String file, HttpServletResponse response)&#123;
     return materialService.getMaterialFileStream(file, response);
@@ -319,7 +307,7 @@ public class LearnApplication &#123;
 &#125;
 </code></pre>
 <h1 id="maven下载包超时"><a href="#maven下载包超时" class="headerlink" title="maven下载包超时"></a>maven下载包超时</h1><p>有时候在pom文件里面,新增了依赖,却发现项目中并没有下载相对应的包,而pom文件中也会报错,表示无法解析对应的依赖.<br>首先可以去.m2文件夹中,找到对应的依赖的文件夹,里买有一个文件,后缀是lastUpdate,用记事本打开该文件,如果里面的原因是read timeout ,则说明是链接超时,可以配置国内的镜像来解决:<br>找到maven安装目录下的conf文件夹,在settings.xml文件中,新增镜像:</p>
-<pre><code class="xml"> &lt;mirror&gt;
+<pre><code class="xml">&lt;mirror&gt;
       &lt;id&gt;mirrorId&lt;/id&gt;
       &lt;mirrorOf&gt;repositoryId&lt;/mirrorOf&gt;
       &lt;name&gt;Human Readable Name for this Mirror.&lt;/name&gt;
@@ -353,7 +341,7 @@ public class LearnApplication &#123;
 </ol>
 <p><img src="/images/flyway.png" alt="upload successful"><br>最下面的地址是sql脚本存放的地址。和common-server中脚本存放的地址不同即可。</p>
 <p>2.elasticsearch的jar包不兼容<br>对于jar不兼容的问题，需要引入如下的依赖，折腾了两天，最后在后端大佬的帮助下才解决。</p>
-<pre><code class="maven">         &lt;dependency&gt;
+<pre><code class="maven">&lt;dependency&gt;
             &lt;groupId&gt;org.springframework.data&lt;/groupId&gt;
             &lt;artifactId&gt;spring-data-elasticsearch&lt;/artifactId&gt;
             &lt;version&gt;2.2.3.0-RELEASE&lt;/version&gt;
@@ -414,7 +402,6 @@ public class LearnApplication &#123;
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -477,20 +464,20 @@ public class LearnApplication &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -528,7 +515,7 @@ public class LearnApplication &#123;
   </span>
   <span class="author" itemprop="copyrightHolder">熊乾坤</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -554,7 +541,7 @@ public class LearnApplication &#123;
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -644,35 +631,6 @@ public class LearnApplication &#123;
     
 
   
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'o6g891hxXze8WG1xu174Bxc4-MdYXbMMI',
-      appKey     : 'HSOYHT8PzTeNo7stIuLIuYvO',
-      placeholder: "快来评论吧~",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : true,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>

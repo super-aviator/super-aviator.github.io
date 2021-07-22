@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="上周进行项目开发的时候，发现前端的含有文件的表单数据时后台接收报错，异常的大致意思是表单类型不支持，我也是有点蒙逼，以前也遇到过这种问题，加上@RequestBody就可以，所以这次我也加上了@RequestBody注解，结果还是报错，这时前端发消息过来，告诉我不能加@RequestBody,我去掉之后果然好了，好吧。一直没弄明白什么时候要加@RequestBody什么时候不要加，趁着这个迭代的任">
@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://super-aviator.github.io/images/applicationjsonrequestdemo.png">
 <meta property="article:published_time" content="2019-08-30T02:31:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-22T08:50:44.375Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="Java Web">
 <meta name="twitter:card" content="summary">
@@ -121,14 +121,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 21:00:00" itemprop="dateModified" datetime="2021-02-23T21:00:00+08:00">2021-02-23</time>
+                <time title="修改时间：2021-07-22 16:50:44" itemprop="dateModified" datetime="2021-07-22T16:50:44+08:00">2021-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,20 +240,6 @@
             </span>
 
           
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/08/30/Spring%E4%B8%AD%E7%9A%84-RequestBody%E6%B3%A8%E8%A7%A3/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/08/30/Spring%E4%B8%AD%E7%9A%84-RequestBody%E6%B3%A8%E8%A7%A3/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
 
         </div>
       </header>
@@ -265,11 +251,13 @@
 
       
         <p>上周进行项目开发的时候，发现前端的含有文件的表单数据时后台接收报错，异常的大致意思是表单类型不支持，我也是有点蒙逼，以前也遇到过这种问题，加上@RequestBody就可以，所以这次我也加上了@RequestBody注解，结果还是报错，这时前端发消息过来，告诉我不能加@RequestBody,我去掉之后果然好了，好吧。一直没弄明白什么时候要加@RequestBody什么时候不要加，趁着这个迭代的任务很轻松，学习一下Spring中@RequestBody注解和后端如何接收常用的HTTP方法传过来的数据，结合PostMan对结果进行测试。</p>
+<span id="more"></span>
+
 <h1 id="RequestBody注解"><a href="#RequestBody注解" class="headerlink" title="@RequestBody注解"></a>@RequestBody注解</h1><blockquote>
 <p>@RequestBody注解常用来处理POST请求，并且content-type不是默认的application/x-www-form-urlcoded编码的内容，比如说：application/json或者是application/xml等。一般情况下来说常用其来处理application/json类型。</p>
 </blockquote>
 <blockquote>
-<p>@RequestMapping注解的方法的参数中包含了@RequestBody注解，那么Spring会首先查看请求中的Content-Type头部，然后根据Content-Type头部去查找合适的HttpMessageConverter        </p>
+<p>@RequestMapping注解的方法的参数中包含了@RequestBody注解，那么Spring会首先查看请求中的Content-Type头部，然后根据Content-Type头部去查找合适的HttpMessageConverter</p>
 </blockquote>
 <blockquote>
 <p>例如，如果客户端发送的Spittle数据是JSON表述形式，那 么Content-Type头部信息可能就会是“application/json”。在 这种情况下，DispatcherServlet会查找能够将JSON转换为Java 对象的消息转换器。如果Jackson 2库在类路径中，那 么MappingJackson2HttpMessageConverter将会担此重任，将 JSON表述转换为Spittle，然后传递到saveSpittle()方法中。 这个方法还使用了@ResponseBody注解，因此方法返回的Spittle 对象将会转换为某种资源表述，发送给客户端。</p>
@@ -301,40 +289,38 @@
 </ul>
 <p>下面是常见的表单提交的Content-Type的取值：</p>
 <h3 id="application-x-www-form-urlencoded"><a href="#application-x-www-form-urlencoded" class="headerlink" title="application/x-www-form-urlencoded"></a>application/x-www-form-urlencoded</h3><ul>
-<li><p>如果使用的是GET请求，浏览器用<code>x-www-form-urlencoded</code>的编码方式把form数据转换成一个字串（name1=value1&amp;name2=value2…），然后把这个字串append到url后面，用?分割，加载这个新的url。</p>
-</li>
-<li><p>如果使用的是POST请求，会采用类似GET的字符串拼接的方式，<strong>将拼接的key-value字段放到body里面，而非url的后面</strong>,所以POST请求的url长度是没有限制的，因为拼接的url请求参数都存放在body里面,如下</p>
-<pre><code class="http">     POST  HTTP/1.1
-  Host: 127.0.0.1:8000
-  Content-Type: application/x-www-form-urlencoded
-  Cache-Control: no-cache
-  Postman-Token: e8c31d7a-fd52-cbf2-2741-07d73cb1101b
+<li>如果使用的是GET请求，浏览器用<code>x-www-form-urlencoded</code>的编码方式把form数据转换成一个字串（name1=value1&amp;name2=value2…），然后把这个字串append到url后面，用?分割，加载这个新的url。</li>
+<li>如果使用的是POST请求，会采用类似GET的字符串拼接的方式，<strong>将拼接的key-value字段放到body里面，而非url的后面</strong>,所以POST请求的url长度是没有限制的，因为拼接的url请求参数都存放在body里面,如下</li>
+</ul>
+<pre><code class="http">POST  HTTP/1.1
+    Host: 127.0.0.1:8000
+    Content-Type: application/x-www-form-urlencoded
+    Cache-Control: no-cache
+    Postman-Token: e8c31d7a-fd52-cbf2-2741-07d73cb1101b
 
-  keyword=panda&amp;author=zane
+    keyword=panda&amp;author=zane
 </code></pre>
 <p><strong>注意</strong>：使用<code>application/x-www-form-urlencoded</code>编码方式的请求会对所有非ASCII的字符使用%HH的方式进行转换，所以一个非ASCII字符会由三个字符去表示，当非ASCII非常多时，会增加大约三倍的带宽，这无疑是一种浪费。</p>
-<h3 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a>multipart/form-data</h3><p>如果没有type=file的控件，用默认的<code>application/x-www-form-urlencoded</code>就可以了。 但是如果有type=file的话，Content-Type就会升级使用<code>multipart/form-data</code>类型。浏览器会把整个表单以控件为单位分割，**并为每个部分加上Content-Disposition(form-data或者file),Content-Type(默认为text/plain),name(控件的name，即字段名)等信息，并加上分割符(boundary)**，例如：    </p>
-<pre><code class="html">  POST / HTTP/1.1
-  Host: 127.0.0.1:8000
-  Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-  Cache-Control: no-cache
-  Postman-Token: 090df52c-d103-279b-1479-50e6a7fef58b
+<h3 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a>multipart/form-data</h3><p>如果没有type=file的控件，用默认的<code>application/x-www-form-urlencoded</code>就可以了。 但是如果有type=file的话，Content-Type就会升级使用<code>multipart/form-data</code>类型。浏览器会把整个表单以控件为单位分割，**并为每个部分加上Content-Disposition(form-data或者file),Content-Type(默认为text/plain),name(控件的name，即字段名)等信息，并加上分割符(boundary)**，例如：</p>
+<pre><code class="html">POST / HTTP/1.1
+    Host: 127.0.0.1:8000
+    Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+    Cache-Control: no-cache
+    Postman-Token: 090df52c-d103-279b-1479-50e6a7fef58b
 
-  ------WebKitFormBoundary7MA4YWxkTrZu0gW
-  Content-Disposition: form-data; name=&quot;keyword&quot;
+    ------WebKitFormBoundary7MA4YWxkTrZu0gW
+    Content-Disposition: form-data; name=&quot;keyword&quot;
 
-  panda
-  ------WebKitFormBoundary7MA4YWxkTrZu0gW
-  Content-Disposition: form-data; name=&quot;author&quot;
+    panda
+    ------WebKitFormBoundary7MA4YWxkTrZu0gW
+    Content-Disposition: form-data; name=&quot;author&quot;
 
-  zane
-  ------WebKitFormBoundary7MA4YWxkTrZu0gW
+    zane
+    ------WebKitFormBoundary7MA4YWxkTrZu0gW
 </code></pre>
-</li>
-</ul>
 <p>上面的请求中，keyword键对应的值为panda,author键对应的值为zane。</p>
-<p>  首先我们看请求头的 Content-Type 它除了正常的 multipart/form-data 外还多了一个 boundary ，这个 boundary 的意思和字面意思一样就是分界线，通过分界线将每个键值对用 boundary 分割开来以示区别,<strong>这个分界线是特殊选择出来的，以便该boundary不会出现在任何有效负载中</strong>。现在我们看请求体，我们注意到boundary 将键值对分割后的每一部分都有 Content-Disposition 字段，实际上该字段的值必须为 form-data 而且后面必须加上 name 指定这部分的键名，然后是一行空行，空行之后便是提交数据的内容。 之所以要弄的这么复杂是因为 multipart/form-data 要支持文件上传。</p>
-<p>  <strong>注意</strong>：使用<code>multipart/form-data</code>编码方式的请求不会对非ASCII字符进行转码，所以也就不会有消耗，但是对于简短的字母数字值(与大多数web表单一样)，添加所有MIME头的开销将大大超过更有效的二进制编码所节省的开销。</p>
+<p>首先我们看请求头的 Content-Type 它除了正常的 multipart/form-data 外还多了一个 boundary ，这个 boundary 的意思和字面意思一样就是分界线，通过分界线将每个键值对用 boundary 分割开来以示区别,<strong>这个分界线是特殊选择出来的，以便该boundary不会出现在任何有效负载中</strong>。现在我们看请求体，我们注意到boundary 将键值对分割后的每一部分都有 Content-Disposition 字段，实际上该字段的值必须为 form-data 而且后面必须加上 name 指定这部分的键名，然后是一行空行，空行之后便是提交数据的内容。 之所以要弄的这么复杂是因为 multipart/form-data 要支持文件上传。</p>
+<p><strong>注意</strong>：使用<code>multipart/form-data</code>编码方式的请求不会对非ASCII字符进行转码，所以也就不会有消耗，但是对于简短的字母数字值(与大多数web表单一样)，添加所有MIME头的开销将大大超过更有效的二进制编码所节省的开销。</p>
 <h3 id="application-json"><a href="#application-json" class="headerlink" title="application/json"></a>application/json</h3><p>数据以纯文本形式(text/json/xml/html)进行编码，POST方法使用这种方式会把表单的键值对以一个JSON字符串的方式放到HTTP的body里面。例如如下的postman中的请求示例：<br>?<br><img src="/images/applicationjsonrequestdemo.png" alt="upload successful"></p>
 <p><strong>注意</strong>：当非post请求的请求体中也含有JSON字符串时，依旧可以使用@RequestBody拿到请求体中的数据。</p>
 <h2 id="Postman测试"><a href="#Postman测试" class="headerlink" title="Postman测试"></a>Postman测试</h2><p>下面使用Postman来测试一下什么时候要加@Requestbody，什么时候不用加@RequestBody注解：<br>首先是Controller中的代码，有个方法，一个使用了@RequestBody注解，一个没有使用：</p>
@@ -389,7 +375,8 @@ public class RequestBodyController &#123;
 <td align="center">能接收</td>
 </tr>
 </tbody></table>
-<h2 id="RequestBody使用总结"><a href="#RequestBody使用总结" class="headerlink" title="@RequestBody使用总结"></a>@RequestBody使用总结</h2><p>@RequestBody用于需要触发HttpMessageConverter的场景：</p>
+<p>否加上注解\ContentTypex-www-form-urlencodedform-dataapplication/json不加@RequestBody注解能接收能接收不能接收加上@RequestBody注解不能接收不能接收能接收## @RequestBody使用总结</p>
+<p>@RequestBody用于需要触发HttpMessageConverter的场景：</p>
 <ul>
 <li>当HTTP请求的Content-Type头部为application/json时，需要加上@RequestBody注解，并使用默认的<code>HttpMessageConverter</code>或者自定义的<code>HttpMessageConverter</code>对请求的body中的json字符串转换为java对象。</li>
 <li>当Content-Type头部的值为application/x-www-form-urlencoded或者multipart/form-data时，表名此请求是一个常规的表单请求，不能使用@RequestBody注解。</li>
@@ -439,7 +426,6 @@ public class RequestBodyController &#123;
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -486,7 +472,7 @@ public class RequestBodyController &#123;
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestBody%E6%B3%A8%E8%A7%A3"><span class="nav-text">@RequestBody注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E7%B1%BB%E5%9E%8B"><span class="nav-text">表单类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#application-x-www-form-urlencoded"><span class="nav-text">application&#x2F;x-www-form-urlencoded</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multipart-form-data"><span class="nav-text">multipart&#x2F;form-data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#application-json"><span class="nav-text">application&#x2F;json</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Postman%E6%B5%8B%E8%AF%95"><span class="nav-text">Postman测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RequestBody%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93"><span class="nav-text">@RequestBody使用总结</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestBody%E6%B3%A8%E8%A7%A3"><span class="nav-text">@RequestBody注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E7%B1%BB%E5%9E%8B"><span class="nav-text">表单类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#application-x-www-form-urlencoded"><span class="nav-text">application&#x2F;x-www-form-urlencoded</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multipart-form-data"><span class="nav-text">multipart&#x2F;form-data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#application-json"><span class="nav-text">application&#x2F;json</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Postman%E6%B5%8B%E8%AF%95"><span class="nav-text">Postman测试</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -502,20 +488,20 @@ public class RequestBodyController &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -553,7 +539,7 @@ public class RequestBodyController &#123;
   </span>
   <span class="author" itemprop="copyrightHolder">熊乾坤</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -579,7 +565,7 @@ public class RequestBodyController &#123;
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -669,35 +655,6 @@ public class RequestBodyController &#123;
     
 
   
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'o6g891hxXze8WG1xu174Bxc4-MdYXbMMI',
-      appKey     : 'HSOYHT8PzTeNo7stIuLIuYvO',
-      placeholder: "快来评论吧~",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : true,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>

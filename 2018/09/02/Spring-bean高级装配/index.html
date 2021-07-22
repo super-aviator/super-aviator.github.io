@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="在学习了基本的装配bean的方式之后，接下来就是bean高级装配的知识了，包括了Spring profile,条件化创建bean,自动装配与歧义性，bean作用域，SpringEL表达式等。 Spring Profile在项目的开发，测试，生产环境中，相同类型的bean的创建方式有时并不相同，我们必须要有一种方法来在不同的环境下创建不相同的bean。这就是Spring Profile所应用的地方，">
@@ -28,7 +28,7 @@
 <meta property="og:description" content="在学习了基本的装配bean的方式之后，接下来就是bean高级装配的知识了，包括了Spring profile,条件化创建bean,自动装配与歧义性，bean作用域，SpringEL表达式等。 Spring Profile在项目的开发，测试，生产环境中，相同类型的bean的创建方式有时并不相同，我们必须要有一种方法来在不同的环境下创建不相同的bean。这就是Spring Profile所应用的地方，">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-09-02T12:45:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-22T08:54:36.097Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="Java Web">
 <meta property="article:tag" content="Spring">
@@ -120,14 +120,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -226,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 21:00:00" itemprop="dateModified" datetime="2021-02-23T21:00:00+08:00">2021-02-23</time>
+                <time title="修改时间：2021-07-22 16:54:36" itemprop="dateModified" datetime="2021-07-22T16:54:36+08:00">2021-07-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,20 +239,6 @@
             </span>
 
           
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2018/09/02/Spring-bean%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2018/09/02/Spring-bean%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
 
         </div>
       </header>
@@ -265,100 +251,103 @@
       
         <p>在学习了基本的装配bean的方式之后，接下来就是bean高级装配的知识了，包括了Spring profile,条件化创建bean,自动装配与歧义性，bean作用域，SpringEL表达式等。</p>
 <h2 id="Spring-Profile"><a href="#Spring-Profile" class="headerlink" title="Spring Profile"></a>Spring Profile</h2><p>在项目的开发，测试，生产环境中，相同类型的bean的创建方式有时并不相同，我们必须要有一种方法来在不同的环境下创建不相同的bean。这就是Spring Profile所应用的地方，可以在自动装配，java类配置以及xml中使用Spring Profile条件化配置bean的产生方式，只需要加上@Profile注解即可，需要注意的是，<strong>没有任何@Profile注解的bean始终都会被创建，不管激活那个Profile</strong> 如下所示：</p>
+<span id="more"></span>
+
 <h4 id="使用-Profile注解"><a href="#使用-Profile注解" class="headerlink" title="使用@Profile注解"></a>使用@Profile注解</h4><ul>
-<li><p>自动装配方式使用Profile注解</p>
+<li>自动装配方式使用Profile注解</li>
+</ul>
 <pre><code class="java">@Component
 @Profile(&quot;dev&quot;)//设置此bean的对应的Profile为开发环境
 public class PrintWorldProfileBean implements ProfileBean &#123;
-   private String title;
+     private String title;
 
-  public PrintWorldProfileBean(String title)&#123;
-      title=title;
-  &#125;
+    public PrintWorldProfileBean(String title)&#123;
+        title=title;
+    &#125;
 
-  @Override
-  public void doWork() &#123;
-      System.out.println(&quot;World&quot;);
-  &#125;
+    @Override
+    public void doWork() &#123;
+        System.out.println(&quot;World&quot;);
+    &#125;
 &#125;
 </code></pre>
-</li>
-<li><p>在java类配置方式中使用Profile</p>
+<ul>
+<li>在java类配置方式中使用Profile</li>
+</ul>
 <pre><code class="java">@Configuration
 @ComponentScan(basePackageClasses = &#123;PrintWorldProfileBean.class&#125;)
 @Profile(&quot;dev&quot;)//类级别的注解
 public class ProfileBeanConfig &#123;
 
-  @Bean
-  @Profile(&#123;&quot;beta  &quot;,&quot;dev&quot;&#125;) //配置在测试和开发环境中都有效
-  @Profile(&quot;beta&quot;)//测试环境
-  public PrintHelloProfileBean getPrintHelloProfileBean()&#123;
-      return new PrintHelloProfileBean();
-  &#125;
+    @Bean
+    @Profile(&#123;&quot;beta  &quot;,&quot;dev&quot;&#125;) //配置在测试和开发环境中都有效
+    @Profile(&quot;beta&quot;)//测试环境
+    public PrintHelloProfileBean getPrintHelloProfileBean()&#123;
+        return new PrintHelloProfileBean();
+    &#125;
 
-  @Bean
-  @Profile(&quot;dev&quot;)//生产环境
-  public PrintWorldProfileBean getPrintWorldProfileBean()&#123;
-      return new PrintWorldProfileBean();
-  &#125;
+    @Bean
+    @Profile(&quot;dev&quot;)//生产环境
+    public PrintWorldProfileBean getPrintWorldProfileBean()&#123;
+        return new PrintWorldProfileBean();
+    &#125;
 &#125;
 </code></pre>
 <p>基于java类配置的方式可以使用类级别或者方法级别的Profile注解。</p>
-</li>
-<li><p>基于xml文件的配置方式使用Profile</p>
+<ul>
+<li>基于xml文件的配置方式使用Profile</li>
+</ul>
 <pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-     xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
-     xmlns:c=&quot;http://www.springframework.org/schema/c&quot;
-     xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-     
-     xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans 
-     http://www.springframework.org/schema/beans/springbeans.xsd 
-     http://www.springframework.org/schema/context 
-     http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+       xmlns:c=&quot;http://www.springframework.org/schema/c&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/springbeans.xsd 
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
 
-  &lt;!--开发环境的Profile--&gt;
-  &lt;beans profile=&quot;dev&quot;&gt;
-      &lt;bean id=&quot;printHelloProfileBean&quot; 
-      class=&quot;chapter3.profile.PrintHelloProfileBean&quot; /&gt;
-  &lt;/beans&gt;
-  
-  &lt;!--生产环境的Profile--&gt;
-  &lt;beans profile=&quot;beta&quot;&gt;
-      &lt;bean id=&quot;printWorldProfileBean&quot; 
-      class=&quot;chapter3.profile.PrintWorldProfileBean&quot; /&gt;
-  &lt;/beans&gt;
+    &lt;!--开发环境的Profile--&gt;
+    &lt;beans profile=&quot;dev&quot;&gt;
+        &lt;bean id=&quot;printHelloProfileBean&quot; 
+        class=&quot;chapter3.profile.PrintHelloProfileBean&quot; /&gt;
+    &lt;/beans&gt;
+    
+    &lt;!--生产环境的Profile--&gt;
+    &lt;beans profile=&quot;beta&quot;&gt;
+        &lt;bean id=&quot;printWorldProfileBean&quot; 
+        class=&quot;chapter3.profile.PrintWorldProfileBean&quot; /&gt;
+    &lt;/beans&gt;
 &lt;/beans&gt;
 </code></pre>
-</li>
-</ul>
 <p>xml中使用Profile必须在<code>&lt;beans&gt;</code>元素的profile属性中使用。</p>
 <h4 id="激活Profile"><a href="#激活Profile" class="headerlink" title="激活Profile"></a>激活Profile</h4><p>Spring中要确定那个profile处于激活状态，依赖于两个独立的属性，<code>spring.profiles.active</code>和<code>spring.profiles.default</code>,首先查找<code>spring.profiles.active</code>，如果没有设置，则查找<code>spring.profiles.default</code>，如果都没有设置，则没有激活profile。</p>
 <p>激活有几种方法，《Spring in action》作者推荐了一种激活profile的方式，如下所示：</p>
 <ul>
-<li><p>在DispatcherServlet中配置激活的Profile</p>
+<li>在DispatcherServlet中配置激活的Profile</li>
+</ul>
 <pre><code class="xml">&lt;servlet&gt;
-      &lt;servlet-name&gt;scdp-dispatcher&lt;/servlet-name&gt;
-      &lt;servlet-class&gt;
-      org.springframework.web.servlet.DispatcherServlet
-      &lt;/servlet-class&gt;
-      &lt;init-param&gt;
-          &lt;param-name&gt;spring.profiles.default&lt;/param-name&gt;
-          &lt;param-value&gt;dev&lt;/param-value&gt;
-      &lt;/init-param&gt;
-      &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+        &lt;servlet-name&gt;scdp-dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;
+        org.springframework.web.servlet.DispatcherServlet
+        &lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;spring.profiles.default&lt;/param-name&gt;
+            &lt;param-value&gt;dev&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
 &lt;/servlet&gt;
 </code></pre>
-</li>
-<li><p>在ContextLoaderListener中激活Profile</p>
+<ul>
+<li>在ContextLoaderListener中激活Profile</li>
+</ul>
 <pre><code class="xml">&lt;context-param&gt;
-      &lt;param-name&gt;spring.profiles.default&lt;/param-name&gt;
-      &lt;param-value&gt;dev&lt;/param-value&gt;
+        &lt;param-name&gt;spring.profiles.default&lt;/param-name&gt;
+        &lt;param-value&gt;dev&lt;/param-value&gt;
 &lt;/context-param&gt;
 </code></pre>
-</li>
-</ul>
 <p>如果使用javaConfig配置的话，则在AbstractAnnotationConfigDispatcherServletInitializer的子类里 重写onStartup方法，如下：</p>
 <pre><code class="java">@Override
     public void onStartup(ServletContext servletContext) throws ServletException &#123;
@@ -370,7 +359,7 @@ public class ProfileBeanConfig &#123;
     &#125;
 </code></pre>
 <p>亦或是重写createRootApplicationContext方法，在context创建时将环境变量传入：</p>
-<pre><code class="java">      //如果RootApplicationContext需要加载带有@Profile的bean时，
+<pre><code class="java">//如果RootApplicationContext需要加载带有@Profile的bean时，
       例如spring的ApplicationContext配置类
     @Override
     protected WebApplicationContext createRootApplicationContext() &#123;
@@ -628,7 +617,7 @@ public class Cookies implements Dessert &#123;
     &lt;/bean&gt;
 </code></pre>
 <p>基于接口的代理：</p>
-<pre><code class="xml">    &lt;!--xml中定义scope以及proxyMode--&gt;
+<pre><code class="xml">&lt;!--xml中定义scope以及proxyMode--&gt;
     &lt;bean id=&quot;cake&quot; class=&quot;chapter4.qualifier.Cake&quot; scope=&quot;session&quot;&gt;
         &lt;aop:scoped-proxy proxy-target-class=&quot;false&quot;/&gt;
     &lt;/bean&gt;
@@ -664,12 +653,12 @@ public class Cookies implements Dessert &#123;
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2018/09/02/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="prev" title="设计模式-装饰器(Decorator)模式">
-      <i class="fa fa-chevron-left"></i> 设计模式-装饰器(Decorator)模式
+    <a href="/2018/08/31/JAVA-WEB%E5%9F%BA%E7%A1%80-%E5%88%9D%E5%AD%A6Spring%E6%A1%86%E6%9E%B6/" rel="prev" title="Spring-装配bean">
+      <i class="fa fa-chevron-left"></i> Spring-装配bean
     </a></div>
       <div class="post-nav-item">
-    <a href="/2018/09/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B-Singleton-%E6%A8%A1%E5%BC%8F/" rel="next" title="设计模式-单例(Singleton)模式">
-      设计模式-单例(Singleton)模式 <i class="fa fa-chevron-right"></i>
+    <a href="/2018/09/06/ng-%E5%9F%BA%E4%BA%8Ejava%E7%9A%84Spring-MVC%E9%85%8D%E7%BD%AE/" rel="next" title="Spring-SpringMVC的框架搭建">
+      Spring-SpringMVC的框架搭建 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -683,7 +672,6 @@ public class Cookies implements Dessert &#123;
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -746,20 +734,20 @@ public class Cookies implements Dessert &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -797,7 +785,7 @@ public class Cookies implements Dessert &#123;
   </span>
   <span class="author" itemprop="copyrightHolder">熊乾坤</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -823,7 +811,7 @@ public class Cookies implements Dessert &#123;
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -913,35 +901,6 @@ public class Cookies implements Dessert &#123;
     
 
   
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'o6g891hxXze8WG1xu174Bxc4-MdYXbMMI',
-      appKey     : 'HSOYHT8PzTeNo7stIuLIuYvO',
-      placeholder: "快来评论吧~",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : true,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>
