@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-15 16:33:54" itemprop="dateModified" datetime="2021-09-15T16:33:54+08:00">2021-09-15</time>
+                <time title="修改时间：2021-09-15 16:37:46" itemprop="dateModified" datetime="2021-09-15T16:37:46+08:00">2021-09-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -253,9 +253,10 @@
 <p>使用Mybatis框架时，自定义一个数据源基本包括以下几个步骤：</p>
 <ol>
 <li>配置文件中声明数据库配置</li>
-<li>根据配置文件声明DataSource</li>
-<li>定义DataSourceTransactionManager或者JpaTransactionManager</li>
-<li>定义SqlSessionFactory和SqlSessionTemplate或者定义EntityManagerFactoryBean</li>
+<li>根据配置文件声明<code>DataSource</code></li>
+<li>定义<code>DataSourceTransactionManager</code>或者<code>JpaTransactionManager</code></li>
+<li>定义<code>SqlSessionFactory</code>和<code>SqlSessionTemplate</code>或者定义<code>EntityManagerFactoryBean</code></li>
+<li>使用<code>@MapperScan</code>或者<code>@EnableJpaRepositories</code>注解区分数据源</li>
 </ol>
           <!--noindex-->
           <!--/noindex-->
