@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="springboot">
+  <meta name="description" content="在开发中，经常会有用到使用多数据源的情况，SpringBoot框架会自动定义一个配置前缀为spring.datasource开头的默认数据源，如果需要使用到其他非默认的数据源，则需要手动去定义，如何在SpringBoot项目中去自定义数据源是一个开发最基本的开发技能，以前总是会按照网上的博客去配置，现在去系统学习一下吧，后面能够用得上。 使用Mybatis框架时，自定义一个数据源基本包括以下几个步">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot自定义数据源">
 <meta property="og:url" content="https://super-aviator.github.io/2021/08/16/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E6%BA%90/index.html">
 <meta property="og:site_name" content="孤独飞行员">
-<meta property="og:description" content="springboot">
+<meta property="og:description" content="在开发中，经常会有用到使用多数据源的情况，SpringBoot框架会自动定义一个配置前缀为spring.datasource开头的默认数据源，如果需要使用到其他非默认的数据源，则需要手动去定义，如何在SpringBoot项目中去自定义数据源是一个开发最基本的开发技能，以前总是会按照网上的博客去配置，现在去系统学习一下吧，后面能够用得上。 使用Mybatis框架时，自定义一个数据源基本包括以下几个步">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Spring/jdbc%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8.jpg">
 <meta property="article:published_time" content="2021-08-16T02:48:53.000Z">
-<meta property="article:modified_time" content="2021-08-16T02:48:53.043Z">
+<meta property="article:modified_time" content="2021-09-15T08:33:54.633Z">
 <meta property="article:author" content="熊乾坤">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Mybatis">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Spring/jdbc%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8.jpg">
 
 <link rel="canonical" href="https://super-aviator.github.io/2021/08/16/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E6%BA%90/">
 
@@ -219,6 +223,13 @@
 
               <time title="创建时间：2021-08-16 10:48:53" itemprop="dateCreated datePublished" datetime="2021-08-16T10:48:53+08:00">2021-08-16</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-15 16:33:54" itemprop="dateModified" datetime="2021-09-15T16:33:54+08:00">2021-09-15</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -226,6 +237,10 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Database/" itemprop="url" rel="index"><span itemprop="name">Database</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
                 </span>
             </span>
 
@@ -240,7 +255,108 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>springboot</p>
+        <p>在开发中，经常会有用到使用多数据源的情况，SpringBoot框架会自动定义一个配置前缀为spring.datasource开头的默认数据源，如果需要使用到其他非默认的数据源，则需要手动去定义，如何在SpringBoot项目中去自定义数据源是一个开发最基本的开发技能，以前总是会按照网上的博客去配置，现在去系统学习一下吧，后面能够用得上。</p>
+<p>使用Mybatis框架时，自定义一个数据源基本包括以下几个步骤：</p>
+<ol>
+<li>配置文件中声明数据库配置</li>
+<li>根据配置文件声明DataSource</li>
+<li>定义DataSourceTransactionManager或者JpaTransactionManager</li>
+<li>定义SqlSessionFactory和SqlSessionTemplate或者定义EntityManagerFactoryBean</li>
+</ol>
+<span id="more"></span>
+
+<h1 id="新增数据库配置"><a href="#新增数据库配置" class="headerlink" title="新增数据库配置"></a>新增数据库配置</h1><p>首先需要在yml文件中新增数据库配置：</p>
+<pre><code class="yml">spring:
+     datasource:
+         jdbc-url: jdbc:oracle:thin:@localhost:1521:orac
+         username: system
+         password: 123456
+         driver-class-name: oracle.jdbc.driver.OracleDriver
+</code></pre>
+<h1 id="自定义数据源（DataSource）"><a href="#自定义数据源（DataSource）" class="headerlink" title="自定义数据源（DataSource）"></a>自定义数据源（DataSource）</h1><p>然后定义Datasource的Bean，Spring Boot提供了一个工具生成器类<code>DataSourceBuilder</code>，可以被用于生成标准的数据源（如果它在类路径上）。在类路径上哪个可用，生成器就会用哪个。它也会基于JDBC URL自动探测驱动，如果使用了Druid数据源，也可以使用DruidDataSourceBuilder类进行生成：</p>
+<pre><code class="java">@Bean(&quot;oracle&quot;)
+@ConfigurationProperties(prefix = &quot;spring.datasource.oracle&quot;)
+public DataSource getOracleDataSource() &#123;
+    return DataSourceBuilder.create().build();
+&#125;
+</code></pre>
+<p>通过Spring Boot提供的<code>DataSourceProperties</code>，你可以走得更远。如果没有URL（带有可感测的用户名和密码）被提供，它提供一个默认的内嵌的数据库。你可以从任何<code>DataSourceProperties</code>的状态，轻松地初始化一个<code>DataSourceBuilder</code>。这样，你可以注入Spring Boot自动创建的数据源。可是，那将会把你的配置分离为两个命名空间：<code>spring.datasource</code>上的url，用户名，密码，类型和驱动，以及在你自定义的命名空间（<code>app.datasource</code>）上的剩余部分。为了避免这种情况，你可以在你自定义的命名空间，**重新定义一个自定义的<code>DataSourceProperties</code>**：</p>
+<pre><code class="java">@Bean
+@Primary
+@ConfigurationProperties(&quot;app.datasource&quot;)
+public DataSourceProperties dataSourceProperties() &#123;
+    return new DataSourceProperties();
+
+&#125;
+
+@Bean
+@ConfigurationProperties(&quot;app.datasource&quot;)
+public HikariDataSource dataSource(DataSourceProperties properties) &#123;
+    return properties.initializeDataSourceBuilder().type(HikariDataSource.class)
+            .build();
+&#125;
+</code></pre>
+<p><strong>需要注意的是</strong>：如果定义了多个DataSource或者DataSourceProperties，需要使用@Primary注解声明哪个数据源是优先的，否则项目会启动失败。同时，一旦用户自定义了数据源， 则SpringBoot会取消掉默认数据源的自动配置。</p>
+<h1 id="针对MyBatis：定义Transaction-Manager、SqlSessionFactory和SqlSessionTemplate"><a href="#针对MyBatis：定义Transaction-Manager、SqlSessionFactory和SqlSessionTemplate" class="headerlink" title="针对MyBatis：定义Transaction Manager、SqlSessionFactory和SqlSessionTemplate"></a>针对MyBatis：定义<code>Transaction Manager</code>、<code>SqlSessionFactory</code>和<code>SqlSessionTemplate</code></h1><p>接下来需要通过创建的DataSource的Bean来创建一个TransactionManager用于事务管理，如果是Mybatis，则可以直接定义DataSourceTransactionManager：</p>
+<pre><code class="java">@Bean(name = &quot;rdsSqlTransactionManager&quot;)
+@Primary
+public DataSourceTransactionManager getTransactionManager(@Qualifier(&quot;oracle&quot;) DataSource dataSource) &#123;
+    return new DataSourceTransactionManager(dataSource);
+&#125;
+</code></pre>
+<p>Transaction Manager继承图如下：</p>
+<p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Spring/jdbc%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8.jpg" alt="继承图"></p>
+<p>Mybatis中，必须声明SqlSesstionFactory才能够使用：</p>
+<pre><code class="java">@Bean(name = &quot;rdsSqlSessionFactory&quot;)
+public SqlSessionFactory sqlSessionFactory(@Qualifier(&quot;rdsDataSource&quot;) DataSource dataSource) throws Exception &#123;
+    SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+    sqlSessionFactoryBean.setDataSource(dataSource);
+    sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(&quot;classpath:mybatis/**.xml&quot;));
+    Objects.requireNonNull(sqlSessionFactoryBean.getObject()).getConfiguration().setMapUnderscoreToCamelCase(true);
+    return sqlSessionFactoryBean.getObject();
+&#125;
+@Bean(name = &quot;rdsSqlSessionTemplate&quot;)
+public SqlSessionTemplate sqlSessionTemplate(@Qualifier(&quot;rdsSqlSessionFactory&quot;) SqlSessionFactory sqlSessionFactory) &#123;
+    return new SqlSessionTemplate(sqlSessionFactory);
+&#125;
+</code></pre>
+<p>最后还需要使用注解@MapperScan来根据包路径区分不同数据源的Mapper：</p>
+<pre><code class="java">@Configuration
+@MapperScan(basePackages = &quot;cn.stormwind.tunnel.mapper.rds&quot;, sqlSessionFactoryRef = &quot;rdsSqlSessionFactory&quot;)
+public class RdsDataSourceConfig &#123;
+&#125;
+</code></pre>
+<h1 id="针对JPA：定义EntityManagerFactoryBean、JPATransactionManager"><a href="#针对JPA：定义EntityManagerFactoryBean、JPATransactionManager" class="headerlink" title="针对JPA：定义EntityManagerFactoryBean、JPATransactionManager"></a>针对JPA：定义<code>EntityManagerFactoryBean</code>、<code>JPATransactionManager</code></h1><p>JPA中，需要声明EntityManagerFactoryBean，并指定entity的包路径以及数据库类型：</p>
+<pre><code class="java">@Bean(&quot;oracleEntityManagerFactory&quot;)
+public LocalContainerEntityManagerFactoryBean getOracleEntityManagerFactory(EntityManagerFactoryBuilder builder) &#123;
+    return builder.dataSource(getOracleDataSource())
+          .packages(&quot;com.xqk.learn.springboot.data.jpa.datasource.entity&quot;)
+          .persistenceUnit(&quot;oracle&quot;)
+          .build();
+&#125;
+</code></pre>
+<p>然后定义JPATransactionManager：</p>
+<pre><code class="java">@Bean(&quot;oracleTransactionManager&quot;)
+public PlatformTransactionManager getOraclePlatformTransactionManager(EntityManagerFactoryBuilder builder) &#123;
+    return new JpaTransactionManager(getOracleEntityManagerFactory(builder).getObject());
+&#125;
+</code></pre>
+<p>同时需要使用注解@EnableJpaRepositories来声明Repository的包位置以及entityManagerFactory和TransactionManager的名称：</p>
+<pre><code class="java">/**
+ * @author xiongqiankun
+ * @since 2020-01-06 13:42
+ */
+@Configuration
+@Profile(&quot;datasource&quot;)
+@EnableTransactionManagement
+@EnableJpaRepositories(
+        basePackages = &#123;&quot;com.xqk.learn.springboot.data.jpa.datasource.repository&quot;&#125;,
+        entityManagerFactoryRef = &quot;oracleEntityManagerFactory&quot;,
+        transactionManagerRef = &quot;oracleTransactionManager&quot;
+)
+public class OracleJpaRepositoryConfiguration &#123;
+&#125;
+</code></pre>
 
     </div>
 
@@ -249,6 +365,11 @@
     
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+              <a href="/tags/Mybatis/" rel="tag"><i class="fa fa-tag"></i> Mybatis</a>
+          </div>
 
         
 
@@ -318,6 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E6%95%B0%E6%8D%AE%E5%BA%93%E9%85%8D%E7%BD%AE"><span class="nav-text">新增数据库配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E6%BA%90%EF%BC%88DataSource%EF%BC%89"><span class="nav-text">自定义数据源（DataSource）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%92%88%E5%AF%B9MyBatis%EF%BC%9A%E5%AE%9A%E4%B9%89Transaction-Manager%E3%80%81SqlSessionFactory%E5%92%8CSqlSessionTemplate"><span class="nav-text">针对MyBatis：定义Transaction Manager、SqlSessionFactory和SqlSessionTemplate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%92%88%E5%AF%B9JPA%EF%BC%9A%E5%AE%9A%E4%B9%89EntityManagerFactoryBean%E3%80%81JPATransactionManager"><span class="nav-text">针对JPA：定义EntityManagerFactoryBean、JPATransactionManager</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -340,13 +462,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
