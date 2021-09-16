@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="【转载】面试官问：淘宝七天自动确认收货，让你设计，可以怎么实现？">
+<meta property="og:url" content="https://super-aviator.github.io/2021/09/16/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%9D%A2%E8%AF%95%E5%AE%98%E9%97%AE%EF%BC%9A%E6%B7%98%E5%AE%9D%E4%B8%83%E5%A4%A9%E8%87%AA%E5%8A%A8%E7%A1%AE%E8%AE%A4%E6%94%B6%E8%B4%A7%EF%BC%8C%E8%AE%A9%E4%BD%A0%E8%AE%BE%E8%AE%A1%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%EF%BC%9F/index.html">
+<meta property="og:site_name" content="孤独飞行员">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Interview/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210916100640.jpg">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Interview/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210916100505.jpg">
+<meta property="article:published_time" content="2021-09-16T02:02:04.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:09:33.548Z">
+<meta property="article:author" content="熊乾坤">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Interview/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210916100640.jpg">
+
+<link rel="canonical" href="https://super-aviator.github.io/2021/09/16/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%9D%A2%E8%AF%95%E5%AE%98%E9%97%AE%EF%BC%9A%E6%B7%98%E5%AE%9D%E4%B8%83%E5%A4%A9%E8%87%AA%E5%8A%A8%E7%A1%AE%E8%AE%A4%E6%94%B6%E8%B4%A7%EF%BC%8C%E8%AE%A9%E4%BD%A0%E8%AE%BE%E8%AE%A1%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%EF%BC%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【转载】面试官问：淘宝七天自动确认收货，让你设计，可以怎么实现？ | 孤独飞行员</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">孤独飞行员</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2021/09/16/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%9D%A2%E8%AF%95%E5%AE%98%E9%97%AE%EF%BC%9A%E6%B7%98%E5%AE%9D%E4%B8%83%E5%A4%A9%E8%87%AA%E5%8A%A8%E7%A1%AE%E8%AE%A4%E6%94%B6%E8%B4%A7%EF%BC%8C%E8%AE%A9%E4%BD%A0%E8%AE%BE%E8%AE%A1%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊乾坤">
+      <meta itemprop="description" content="熊乾坤的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="孤独飞行员">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【转载】面试官问：淘宝七天自动确认收货，让你设计，可以怎么实现？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-16 10:02:04 / 修改时间：10:09:33" itemprop="dateCreated datePublished" datetime="2021-09-16T10:02:04+08:00">2021-09-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Interview/" itemprop="url" rel="index"><span itemprop="name">Interview</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Interview/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210916100640.jpg"></p>
+<span id="more"></span>
+
+<p><strong>原文链接：</strong><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/vh-VyALlIhu8mkweB277Vg"># 面试官问：淘宝七天自动确认收货，让你设计，可以怎么实现？</a></p>
+<p>目前常见的应用软件都有消息的延迟推送的影子，应用也极为广泛，例如：</p>
+<ul>
+<li>淘宝七天自动确认收货。在我们签收商品后，物流系统会在七天后延时发送一个消息给支付系统，通知支付系统将款打给商家，这个过程持续七天，就是使用了消息中间件的延迟推送功能</li>
+<li>12306 购票支付确认页面。我们在选好票点击确定跳转的页面中往往都会有倒计时，代表着 30 分钟内订单不确认的话将会自动取消订单。其实在下订单那一刻开始购票业务系统就会发送一个延时消息给订单系统，延时30分钟，告诉订单系统订单未完成，如果我们在30分钟内完成了订单，则可以通过逻辑代码判断来忽略掉收到的消息</li>
+</ul>
+<p>在上面两种场景中，如果我们使用下面两种传统解决方案无疑大大降低了系统的整体性能和吞吐量：</p>
+<ul>
+<li>使用 redis 给订单设置过期时间，最后通过判断 redis 中是否还有该订单来决定订单是否已经完成。这种解决方案相较于消息的延迟推送性能较低，因为我们知道 redis 都是存储于内存中，我们遇到恶意下单或者刷单的将会给内存带来巨大压力。</li>
+<li>使用传统的数据库轮询来判断数据库表中订单的状态，这无疑增加了IO次数，性能极低。</li>
+<li>使用 jvm 原生的 DelayQueue ，也是大量占用内存，而且没有持久化策略，系统宕机或者重启都会丢失订单信息。</li>
+</ul>
+<h2 id="消息延迟推送的实现"><a href="#消息延迟推送的实现" class="headerlink" title="消息延迟推送的实现"></a>消息延迟推送的实现</h2><p>在 RabbitMQ 3.6.x 之前我们一般采用死信队列+TTL过期时间来实现延迟队列，我们这里不做过多介绍。</p>
+<p>在 RabbitMQ 3.6.x 开始，RabbitMQ 官方提供了延迟队列的插件，可以下载放置到 RabbitMQ 根目录下的 plugins 下。</p>
+<p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/Interview/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210916100505.jpg" alt="图片"></p>
+<p>首先我们创建交换机和消息队列，application.properties 中配置与上一篇文章相同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.amqp.core.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MQConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String LAZY_EXCHANGE = <span class="string">&quot;Ex.LazyExchange&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String LAZY_QUEUE = <span class="string">&quot;MQ.LazyQueue&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String LAZY_KEY = <span class="string">&quot;lazy.#&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TopicExchange <span class="title">lazyExchange</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//Map&lt;String, Object&gt; pros = new HashMap&lt;&gt;();</span></span><br><span class="line">        <span class="comment">//设置交换机支持延迟消息推送</span></span><br><span class="line">        <span class="comment">//pros.put(&quot;x-delayed-message&quot;, &quot;topic&quot;);</span></span><br><span class="line">        TopicExchange exchange = <span class="keyword">new</span> TopicExchange(LAZY_EXCHANGE, <span class="keyword">true</span>, <span class="keyword">false</span>, pros);</span><br><span class="line">        exchange.setDelayed(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">return</span> exchange;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Queue <span class="title">lazyQueue</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Queue(LAZY_QUEUE, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Binding <span class="title">lazyBinding</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> BindingBuilder.bind(lazyQueue()).to(lazyExchange()).with(LAZY_KEY);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们在 Exchange 的声明中可以设置<code>exchange.setDelayed(true)</code>来开启延迟队列，也可以设置为以下内容传入交换机声明的方法中，因为第一种方式的底层就是通过这种方式来实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Map&lt;String, Object&gt; pros = new HashMap&lt;&gt;();</span></span><br><span class="line">        <span class="comment">//设置交换机支持延迟消息推送</span></span><br><span class="line">        <span class="comment">//pros.put(&quot;x-delayed-message&quot;, &quot;topic&quot;);</span></span><br><span class="line">        TopicExchange exchange = <span class="keyword">new</span> TopicExchange(LAZY_EXCHANGE, <span class="keyword">true</span>, <span class="keyword">false</span>, pros);</span><br></pre></td></tr></table></figure>
+
+<p>发送消息时我们需要指定延迟推送的时间，我们这里在发送消息的方法中传入参数 <code>new MessagePostProcessor()</code> 是为了获得 <code>Message</code>对象，因为需要借助 <code>Message</code>对象的api 来设置延迟时间。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.anqi.mq.config.MQConfig;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.AmqpException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.core.Message;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.core.MessageDeliveryMode;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.core.MessagePostProcessor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.rabbit.connection.CorrelationData;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.rabbit.core.RabbitTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MQSender</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RabbitTemplate rabbitTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//confirmCallback returnCallback 代码省略，请参照上一篇</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendLazy</span><span class="params">(Object message)</span></span>&#123;</span><br><span class="line">        rabbitTemplate.setMandatory(<span class="keyword">true</span>);</span><br><span class="line">        rabbitTemplate.setConfirmCallback(confirmCallback);</span><br><span class="line">        rabbitTemplate.setReturnCallback(returnCallback);</span><br><span class="line">        <span class="comment">//id + 时间戳 全局唯一</span></span><br><span class="line">        CorrelationData correlationData = <span class="keyword">new</span> CorrelationData(<span class="string">&quot;12345678909&quot;</span>+<span class="keyword">new</span> Date());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//发送消息时指定 header 延迟时间</span></span><br><span class="line">        rabbitTemplate.convertAndSend(MQConfig.LAZY_EXCHANGE, <span class="string">&quot;lazy.boot&quot;</span>, message,</span><br><span class="line">                <span class="keyword">new</span> MessagePostProcessor() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Message <span class="title">postProcessMessage</span><span class="params">(Message message)</span> <span class="keyword">throws</span> AmqpException </span>&#123;</span><br><span class="line">                <span class="comment">//设置消息持久化</span></span><br><span class="line">                message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);</span><br><span class="line">                <span class="comment">//message.getMessageProperties().setHeader(&quot;x-delay&quot;, &quot;6000&quot;);</span></span><br><span class="line">                message.getMessageProperties().setDelay(<span class="number">6000</span>);</span><br><span class="line">                <span class="keyword">return</span> message;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, correlationData);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以观察 <code>setDelay(Integer i)</code>底层代码，也是在 header 中设置 x-delay。等同于我们手动设置 header</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">message.getMessageProperties().setHeader(<span class="string">&quot;x-delay&quot;</span>, <span class="string">&quot;6000&quot;</span>);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Set the x-delay header.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> delay the delay.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.6</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDelay</span><span class="params">(Integer delay)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (delay == <span class="keyword">null</span> || delay &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.headers.remove(X_DELAY);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.headers.put(X_DELAY, delay);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>消费端进行消费</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.rabbit.annotation.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.support.AmqpHeaders;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MQReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RabbitListener(queues = &quot;MQ.LazyQueue&quot;)</span></span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLazyMessage</span><span class="params">(Message msg, Channel channel)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        <span class="keyword">long</span> deliveryTag = msg.getMessageProperties().getDeliveryTag();</span><br><span class="line">        channel.basicAck(deliveryTag, <span class="keyword">true</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;lazy receive &quot;</span> + <span class="keyword">new</span> String(msg.getBody()));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果#"></a>测试结果<a target="_blank" rel="noopener" href="https://www.cnblogs.com/haixiang/p/10966985.html#3724420099">#</a></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.test.context.SpringBootTest;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringRunner;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="meta">@RunWith(SpringRunner.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MQSenderTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MQSender mqSender;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendLazy</span><span class="params">()</span> <span class="keyword">throws</span>  Exception </span>&#123;</span><br><span class="line">        String msg = <span class="string">&quot;hello spring boot&quot;</span>;</span><br><span class="line"></span><br><span class="line">        mqSender.sendLazy(msg + <span class="string">&quot;:&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>果然在 6 秒后收到了消息 <code>lazy receive hello spring boot:</code></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/16/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E6%BA%90/" rel="prev" title="SpringBoot自定义数据源">
+      <i class="fa fa-chevron-left"></i> SpringBoot自定义数据源
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%BB%B6%E8%BF%9F%E6%8E%A8%E9%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-text">消息延迟推送的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-text">测试结果</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊乾坤"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊乾坤</p>
+  <div class="site-description" itemprop="description">熊乾坤的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/aviator/blog" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;aviator&#x2F;blog" rel="noopener" target="_blank"><i class="fa fa-address-book fa-fw"></i>YuQue</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/super-aviator" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;super-aviator" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:18062148246@163.com" title="E-Mail → mailto:18062148246@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5966289049" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5966289049" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://fangjian0423.github.io/" title="http:&#x2F;&#x2F;fangjian0423.github.io&#x2F;" rel="noopener" target="_blank">方剑-Format's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xiaomi-info.github.io/" title="https:&#x2F;&#x2F;xiaomi-info.github.io&#x2F;" rel="noopener" target="_blank">小米信息部技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊乾坤</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
