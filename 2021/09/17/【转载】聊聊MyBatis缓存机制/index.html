@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/090216b1.jpg">
 <meta property="og:image" content="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/1f5233b2.jpg">
 <meta property="article:published_time" content="2021-09-17T08:06:12.000Z">
-<meta property="article:modified_time" content="2021-09-17T08:13:51.817Z">
+<meta property="article:modified_time" content="2021-09-18T01:04:59.755Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="MyBatis">
 <meta name="twitter:card" content="summary">
@@ -237,10 +237,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-09-17 16:06:12 / 修改时间：16:13:51" itemprop="dateCreated datePublished" datetime="2021-09-17T16:06:12+08:00">2021-09-17</time>
+              <time title="创建时间：2021-09-17 16:06:12" itemprop="dateCreated datePublished" datetime="2021-09-17T16:06:12+08:00">2021-09-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-18 09:04:59" itemprop="dateModified" datetime="2021-09-18T09:04:59+08:00">2021-09-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -265,19 +271,19 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>MyBatis是常见的Java数据库访问层框架。在日常工作中，开发人员多数情况下是使用MyBatis的默认缓存配置，但是MyBatis缓存机制有一些不足之处，在使用中容易引起脏数据，形成一些潜在的隐患。个人在业务开发中也处理过一些由于MyBatis缓存引发的开发问题，带着个人的兴趣，希望从应用及源码的角度为读者梳理MyBatis缓存机制。</p>
 <span id="more"></span>
 
-<p>本次分析中涉及到的代码和数据库表均放在GitHub上，地址： <a target="_blank" rel="noopener" href="https://github.com/kailuncen/mybatis-cache-demo">mybatis-cache-demo</a> </p>
+<p>本次分析中涉及到的代码和数据库表均放在GitHub上，地址： <a target="_blank" rel="noopener" href="https://github.com/kailuncen/mybatis-cache-demo">mybatis-cache-demo</a></p>
 <p><strong>原文链接：</strong> <a target="_blank" rel="noopener" href="https://tech.meituan.com/2018/01/19/mybatis-cache.html">聊聊MyBatis缓存机制</a></p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>本文按照以下顺序展开。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>本文按照以下顺序展开</p>
 <ul>
-<li>一级缓存介绍及相关配置。</li>
-<li>一级缓存工作流程及源码分析。</li>
-<li>一级缓存总结。</li>
-<li>二级缓存介绍及相关配置。</li>
-<li>二级缓存源码分析。</li>
-<li>二级缓存总结。</li>
-<li>全文总结。</li>
+<li>一级缓存介绍及相关配置</li>
+<li>一级缓存工作流程及源码分析</li>
+<li>一级缓存总结</li>
+<li>二级缓存介绍及相关配置</li>
+<li>二级缓存源码分析</li>
+<li>二级缓存总结</li>
+<li>全文总结</li>
 </ul>
-<h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><h3 id="一级缓存介绍"><a href="#一级缓存介绍" class="headerlink" title="一级缓存介绍"></a>一级缓存介绍</h3><p>在应用运行过程中，我们有可能在一次数据库会话中，执行多次查询条件完全相同的SQL，MyBatis提供了一级缓存的方案优化这部分场景，如果是相同的SQL语句，会优先命中一级缓存，避免直接对数据库进行查询，提高性能。具体执行过程如下图所示。</p>
+<h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><h3 id="一级缓存介绍"><a href="#一级缓存介绍" class="headerlink" title="一级缓存介绍"></a>一级缓存介绍</h3><p>在应用运行过程中，我们有可能在一次数据库会话中，执行多次查询条件完全相同的SQL，MyBatis提供了一级缓存的方案优化这部分场景，如果是相同的SQL语句，会优先命中一级缓存，避免直接对数据库进行查询，提高性能。具体执行过程如下图所示：</p>
 <p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/6e38df6a.jpg"></p>
 <p>每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成<code>MappedStatement</code>，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入<code>Local Cache</code>，最后返回结果给用户。具体实现类的类关系图如下图所示。</p>
 <p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/d76ec5fe.jpg"></p>
@@ -610,7 +616,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
