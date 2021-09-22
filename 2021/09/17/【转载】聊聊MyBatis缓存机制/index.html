@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/090216b1.jpg">
 <meta property="og:image" content="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/1f5233b2.jpg">
 <meta property="article:published_time" content="2021-09-17T08:06:12.000Z">
-<meta property="article:modified_time" content="2021-09-22T06:17:56.257Z">
+<meta property="article:modified_time" content="2021-09-22T08:27:31.447Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="MyBatis">
 <meta name="twitter:card" content="summary">
@@ -245,7 +245,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-22 14:17:56" itemprop="dateModified" datetime="2021-09-22T14:17:56+08:00">2021-09-22</time>
+                <time title="修改时间：2021-09-22 16:27:31" itemprop="dateModified" datetime="2021-09-22T16:27:31+08:00">2021-09-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -286,12 +286,14 @@
 <h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><h3 id="一级缓存介绍"><a href="#一级缓存介绍" class="headerlink" title="一级缓存介绍"></a>一级缓存介绍</h3><p>在应用运行过程中，我们有可能在一次数据库会话中，执行多次查询条件完全相同的SQL，MyBatis提供了一级缓存的方案优化这部分场景，如果是相同的SQL语句，会优先命中一级缓存，避免直接对数据库进行查询，提高性能。具体执行过程如下图所示：</p>
 <p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/6e38df6a.jpg"></p>
 <p>每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成<code>MappedStatement</code>，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入<code>Local Cache</code>，最后返回结果给用户。具体实现类的类关系图如下图所示。</p>
-<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/d76ec5fe.jpg"></p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/d76ec5fe.jpg"><br>hljs</p>
 <h3 id="一级缓存配置"><a href="#一级缓存配置" class="headerlink" title="一级缓存配置"></a>一级缓存配置</h3><p>我们来看看如何使用MyBatis一级缓存。开发者只需在MyBatis的配置文件中，添加如下语句，就可以使用一级缓存。共有两个选项，<code>SESSION</code>或者<code>STATEMENT</code>，默认是<code>SESSION</code>级别，即在一个MyBatis会话中执行的所有语句，都会共享这一个缓存。一种是<code>STATEMENT</code>级别，可以理解为缓存只对当前执行的这一个<code>Statement</code>有效。</p>
 <figure class="highlight xml"><figcaption><span>hljs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">&quot;localCacheScope&quot;</span> <span class="attr">value</span>=<span class="string">&quot;SESSION&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
 
+
 <h3 id="一级缓存实验"><a href="#一级缓存实验" class="headerlink" title="一级缓存实验"></a>一级缓存实验</h3><p>接下来通过实验，了解MyBatis一级缓存的效果，每个单元测试后都请恢复被修改的数据。</p>
-<p>首先是创建示例表student，创建对应的POJO类和增改的方法，具体可以在entity包和mapper包中查看。</p>
+<p><strong>注意：</strong> 在未开启事务时，每次查询Spring关闭旧的SqlSesstion，创建一个新的SqlSesstion对象，一级缓存不起作用，而开启事务时，Spring使用ThreadLocal获取当前资源绑定的同一个SqlSesstion，一级缓存起作用。</p>
+<p>首先是创建示例表student，创建对应的POJO类和增改的方法，具体可以在entity包和mapper包中查看：</p>
 <figure class="highlight sql"><figcaption><span>hljs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) unsigned <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">200</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `age` tinyint(<span class="number">3</span>) unsigned <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">4</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8_bin;</span><br></pre></td></tr></table></figure>
 
 <p>在以下实验中，id为1的学生名称是凯伦。</p>
@@ -666,6 +668,9 @@
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.javaboy.org/" title="http:&#x2F;&#x2F;www.javaboy.org&#x2F;" rel="noopener" target="_blank">江南一点雨</a>
         </li>
     </ul>
   </div>
