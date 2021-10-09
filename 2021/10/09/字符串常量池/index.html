@@ -28,15 +28,12 @@
 <meta property="og:description" content="我想所有 Java 程序员都曾被这个 new String的问题困扰过，这是一道高频的 Java 面试题，但可惜的是网上众说纷纭，竟然找不到标准的答案。有人说创建了 1 个对象，也有人说创建了 2 个对象，还有人说可能创建了 1 个或 2 个对象，但谁都没有拿出干掉对方的证据，这就让我们这帮吃瓜群众们陷入了两难之中，不知道到底该信谁得。但是今天，老王就斗胆和大家聊聊这个话题，顺便再拿出点证据。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574247969-f9a9fede-d06b-4256-b2b9-25661e696e0e.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574247995-e7631afb-b5c2-48d1-a2c6-7ef6afa0688c.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574248068-6dc40f1e-00de-448b-8456-06a255d8d9b6.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574247941-c5193cd3-654f-451d-bd7e-5357b69d0b65.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/e825b8d1714e059277025ed9aee0ce4a.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/e825b8d1714e059277025ed9aee0ce4a.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/953f80b7948cab44f62fe98d1b16ce59.svg">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A02.jpg">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A03.jpg">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A04.jpg">
+<meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A05.png">
 <meta property="article:published_time" content="2021-10-09T09:30:34.000Z">
-<meta property="article:modified_time" content="2021-10-09T09:37:45.852Z">
+<meta property="article:modified_time" content="2021-10-09T10:03:21.283Z">
 <meta property="article:author" content="熊乾坤">
 <meta property="article:tag" content="Java疑惑解答">
 <meta name="twitter:card" content="summary">
@@ -228,7 +225,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-10-09 17:30:34 / 修改时间：17:37:45" itemprop="dateCreated datePublished" datetime="2021-10-09T17:30:34+08:00">2021-10-09</time>
+              <time title="创建时间：2021-10-09 17:30:34 / 修改时间：18:03:21" itemprop="dateCreated datePublished" datetime="2021-10-09T17:30:34+08:00">2021-10-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,194 +258,61 @@
 <li>有人说创建了 2 个对象；</li>
 <li>有人说创建了 1 个或 2 个对象。</li>
 </ol>
-<p><strong>而出现多个答案的关键争议点在「字符串常量池」上</strong>，有的说new字符串的方式会在常量池创建一个字符串对象，有人说 new 字符串的时候并不会去字符串常量池创建对象，而是在调用 <code>&lt;span class=&quot;ne-text&quot;&gt;intern()&lt;/span&gt;</code> 方法时，才会去字符串常量池检测并创建字符串。</p>
+<p><strong>而出现多个答案的关键争议点在「字符串常量池」上</strong>，有的说new字符串的方式会在常量池创建一个字符串对象，有人说 new 字符串的时候并不会去字符串常量池创建对象，而是在调用 <code>intern()</code> 方法时，才会去字符串常量池检测并创建字符串。</p>
 <p>那我们就先来说说这个「字符串常量池」。</p>
-<h2 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h2><p>字符串的分配和其他的对象分配一样，需要耗费高昂的时间和空间为代价，如果需要大量频繁的创建字符串，会极大程度地影响程序的性能，因此 JVM 为了提高性能和减少内存开销引入了字符串常量池（Constant Pool Table）的概念。</p>
+<h1 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h1><p>字符串的分配和其他的对象分配一样，需要耗费高昂的时间和空间为代价，如果需要大量频繁的创建字符串，会极大程度地影响程序的性能，因此 JVM 为了提高性能和减少内存开销引入了字符串常量池（Constant Pool Table）的概念。</p>
 <p>字符串常量池相当于给字符串开辟一个常量池空间类似于缓存区，<strong>对于直接赋值的字符串（String s=”xxx”）来说，在每次创建字符串时优先使用已经存在字符串常量池的字符串，如果字符串常量池没有相关的字符串，会先在字符串常量池中创建该字符串，然后将引用地址返回变量</strong>，如下图所示：</p>
 <p>_<img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0.png"><br>_</p>
 <p>以上说法可以通过如下代码进行证明：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringExample</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">         String s1 = &amp;#34;Java&amp;#34;;</span><br><span class="line">         String s2 = &amp;#34;Java&amp;#34;;</span><br><span class="line">         System.out.println(s1 == s2);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringExample</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">         String s1 = <span class="string">&quot;Java&quot;</span>;</span><br><span class="line">         String s2 = <span class="string">&quot;Java&quot;</span>;</span><br><span class="line">         System.out.println(s1 == s2);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>以上程序的执行结果为：<code>true</code>，说明变量 s1 和变量 s2 指向的是同一个地址。在这里我们顺便说一下字符串常量池在不同JDK版本的变化。</p>
-<h2 id="常量池的内存布局"><a href="#常量池的内存布局" class="headerlink" title="常量池的内存布局"></a>常量池的内存布局</h2><p>从<strong>JDK 1.7 之后把永生代换成的元空间，把字符串常量池从方法区移到了 Java 堆上</strong>。</p>
+<h1 id="常量池的内存布局"><a href="#常量池的内存布局" class="headerlink" title="常量池的内存布局"></a>常量池的内存布局</h1><p>从<strong>JDK 1.7 之后把永生代换成的元空间，把字符串常量池从方法区移到了 Java 堆上</strong>。</p>
 <p>JDK 1.7 内存布局如下图所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574247969-f9a9fede-d06b-4256-b2b9-25661e696e0e.png"></p>
+<p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A02.jpg"></p>
 <p>JDK1.8 内存布局如下图所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574247995-e7631afb-b5c2-48d1-a2c6-7ef6afa0688c.png"></p>
+<p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A03.jpg"></p>
 <p><strong>JDK 1.8 与 JDK 1.7 最大的区别是 JDK 1.8 将永久代取消，并设立了元空间</strong>。官方给的说明是<strong>由于永久代内存经常不够用或发生内存泄露</strong>，会爆出 java.lang.OutOfMemoryError: PermGen 的异常，所以把将永久区废弃而改用元空间了，改为了使用本地内存空间，官网解释详情：<a target="_blank" rel="noopener" href="http://openjdk.java.net/jeps/122">http://openjdk.java.net/jeps/122</a></p>
-<h2 id="答案解密"><a href="#答案解密" class="headerlink" title="答案解密"></a>答案解密</h2><p>认为 new 方式创建了 1 个对象的人认为，new String 只是在堆上创建了一个对象，只有在使用 <code>&lt;span class=&quot;ne-text&quot;&gt;intern()&lt;/span&gt;</code> 时才去常量池中查找并创建字符串。</p>
+<h1 id="答案解密"><a href="#答案解密" class="headerlink" title="答案解密"></a>答案解密</h1><p>认为 new 方式创建了 1 个对象的人认为，new String 只是在堆上创建了一个对象，只有在使用 <code>&lt;span class=&quot;ne-text&quot;&gt;intern()&lt;/span&gt;</code> 时才去常量池中查找并创建字符串。</p>
 <p>认为 new 方式创建了 2 个对象的人认为，new String 会在堆上创建一个对象，并且在字符串常量池中也创建一个字符串。</p>
 <p>认为 new 方式有可能创建 1 个或 2 个对象的人认为，new String 会先去常量池中判断有没有此字符串，如果有则只在堆上创建一个字符串并且指向常量池中的字符串，如果常量池中没有此字符串，则会创建 2 个对象，先在常量池中新建此字符串，然后把此引用返回给堆上的对象，如下图所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574248068-6dc40f1e-00de-448b-8456-06a255d8d9b6.png"></p>
+<p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A04.jpg"></p>
 <p><strong>老王认为正确的答案：创建 1 个或者 2 个对象</strong>。</p>
-<h3 id="技术论证"><a href="#技术论证" class="headerlink" title="技术论证"></a>技术论证</h3><p>解铃还须系铃人，回到问题的那个争议点上，new String 到底会不会在常量池中创建字符呢？我们通过反编译下面这段代码就可以得出正确的结论，代码如下：</p>
-<pre data-language="java" id="WPOpO" class="ne-codeblock">public class StringExample {
-    public static void main(String[] args) {
-        String s1 = new String(&#34;javaer-wang&#34;);
-        String s2 = &#34;wang-javaer&#34;;
-        String s3 = &#34;wang-javaer&#34;;
-    }
-}</pre>
+<h2 id="技术论证"><a href="#技术论证" class="headerlink" title="技术论证"></a>技术论证</h2><p>解铃还须系铃人，回到问题的那个争议点上，new String 到底会不会在常量池中创建字符呢？我们通过反编译下面这段代码就可以得出正确的结论，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringExample</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1 = <span class="keyword">new</span> String(<span class="string">&quot;javaer-wang&quot;</span>);</span><br><span class="line">        String s2 = <span class="string">&quot;wang-javaer&quot;</span>;</span><br><span class="line">        String s3 = <span class="string">&quot;wang-javaer&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>首先我们使用 <code>&lt;span class=&quot;ne-text&quot;&gt;javac StringExample.java&lt;/span&gt;</code> 编译代码，然后我们再使用 <code>&lt;span class=&quot;ne-text&quot;&gt;javap -v StringExample&lt;/span&gt;</code> 查看编译的结果，相关信息如下：</p>
-<pre data-language="java" id="R30NL" class="ne-codeblock">Classfile /Users/admin/github/blog-example/blog-example/src/main/java/com/example/StringExample.class
-  Last modified 2020 年 4 月 16 日; size 401 bytes
-  SHA-256 checksum 89833a7365ef2930ac1bc3d7b88dcc5162da4b98996eaac397940d8997c94d8e
-  Compiled from &#34;StringExample.java&#34;
-public class com.example.StringExample
-  minor version: 0
-  major version: 58
-  flags: (0x0021) ACC_PUBLIC, ACC_SUPER
-  this_class: #16                         // com/example/StringExample
-  super_class: #2                         // java/lang/Object
-  interfaces: 0, fields: 0, methods: 2, attributes: 1
-Constant pool:
-   #1 = Methodref          #2.#3          // java/lang/Object.&#34;&#34;:()V
-   #2 = Class              #4             // java/lang/Object
-   #3 = NameAndType        #5:#6          // &#34;&#34;:()V
-   #4 = Utf8               java/lang/Object
-   #5 = Utf8               
-   #6 = Utf8               ()V
-   #7 = Class              #8             // java/lang/String
-   #8 = Utf8               java/lang/String
-   #9 = String             #10            // javaer-wang
-  #10 = Utf8               javaer-wang
-  #11 = Methodref          #7.#12         // java/lang/String.&#34;&#34;:(Ljava/lang/String;)V
-  #12 = NameAndType        #5:#13         // &#34;&#34;:(Ljava/lang/String;)V
-  #13 = Utf8               (Ljava/lang/String;)V
-  #14 = String             #15            // wang-javaer
-  #15 = Utf8               wang-javaer
-  #16 = Class              #17            // com/example/StringExample
-  #17 = Utf8               com/example/StringExample
-  #18 = Utf8               Code
-  #19 = Utf8               LineNumberTable
-  #20 = Utf8               main
-  #21 = Utf8               ([Ljava/lang/String;)V
-  #22 = Utf8               SourceFile
-  #23 = Utf8               StringExample.java
-{
-  public com.example.StringExample();
-    descriptor: ()V
-    flags: (0x0001) ACC_PUBLIC
-    Code:
-      stack=1, locals=1, args_size=1
-         0: aload_0
-         1: invokespecial #1                  // Method java/lang/Object.&#34;&#34;:()V
-         4: return
-      LineNumberTable:
-        line 3: 0
+<p>首先我们使用 <code>javac StringExample.java</code> 编译代码，然后我们再使用 <code>javap -v StringExample</code>查看编译的结果，相关信息如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">Classfile /Users/admin/github/blog-example/blog-example/src/main/java/com/example/StringExample.class</span><br><span class="line">  Last modified <span class="number">2020</span> 年 <span class="number">4</span> 月 <span class="number">16</span> 日; size <span class="number">401</span> bytes</span><br><span class="line">  SHA-<span class="number">256</span> checksum 89833a7365ef2930ac1bc3d7b88dcc5162da4b98996eaac397940d8997c94d8e</span><br><span class="line">  Compiled from <span class="string">&quot;StringExample.java&quot;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">StringExample</span></span></span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: <span class="number">58</span></span><br><span class="line">  flags: (<span class="number">0x0021</span>) ACC_PUBLIC, ACC_SUPER</span><br><span class="line">  this_class: #16                         // com/example/StringExample</span><br><span class="line">  super_class: #2                         // java/lang/Object</span><br><span class="line">  interfaces: <span class="number">0</span>, fields: <span class="number">0</span>, methods: <span class="number">2</span>, attributes: <span class="number">1</span></span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #2.#3          // java/lang/Object.&quot;&quot;:()V</span><br><span class="line">   #2 = Class              #4             // java/lang/Object</span><br><span class="line">   #3 = NameAndType        #5:#6          // &quot;&quot;:()V</span><br><span class="line">   #4 = Utf8               java/lang/Object</span><br><span class="line">   #5 = Utf8               </span><br><span class="line">   #6 = Utf8               ()V</span><br><span class="line">   #7 = Class              #8             // java/lang/String</span><br><span class="line">   #8 = Utf8               java/lang/String</span><br><span class="line">   #9 = String             #10            // javaer-wang</span><br><span class="line">  #10 = Utf8               javaer-wang</span><br><span class="line">  #11 = Methodref          #7.#12         // java/lang/String.&quot;&quot;:(Ljava/lang/String;)V</span><br><span class="line">  #12 = NameAndType        #5:#13         // &quot;&quot;:(Ljava/lang/String;)V</span><br><span class="line">  #13 = Utf8               (Ljava/lang/String;)V</span><br><span class="line">  #14 = String             #15            // wang-javaer</span><br><span class="line">  #15 = Utf8               wang-javaer</span><br><span class="line">  #16 = Class              #17            // com/example/StringExample</span><br><span class="line">  #17 = Utf8               com/example/StringExample</span><br><span class="line">  #18 = Utf8               Code</span><br><span class="line">  #19 = Utf8               LineNumberTable</span><br><span class="line">  #20 = Utf8               main</span><br><span class="line">  #21 = Utf8               ([Ljava/lang/String;)V</span><br><span class="line">  #22 = Utf8               SourceFile</span><br><span class="line">  #23 = Utf8               StringExample.java</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span> com.example.StringExample();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: (<span class="number">0x0001</span>) ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&quot;:()V</span><br><span class="line">         <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">3</span>: <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: (<span class="number">0x0009</span>) ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">3</span>, locals=<span class="number">4</span>, args_size=<span class="number">1</span></span><br><span class="line">         0: new           #7                  // class java/lang/String</span><br><span class="line">         <span class="number">3</span>: dup</span><br><span class="line">         4: ldc           #9                  // String javaer-wang</span><br><span class="line">         6: invokespecial #11                 // Method java/lang/String.&quot;&quot;:(Ljava/lang/String;)V</span><br><span class="line">         <span class="number">9</span>: astore_1</span><br><span class="line">        10: ldc           #14                 // String wang-javaer</span><br><span class="line">        <span class="number">12</span>: astore_2</span><br><span class="line">        13: ldc           #14                 // String wang-javaer</span><br><span class="line">        <span class="number">15</span>: astore_3</span><br><span class="line">        <span class="number">16</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">5</span>: <span class="number">0</span></span><br><span class="line">        line <span class="number">6</span>: <span class="number">10</span></span><br><span class="line">        line <span class="number">7</span>: <span class="number">13</span></span><br><span class="line">        line <span class="number">8</span>: <span class="number">16</span></span><br><span class="line">&#125;</span><br><span class="line">SourceFile: <span class="string">&quot;StringExample.java&quot;</span></span><br></pre></td></tr></table></figure>
 
-public static void main(java.lang.String[]);
-    descriptor: ([Ljava/lang/String;)V
-    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
-    Code:
-      stack=3, locals=4, args_size=1
-         0: new           #7                  // class java/lang/String
-         3: dup
-         4: ldc           #9                  // String javaer-wang
-         6: invokespecial #11                 // Method java/lang/String.&#34;&#34;:(Ljava/lang/String;)V
-         9: astore_1
-        10: ldc           #14                 // String wang-javaer
-        12: astore_2
-        13: ldc           #14                 // String wang-javaer
-        15: astore_3
-        16: return
-      LineNumberTable:
-        line 5: 0
-        line 6: 10
-        line 7: 13
-        line 8: 16
-}
-SourceFile: &#34;StringExample.java&#34;</pre>
 
 <p>备注：以上代码的运行也编译环境为 jdk1.8.0_101。</p>
-<p>其中 <code>&lt;span class=&quot;ne-text&quot;&gt;Constant pool&lt;/span&gt;</code> 表示字符串常量池，我们在字符串编译期的字符串常量池中找到了我们 <code>&lt;span class=&quot;ne-text&quot;&gt;String s1 = new String(&quot;javaer-wang&quot;);&lt;/span&gt;</code>  定义的 “javaer-wang” 字符，在信息 <code>&lt;span class=&quot;ne-text&quot;&gt;#10 = Utf8 javaer-wang&lt;/span&gt;</code> 可以看出，也就是<strong>在编译期 new 方式创建的字符串就会被放入到编译期的字符串常量池中</strong>，也就是说 new String  的方式会首先去判断字符串常量池，如果没有就会新建字符串那么就会创建 2 个对象，如果已经存在就只会在堆中创建一个对象指向字符串常量池中的字符串。</p>
+<p>其中 <code>Constant pool</code> 表示字符串常量池，我们在字符串编译期的字符串常量池中找到了我们 <code>String s1 = new String(&quot;javaer-wang&quot;);</code>  定义的 “javaer-wang” 字符，在信息 <code>#10 = Utf8 javaer-wang</code> 可以看出，也就是<strong>在编译期 new 方式创建的字符串就会被放入到编译期的字符串常量池中</strong>，也就是说 new String  的方式会首先去判断字符串常量池，如果没有就会新建字符串那么就会创建 2 个对象，如果已经存在就只会在堆中创建一个对象指向字符串常量池中的字符串。</p>
 <p>那么问题来了，以下这段代码的执行结果为 true 还是 false？</p>
-<pre data-language="java" id="v5LQY" class="ne-codeblock">String s1 = new String(&#34;javaer-wang&#34;); 
-String s2 = new String(&#34;javaer-wang&#34;);
-System.out.println(s1 == s2);</pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">&quot;javaer-wang&quot;</span>); </span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">&quot;javaer-wang&quot;</span>);</span><br><span class="line">System.out.println(s1 == s2);</span><br></pre></td></tr></table></figure>
 
 <p>既然 new String 会在常量池中创建字符串，那么执行的结果就应该是 true 了。其实并不是，这里对比的变量 s1 和 s2 堆上地址，因为堆上的地址是不同的，所以结果一定是 false，如下图所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1301812/1620574247941-c5193cd3-654f-451d-bd7e-5357b69d0b65.png"></p>
+<p><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A05.png"></p>
 <p>从图中可以看出 s1 和 s2 的引用一定是相同的，而 s3 和 s4 的引用是不同的，对应的程序代码如下：</p>
-<pre data-language="java" id="YkWFq" class="ne-codeblock">public static void main(String[] args) {
-    String s1 = &#34;Java&#34;;
-    String s2 = &#34;Java&#34;;
-    String s3 = new String(&#34;Java&#34;);
-    String s4 = new String(&#34;Java&#34;);
-    System.out.println(s1 == s2);
-    System.out.println(s3 == s4);
-}</pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;Java&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;Java&quot;</span>;</span><br><span class="line">    String s3 = <span class="keyword">new</span> String(<span class="string">&quot;Java&quot;</span>);</span><br><span class="line">    String s4 = <span class="keyword">new</span> String(<span class="string">&quot;Java&quot;</span>);</span><br><span class="line">    System.out.println(s1 == s2);</span><br><span class="line">    System.out.println(s3 == s4);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>程序执行的结果也符合预期：</p>
 <p>true</p>
 <p>false</p>
-<h2 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h2><p>我们知道 String 是 final 修饰的，也就是说一定被赋值就不能被修改了。但编译器除了有字符串常量池的优化之外，还会对编译期可以确认的字符串进行优化，例如以下代码：</p>
-<pre data-language="java" id="c1UL3" class="ne-codeblock">public static void main(String[] args) {
-    String s1 = &#34;abc&#34;;
-    String s2 = &#34;ab&#34; + &#34;c&#34;;
-    String s3 = &#34;a&#34; + &#34;b&#34; + &#34;c&#34;;
-    System.out.println(s1 == s2);
-    System.out.println(s1 == s3);
-}</pre>
+<h1 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h1><p>我们知道 String 是 final 修饰的，也就是说一定被赋值就不能被修改了。但编译器除了有字符串常量池的优化之外，还会对编译期可以确认的字符串进行优化，例如以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;ab&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">    System.out.println(s1 == s2);</span><br><span class="line">    System.out.println(s1 == s3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>按照 String 不能被修改的思想来看，s2 应该会在字符串常量池创建两个字符串 “ab” 和“c”，s3 会创建三个字符串，他们的引用对比结果也一定是 false，但其实不是，他们的结果都是 true，这是编译器优化的功劳。</p>
-<p>同样我们使用 <code>&lt;span class=&quot;ne-text&quot;&gt;javac StringExample.java&lt;/span&gt;</code> 先编译代码，再使用 <code>&lt;span class=&quot;ne-text&quot;&gt;javap -c StringExample&lt;/span&gt;</code> 命令查看编译的代码如下：</p>
-<pre data-language="java" id="LDC3O" class="ne-codeblock">警告: 文件 ./StringExample.class 不包含类 StringExample
-Compiled from &#34;StringExample.java&#34;
-public class com.example.StringExample {
-  public com.example.StringExample();
-    Code:
-       0: aload_0
-       1: invokespecial #1                  // Method java/lang/Object.&#34;&#34;:()V
-       4: return
-
-public static void main(java.lang.String[]);
-    Code:
-       0: ldc           #7                  // String abc
-       2: astore_1
-       3: ldc           #7                  // String abc
-       5: astore_2
-       6: ldc           #7                  // String abc
-       8: astore_3
-       9: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;
-      12: aload_1
-      13: aload_2
-      14: if_acmpne     21
-      17: iconst_1
-      18: goto          22
-      21: iconst_0
-      22: invokevirtual #15                 // Method java/io/PrintStream.println:(Z)V
-      25: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;
-      28: aload_1
-      29: aload_3
-      30: if_acmpne     37
-      33: iconst_1
-      34: goto          38
-      37: iconst_0
-      38: invokevirtual #15                 // Method java/io/PrintStream.println:(Z)V
-      41: return
-}</pre>
+<p>同样我们使用 <code>javac StringExample.java</code> 先编译代码，再使用 <code>javap -c StringExample</code> 命令查看编译的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">警告: 文件 ./StringExample.class 不包含类 StringExample</span><br><span class="line">Compiled from <span class="string">&quot;StringExample.java&quot;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">StringExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.example.StringExample();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&quot;:()V</span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       0: ldc           #7                  // String abc</span><br><span class="line">       <span class="number">2</span>: astore_1</span><br><span class="line">       3: ldc           #7                  // String abc</span><br><span class="line">       <span class="number">5</span>: astore_2</span><br><span class="line">       6: ldc           #7                  // String abc</span><br><span class="line">       <span class="number">8</span>: astore_3</span><br><span class="line">       9: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      <span class="number">12</span>: aload_1</span><br><span class="line">      <span class="number">13</span>: aload_2</span><br><span class="line">      <span class="number">14</span>: if_acmpne     <span class="number">21</span></span><br><span class="line">      <span class="number">17</span>: iconst_1</span><br><span class="line">      <span class="number">18</span>: goto          <span class="number">22</span></span><br><span class="line">      <span class="number">21</span>: iconst_0</span><br><span class="line">      22: invokevirtual #15                 // Method java/io/PrintStream.println:(Z)V</span><br><span class="line">      25: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      <span class="number">28</span>: aload_1</span><br><span class="line">      <span class="number">29</span>: aload_3</span><br><span class="line">      <span class="number">30</span>: if_acmpne     <span class="number">37</span></span><br><span class="line">      <span class="number">33</span>: iconst_1</span><br><span class="line">      <span class="number">34</span>: goto          <span class="number">38</span></span><br><span class="line">      <span class="number">37</span>: iconst_0</span><br><span class="line">      38: invokevirtual #15                 // Method java/io/PrintStream.println:(Z)V</span><br><span class="line">      <span class="number">41</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>从 Code 3、6 可以看出字符串都被编译器优化成了字符串 “abc” 了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文我们通过 <code>&lt;span class=&quot;ne-text&quot;&gt;javap -v XXX&lt;/span&gt;</code> 的方式查看编译的代码发现 new String首次会在字符串常量池中创建此字符串，那也就是说，通过 new 创建字符串的方式可能会创建 1 个或 2 个对象，如果常量池中已经存在此字符串只会在堆上创建一个变量，并指向字符串常量池中的值，如果字符串常量池中没有相关的字符，会先创建字符串再返回此字符串的引用给堆空间的变量。我们还将了字符串常量池在 JDK7 和 JDK8 的变化以及编译器对确定字符串的优化，希望能帮你正在的理解字符串的比较。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文我们通过 <code>javap -v XXX</code> 的方式查看编译的代码发现 new String首次会在字符串常量池中创建此字符串，那也就是说，通过 new 创建字符串的方式可能会创建 1 个或 2 个对象，如果常量池中已经存在此字符串只会在堆上创建一个变量，并指向字符串常量池中的值，如果字符串常量池中没有相关的字符，会先创建字符串再返回此字符串的引用给堆空间的变量。我们还将了字符串常量池在 JDK7 和 JDK8 的变化以及编译器对确定字符串的优化，希望能帮你正在的理解字符串的比较。</p>
 <h1 id="String类型的长度"><a href="#String类型的长度" class="headerlink" title="String类型的长度"></a>String类型的长度</h1><p>参考地址：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/A91ZwKabL4H3GLlw6zMsZA">面试官：String长度有限制吗？是多少？</a></p>
 <p>问：字符串有长度限制吗？是多少？</p>
-<p>答：<strong>针对未放入常量池的字符串</strong>：字符串的内容是由一个字符数组 char[] 来存储的，由于数组的长度及索引是整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看java源码中的类Integer我们可以看到Integer的最大范围是<img src="https://cdn.nlark.com/yuque/__latex/e825b8d1714e059277025ed9aee0ce4a.svg"> -1,由于数组是从0开始的，所以数组的最大长度可以使【0~<img src="https://cdn.nlark.com/yuque/__latex/e825b8d1714e059277025ed9aee0ce4a.svg">-1】通过计算是大概4GB。</p>
-<p><strong>针对使用字面量的方式定义字符串</strong>：当使用String str=””这种字面量方式创建字符串时，字符串是会直接放入到字符串常量池中的。通过翻阅java虚拟机手册对class文件格式的定义以及常量池中对String类型的结构体使用byte数组对字符串进行存储，数组的下标的长度为2个字节的无符号类型，对应的下标范围即为0~<img src="https://cdn.nlark.com/yuque/__latex/953f80b7948cab44f62fe98d1b16ce59.svg">=65535。但是由于JVM需要1个字节表示结束指令，所以这个范围就为65534了。超出这个范围在编译时期是会报错的，<strong>但是运行时拼接或者赋值的话范围是在整形的最大范围</strong>。</p>
+<p>答：<strong>针对未放入常量池的字符串</strong>：字符串的内容是由一个字符数组 char[] 来存储的，由于数组的长度及索引是整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看java源码中的类Integer我们可以看到Integer的最大范围是$ 2^{31} -1$,由于数组是从0开始的，所以数组的最大长度可以使【0~$ 2^{31} -1$】通过计算是大概4GB。</p>
+<p><strong>针对使用字面量的方式定义字符串</strong>：当使用String str=””这种字面量方式创建字符串时，字符串是会直接放入到字符串常量池中的。通过翻阅java虚拟机手册对class文件格式的定义以及常量池中对String类型的结构体使用byte数组对字符串进行存储，数组的下标的长度为2个字节的无符号类型，对应的下标范围即为0~$ 2^{16}-1 $=65535。但是由于JVM需要1个字节表示结束指令，所以这个范围就为65534了。超出这个范围在编译时期是会报错的，<strong>但是运行时拼接或者赋值的话范围是在整形的最大范围</strong>。</p>
 <h1 id="intern-方法"><a href="#intern-方法" class="headerlink" title="intern()方法"></a>intern()方法</h1><p>String::intern()是一个本地方法，它的作用是如果字符串常量池中已经包含一个等于此String对象的字符串，则返回代表池中这个字符串的String对象的引用；否则，会将此String对象包含的字符串添加到常量池中，并且返回此String对象的引用。</p>
-<pre data-language="java" id="JLz9x" class="ne-codeblock">public class RuntimeConstantPoolOOM {
-
-    public static void main(String[] args) {
-        String str1 = new StringBuilder(&#34;计算机&#34;).append(&#34;软件&#34;).toString();
-        System.out.println(str1.intern() == str1);
-
-        String str2 = new StringBuilder(&#34;ja&#34;).append(&#34;va&#34;).toString();
-        System.out.println(str2.intern() == str2);
-        
-        //这段代码在JDK 6中运行，会得到两个false，而在JDK 7中运行，会得到一个true和一个false
-    }
-}</pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> StringBuilder(<span class="string">&quot;计算机&quot;</span>).append(<span class="string">&quot;软件&quot;</span>).toString();</span><br><span class="line">        System.out.println(str1.intern() == str1);</span><br><span class="line"></span><br><span class="line">        String str2 = <span class="keyword">new</span> StringBuilder(<span class="string">&quot;ja&quot;</span>).append(<span class="string">&quot;va&quot;</span>).toString();</span><br><span class="line">        System.out.println(str2.intern() == str2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//这段代码在JDK 6中运行，会得到两个false，而在JDK 7中运行，会得到一个true和一个false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>在JDK 6中，intern()方法会把首次遇到的字符串实例复制到永久代的字符串常量池中存储，返回的也是永久代里面这个字符串实例的引用，而由StringBuilder创建的字符串对象实例在Java堆上，所以必然不可能是同一个引用，结果将返回false。</p>
 <p>而JDK 7（以及部分其他虚拟机，例如JRockit）的intern()方法实现就不需要再拷贝字符串的实例到永久代了，既然字符串常量池已经移到Java堆中，那只需要在常量池里记录一下首次出现的实例引用即可，因此intern()返回的引用和由StringBuilder创建的那个字符串实例就是同一个。而对str2比较返回false，这是因为“java”这个字符串在执行String-Builder.toString()之前就已经出现过了，字符串常量池中已经有它的引用，不符合intern()方法要求“首次遇到”的原则，“计算机软件”这个字符串则是首次出现的，因此结果返回true。</p>
@@ -533,7 +397,7 @@ public static void main(java.lang.String[]);
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-text">字符串常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-text">常量池的内存布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%94%E6%A1%88%E8%A7%A3%E5%AF%86"><span class="nav-text">答案解密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E8%AE%BA%E8%AF%81"><span class="nav-text">技术论证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86"><span class="nav-text">扩展知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B%E7%9A%84%E9%95%BF%E5%BA%A6"><span class="nav-text">String类型的长度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#intern-%E6%96%B9%E6%B3%95"><span class="nav-text">intern()方法</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-text">字符串常量池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-text">常量池的内存布局</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%94%E6%A1%88%E8%A7%A3%E5%AF%86"><span class="nav-text">答案解密</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E8%AE%BA%E8%AF%81"><span class="nav-text">技术论证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86"><span class="nav-text">扩展知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B%E7%9A%84%E9%95%BF%E5%BA%A6"><span class="nav-text">String类型的长度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#intern-%E6%96%B9%E6%B3%95"><span class="nav-text">intern()方法</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
