@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="👀️复杂度分析是数据结构和算法中最重要的知识点，毫不夸张的说，这就是数据结构与算法学习的核心所在。你学会了它你就入的了门，你学不会它，你就永远不知道门儿在哪。 我们需要一个不依赖于性能和规模等外力影响就可以估算算法效率、判断算法优劣的度量指标，而复杂度分析天生就是干这个的，这也是为什么我们要学习并必须学会复杂度分析！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转载】保姆级教学！彻底学会时间复杂度和空间复杂度">
+<meta property="og:url" content="https://super-aviator.github.io/2021/10/12/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6%EF%BC%81%E5%BD%BB%E5%BA%95%E5%AD%A6%E4%BC%9A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/index.html">
+<meta property="og:site_name" content="孤独飞行员">
+<meta property="og:description" content="👀️复杂度分析是数据结构和算法中最重要的知识点，毫不夸张的说，这就是数据结构与算法学习的核心所在。你学会了它你就入的了门，你学不会它，你就永远不知道门儿在哪。 我们需要一个不依赖于性能和规模等外力影响就可以估算算法效率、判断算法优劣的度量指标，而复杂度分析天生就是干这个的，这也是为什么我们要学习并必须学会复杂度分析！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-12T01:31:06.000Z">
+<meta property="article:modified_time" content="2021-10-12T02:42:29.587Z">
+<meta property="article:author" content="熊乾坤">
+<meta property="article:tag" content="时间复杂度">
+<meta property="article:tag" content="空间复杂度">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://super-aviator.github.io/2021/10/12/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6%EF%BC%81%E5%BD%BB%E5%BA%95%E5%AD%A6%E4%BC%9A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【转载】保姆级教学！彻底学会时间复杂度和空间复杂度 | 孤独飞行员</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">孤独飞行员</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2021/10/12/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6%EF%BC%81%E5%BD%BB%E5%BA%95%E5%AD%A6%E4%BC%9A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊乾坤">
+      <meta itemprop="description" content="爱坤坤|爱生活">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="孤独飞行员">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【转载】保姆级教学！彻底学会时间复杂度和空间复杂度
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-12 09:31:06 / 修改时间：10:42:29" itemprop="dateCreated datePublished" datetime="2021-10-12T09:31:06+08:00">2021-10-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>👀️<strong>复杂度分析是数据结构和算法中最重要的知识点</strong>，毫不夸张的说，这就是数据结构与算法学习的<strong>核心</strong>所在。你学会了它你就入的了门，你学不会它，你就永远不知道门儿在哪。</p>
+<p><strong>我们需要一个不依赖于性能和规模等外力影响就可以估算算法效率、判断算法优劣的度量指标，而复杂度分析天生就是干这个的，这也是为什么我们要学习并必须学会复杂度分析！</strong></p>
+<span id="more"></span>
+
+<p>原文链接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI0NjAxMDU5NA==&mid=2475918746&idx=1&sn=3fe42234a1f07fb084d11fe06fb24893&chksm=ff22e217c8556b019b9052f9d4805174385ba4c8c099216fa226dbd1b033a9a49782579e4b75&token=1999379592&lang=zh_CN#rd">保姆级教学！彻底学会时间复杂度和空间复杂度</a></p>
+<h1 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h1><p><strong>代码 1</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dogeggs_sum</span> (<span class="params">n</span>):</span></span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> dogegg <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="built_in">sum</span> += dogegg * i</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码我会从最开始一点点带你来。</p>
+<p>第 2 行需要运行 1 次 ，第 4 行需要运行 n 次，第 5 行和第 6 行分别需要运行 n² 次。所以总的运行次数 f(n) =  1 + n + 2n²。</p>
+<p>当 n 为 5 的时候，f(n) = 1 + 5 + 2 * 25，当 n 为 10000 的时候，f(n) = 1 + 10000 + 2 * 100000000，当 n 更大呢？</p>
+<p>这个时候其实很明显的就可以看出来 n² 起到了决定性的作用，像常数 1，一阶 n 和 系数 2 对最终的结果（即趋势）影响不大，所以我们可以把它们直接忽略掉，所以执行的总步数就可以看成是“主导”结果的那个，也就是 f(n) = n²。</p>
+<p>自然代码的运行时间 T(n) = O(f(n)) = O(n²)。</p>
+<p><strong>代码 2</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dogeggs_sum</span> (<span class="params">n</span>):</span></span><br><span class="line">    sum1 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> dogegg1 <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        sum1 += dogegg1</span><br><span class="line"></span><br><span class="line">    sum2 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> dogegg2 <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            sum2 += dogegg2 * i</span><br><span class="line"></span><br><span class="line">    sum3 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> dogegg3 <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">                sum3 += dogegg3 * i * j</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sum1 + sum2 + sum3</span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码是求三部分的和，经过之前的学习应该很容易知道，第一部分的时间复杂度是 O(n)，第二部分的时间复杂度是 O(n²)，第三部分是 O(n³)。</p>
+<p>正常来讲，这段代码的 T(n) = O(n) + O(n²) + O(n³)，按照我们取“主导”部分，显然前面两个小弟都应该直接 pass，最终 T(n) = O(n³)。</p>
+<p>通过这几个例子，聪明的小婊贝们肯定会发现，<strong>对于时间复杂度分析来说，只要找起“主导”作用的部分代码即可，这个主导就是最高的那个复杂度，**</strong>也就是执行次数最多的那部分 n 的量级**。</p>
+<h2 id="常见时间复杂度"><a href="#常见时间复杂度" class="headerlink" title="常见时间复杂度"></a>常见时间复杂度</h2><p>算法学习过程中，我们会遇到各种各样的时间复杂度，但纵使你代码七十二变，几乎也逃不过下面这几种常见的时间复杂度。</p>
+<table>
+<thead>
+<tr>
+<th><strong>时间复杂度</strong></th>
+<th><strong>阶</strong></th>
+<th><strong>f(n) 举例</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>常数复杂度</td>
+<td>O(1)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>对数复杂度</td>
+<td>O(logn)</td>
+<td>logn + 1</td>
+</tr>
+<tr>
+<td>线性复杂度</td>
+<td>O(n)</td>
+<td>n + 1</td>
+</tr>
+<tr>
+<td>线性对数复杂度</td>
+<td>O(nlogn)</td>
+<td>nlogn + 1</td>
+</tr>
+<tr>
+<td>k 次复杂度</td>
+<td>O(n²)、O(n³)、….</td>
+<td>n² + n +1</td>
+</tr>
+<tr>
+<td>指数复杂度</td>
+<td>O(2n)</td>
+<td>2n + 1</td>
+</tr>
+<tr>
+<td>阶乘复杂度</td>
+<td>O(n!)</td>
+<td>n! + 1</td>
+</tr>
+</tbody></table>
+<p><strong>上表的时间复杂度由上往下依次增加</strong>，O(n) 和 O(n²) 前面已经讲过了，O(2n) 和  O(n!) 效率低到离谱，以后不幸碰到我再提一下，就不再赘述。</p>
+<p>下面主要来看剩下几种最常见的时间复杂度。</p>
+<p><strong>O(1)</strong></p>
+<p>O(1) 是常数时间复杂度。</p>
+<p>在这你要先明白一个概念，不是只执行 1 次的代码的时间复杂度记为 O(1)，只要你是常数，像 O(2)、O(3) … O(100000) 在复杂度的表示上都是 O(1)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">10000</span></span><br><span class="line">res = n / <span class="number">2</span></span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+<p>比如像上面这段代码，它运行了 3 次，但是它的时间复杂度记为 O(1)，而不是 O(3)。</p>
+<p>因为<strong>无论 n 等于多少，对于它们每行代码来说还是只是执行了一次，代码的执行时间不随 n 的变化而变化。</strong></p>
+<p><strong>O(logn)</strong></p>
+<p>O(logn) 是对数时间复杂度。首先我们来看一段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dogegg = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> dogegg &lt; n:</span><br><span class="line">    dogegg = dogegg * <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>根据之前讲的，我们先找“主导”，在这主导就是第 4 行代码，只要算出它的时间复杂度，总的时间复杂度就知道了。</p>
+<p>其实很简单，上面的代码翻译一下就是初始化 dogegg = 1， 乘上多少个 2 以后会 ≥ n。</p>
+<p>$$<br>2<em>2</em>2*<em>2</em>2*…*2 \geq n<br>$$</p>
+<p>假设需要 x 个，那么相当于求：</p>
+<p>$$<br>2^x=n<br>$$</p>
+<p>即：</p>
+<p>$$<br>x=log_2n<br>$$</p>
+<p>所以上述代码的时间复杂度应该为$O(log_2n)$。</p>
+<p>但是**对于对数复杂度来说，不管你是以 2、3 为底，还是以 10 为底，通通记作 O(logn)**，这是为什么呢？</p>
+<p>这就要从对数的<strong>换底公式</strong>说起。</p>
+<p>$$<br>log_mN=log_ma*log_aN(a&gt;0且a != 1,m&gt;0且m!=1,N&gt;0)<br>$$</p>
+<p>根据换底公式，log2n 可以写成：</p>
+<p>$$<br>log_2n=log_23*log_3n<br>$$</p>
+<p>对于时间复杂度来说：</p>
+<p>$$<br>O(log_2n)=O(log_23*log_3n)=O(log_3n)<br>$$</p>
+<p>所以在对数时间复杂度中我们就忽略了底，直接用 O(logn) 来表示对数时间复杂度。</p>
+<p><strong>O(nlogn)</strong></p>
+<p>O(nlogn)，真的是很常见的时间复杂度，像后面会学到的快速排序、归并排序的时间复杂度都是 O(nlogn)。</p>
+<p>如果只是简单看的话是在 logn 外面套了层 for 循环，比如像下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stupid_cnt</span>(<span class="params">n</span>):</span></span><br><span class="line">    cnt = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        dogegg = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> dogegg &lt; n:</span><br><span class="line">            dogegg = dogegg * <span class="number">2</span></span><br><span class="line">            cnt += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> cnt</span><br></pre></td></tr></table></figure>
+
+<p>当然像上面这种 stupid 代码一般人不会写，我也只是举个例子给大家看，我是狗蛋，大家千万不要以为我是傻狗。</p>
+<h2 id="最好情况、最坏情况和平均情况时间复杂度"><a href="#最好情况、最坏情况和平均情况时间复杂度" class="headerlink" title="最好情况、最坏情况和平均情况时间复杂度"></a>最好情况、最坏情况和平均情况时间复杂度</h2><p><strong>除了数据集规模影响算法的运行时间外，“数据的具体情况”也会影响到运行时间。</strong></p>
+<p>我们来看这么一段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_word</span>(<span class="params">lst, word</span>):</span></span><br><span class="line"></span><br><span class="line">    flag = -<span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(lst)):</span><br><span class="line">        <span class="keyword">if</span> lst[i] == word:</span><br><span class="line">            flag = i</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> flag</span><br></pre></td></tr></table></figure>
+
+<p>上面这段简单代码是求变量 word 在列表 lst 中出现的位置，我用这段来解释“数据的具体情况”是什么意思。</p>
+<p>变量 word 可能出现在列表 lst 的任意位置，假设 a = [‘a’, ‘b’, ‘c’, ‘d’]：</p>
+<ul>
+<li>当 word = ‘a’ 时，正好是列表 lst 的第 1 个，后面的不需要再遍历，那么本情况下的时间复杂度是 O(1)。</li>
+<li>当 word = ‘d’ 或者 word = ‘e’ 时，这两种情况是整个列表全部遍历完，那么这些情况下的时间复杂度是 O(n)。</li>
+</ul>
+<p>这就是数据的具体情况不同，代码的时间复杂度不同。</p>
+<p>根据不同情况，我们有了最好情况时间复杂度、最坏情况时间复杂度和平均情况时间复杂度这 3 个概念。</p>
+<p><strong>最好情况时间复杂度</strong></p>
+<p><strong>最好情况就是在最理想的情况下，代码的时间复杂度。</strong>对应上例变量 word 正好是列表 lst 的第 1 个，这个时候对应的时间复杂度 O(1) 就是这段代码的最好情况时间复杂度。</p>
+<p><strong>最坏情况时间复杂度</strong></p>
+<p><strong>最坏情况就是在最差的情况下，代码的时间复杂度。</strong>对应上例变量 word 正好是列表 lst 的最后一个，或者 word 不存在于列表 lst，这个时候对应的时间复杂度 O(n) 是这段代码的最坏情况时间复杂度。</p>
+<p><strong>平均情况时间复杂度</strong></p>
+<p>大多数情况下，代码的执行情况都是介于最好情况和最坏情况之间，所以又出现了平均情况时间复杂度。</p>
+<p>那怎么计算平均时间复杂度呢？这个说起来有点复杂，需要用到概率论的知识。</p>
+<p>在这里我还是用上面的例子来讲，因为只是简单的科普一下，为了方便计算，我假设的会有点随意：</p>
+<ul>
+<li>从大的方面来看，查找变量 x 在列表 lst 中的位置有两种情况：在或者不在。假设变量 x 在或者不在列表 lst 中的概率都为 1/2。</li>
+<li>如果 x 在列表 lst 中，那么 x 有 n 种情况，它可能出现在 0 到 n-1 中任意位置，假设出现在每个位置的概率都相同，都为 1/n。</li>
+</ul>
+<p>每个出现的概率（即权重）知道了，所以平均时间复杂度为：</p>
+<p>$$<br>(1<em>\frac{1}{n}+2</em>\frac{1}{n}+3<em>\frac{1}{n}+…+n</em>\frac{1}{n})*\frac{1}{2}+(n * \frac{1}{2})=\frac{3n+1}{4}<br>$$</p>
+<p>是不是看着有点眼熟，这就是我们都学过的加权平均值。</p>
+<p>什么，没学过？问题不大。<strong>加权平均值</strong>就是将各数值乘以相应的权数，然后加总求和得到总体值，再除以总的单位数。</p>
+<p>所以最终的平均时间复杂度就为：</p>
+<p>$$<br>O(\frac{3n+1}{4})=O(n)<br>$$</p>
+<p>最好情况，反应最理想的情况，怎么可能天上天天掉馅饼，没啥参考价值。</p>
+<p>平均情况，这倒是能反映算法的全面情况，但是一般“全面”，就和什么都没说一样，也没啥参考价值。</p>
+<p>最坏情况，干啥事情都要考虑最坏的结果，因为最坏的结果提供了一种保障，触底的保障，保障代码的运行时间这个就是最差的，不会有比它还差的。</p>
+<p>所以，<strong>不需要纠结各种情况，算时间复杂度就算最坏的那个时间复杂度即可。</strong></p>
+<h1 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h1><p>下面我们用一段简单代码来学习下如何分析空间复杂度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dogeggs_sum</span>(<span class="params">lst</span>):</span></span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(lst)):</span><br><span class="line">        <span class="built_in">sum</span> += lst[i]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span></span><br></pre></td></tr></table></figure>
+
+<p>上述代码是求列表 lst 的所有元素之和，根据之前说的，只计算临时变量所占用的内存空间。</p>
+<p>形参 lst 所占的空间不计，那么剩下的临时变量只有 sum 和 i，sum 是存储和，是常数阶，i 是存储元素位置，也是常数阶，它俩所分配的空间和规模 n 都没有关系，所以整段代码的空间复杂度 S(n) = O(1)。</p>
+<h2 id="常见空间复杂度"><a href="#常见空间复杂度" class="headerlink" title="常见空间复杂度"></a>常见空间复杂度</h2><p>常见的空间复杂度有 O(1)、O(n)、O(n²)，O(1) 在上节讲了，还有就是像 O(logn) 这种也有，但是等闲不会碰到，在这里就不罗嗦了。</p>
+<p><strong>O(n)</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_lst</span>(<span class="params">n</span>):</span></span><br><span class="line">    lst = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        lst.append(i)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> lst</span><br></pre></td></tr></table></figure>
+
+<p>上面这段傻傻的代码有两个临时变量 lst 和 i。</p>
+<p>其中 lst 是被创建的一个空列表，这个列表占用的内存随着 for 循环的增加而增加，最大到 n，所以 lst 的空间复杂度为 O(n)，i 是存储元素位置的常数阶，与规模 n 无关，所以这段代码最终的空间复杂度为 O(n)。</p>
+<p><strong>O(n²)</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_lst</span>(<span class="params">n</span>):</span></span><br><span class="line">    lst1 = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        lst2 = []</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            lst2.append(j)</span><br><span class="line">        lst1.append(lst2)</span><br><span class="line">    <span class="keyword">return</span> lst1</span><br></pre></td></tr></table></figure>
+
+<p>还是一样的分析方式，很明显上面这段傻二次方的代码创建了一个二维数组 lst，一维 lst1 占用 n，二维 lst2 占用 n²，所以最终这段代码的空间复杂度为 O(n²)。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 时间复杂度</a>
+              <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 空间复杂度</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/10/%E3%80%8A%E5%8D%B7%E3%80%8B/" rel="prev" title="忘记时间">
+      <i class="fa fa-chevron-left"></i> 忘记时间
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">常见时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%A5%BD%E6%83%85%E5%86%B5%E3%80%81%E6%9C%80%E5%9D%8F%E6%83%85%E5%86%B5%E5%92%8C%E5%B9%B3%E5%9D%87%E6%83%85%E5%86%B5%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">最好情况、最坏情况和平均情况时间复杂度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">空间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">常见空间复杂度</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊乾坤"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊乾坤</p>
+  <div class="site-description" itemprop="description">爱坤坤|爱生活</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/aviator/blog" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;aviator&#x2F;blog" rel="noopener" target="_blank"><i class="fa fa-address-book fa-fw"></i>YuQue</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/super-aviator" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;super-aviator" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:18062148246@163.com" title="E-Mail → mailto:18062148246@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5966289049" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5966289049" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://fangjian0423.github.io/" title="http:&#x2F;&#x2F;fangjian0423.github.io&#x2F;" rel="noopener" target="_blank">方剑-Format's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xiaomi-info.github.io/" title="https:&#x2F;&#x2F;xiaomi-info.github.io&#x2F;" rel="noopener" target="_blank">小米信息部技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.javaboy.org/" title="http:&#x2F;&#x2F;www.javaboy.org&#x2F;" rel="noopener" target="_blank">江南一点雨</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊乾坤</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
