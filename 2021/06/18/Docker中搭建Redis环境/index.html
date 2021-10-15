@@ -23,7 +23,7 @@
   <meta name="description" content="几天学习了下载Docker中搭建Redis，利用昨天学习的docker中的命令，现学现卖惹。其实过程非常简单，但是踩到了一个大坑，都是由于自己的粗心引起的。 在搭建之前，首先需要下载一个redis的tar包，然后将其解压，因为docker中下载的redis镜像是不包含redis.cong配置文件的，需要使用-v命令去手动挂载容器外部的配置文件（喵了个咪的，怪不得我找了半天），所以需要把默认的red">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker中搭建Redis环境">
-<meta property="og:url" content="https://super-aviator.github.io/2021/10/12/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:url" content="https://super-aviator.github.io/2021/06/18/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/index.html">
 <meta property="og:site_name" content="孤独飞行员">
 <meta property="og:description" content="几天学习了下载Docker中搭建Redis，利用昨天学习的docker中的命令，现学现卖惹。其实过程非常简单，但是踩到了一个大坑，都是由于自己的粗心引起的。 在搭建之前，首先需要下载一个redis的tar包，然后将其解压，因为docker中下载的redis镜像是不包含redis.cong配置文件的，需要使用-v命令去手动挂载容器外部的配置文件（喵了个咪的，怪不得我找了半天），所以需要把默认的red">
 <meta property="og:locale" content="zh_CN">
@@ -34,13 +34,15 @@
 <meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis3.png">
 <meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis6.png">
 <meta property="og:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis7.png">
-<meta property="article:published_time" content="2021-10-12T09:49:28.000Z">
-<meta property="article:modified_time" content="2021-10-12T11:06:49.674Z">
+<meta property="article:published_time" content="2021-06-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-15T06:59:34.405Z">
 <meta property="article:author" content="熊乾坤">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis1.png">
 
-<link rel="canonical" href="https://super-aviator.github.io/2021/10/12/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/">
+<link rel="canonical" href="https://super-aviator.github.io/2021/06/18/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/">
 
 
 <script id="page-configurations">
@@ -202,7 +204,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2021/10/12/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/">
+    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2021/06/18/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -224,9 +226,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-10-12 17:49:28 / 修改时间：19:06:49" itemprop="dateCreated datePublished" datetime="2021-10-12T17:49:28+08:00">2021-10-12</time>
+              <time title="创建时间：2021-06-18 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-18T00:00:00+08:00">2021-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-15 14:59:34" itemprop="dateModified" datetime="2021-10-15T14:59:34+08:00">2021-10-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a>
+                </span>
             </span>
 
           
@@ -275,6 +292,11 @@
     
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"><i class="fa fa-tag"></i> Redis</a>
+              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
+          </div>
 
         
 
@@ -282,12 +304,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/10/12/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6%EF%BC%81%E5%BD%BB%E5%BA%95%E5%AD%A6%E4%BC%9A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="prev" title="【转载】保姆级教学！彻底学会时间复杂度和空间复杂度">
-      <i class="fa fa-chevron-left"></i> 【转载】保姆级教学！彻底学会时间复杂度和空间复杂度
+    <a href="/2021/04/05/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%AD%E6%97%A0%E6%B3%95%E6%9B%B4%E6%94%B9%E5%A4%96%E9%83%A8%E5%80%BC%E7%9A%84%E5%8E%9F%E5%9B%A0/" rel="prev" title="Lambda表达式和匿名内部类中无法更改外部值的原因">
+      <i class="fa fa-chevron-left"></i> Lambda表达式和匿名内部类中无法更改外部值的原因
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/10/15/%E3%80%8A%E5%B0%8F%E7%8E%8B%E5%AD%90%E3%80%8B%E4%B9%A6%E8%AF%84/" rel="next" title="《小王子》书评">
-      《小王子》书评 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/07/28/2021-07-28/" rel="next" title="2021-07-28">
+      2021-07-28 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
