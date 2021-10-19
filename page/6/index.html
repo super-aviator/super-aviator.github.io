@@ -191,6 +191,100 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2019/03/16/IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊乾坤">
+      <meta itemprop="description" content="爱坤坤|爱生活">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="孤独飞行员">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/03/16/IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat/" class="post-title-link" itemprop="url">Windows系统下配置Tomcat</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-16 21:11:14" itemprop="dateCreated datePublished" datetime="2019-03-16T21:11:14+08:00">2019-03-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-22 16:52:37" itemprop="dateModified" datetime="2021-07-22T16:52:37+08:00">2021-07-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Tomcat下载并解压"><a href="#Tomcat下载并解压" class="headerlink" title="Tomcat下载并解压"></a>Tomcat下载并解压</h1><p>首先去官网下载一个Tomcat安装包,JDK当然也是需要滴。</p>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>下载下来的压缩包解药到文件夹中，比如说我解压到了<code>G:\apache-tomcat-7.0.86</code>文件夹，然后配置环境变量：</p>
+<ul>
+<li><p>计算机→属性→高级系统设置→高级→<strong>系统</strong>环境变量</p>
+</li>
+<li><p>新建TOMCAT_HOME变量</p>
+<ul>
+<li>变量名TOMCAT_HOME</li>
+<li>变量值为解压的Tomcat安装包的路径,比如<code>G:\apache-tomcat-7.0.86</code></li>
+</ul>
+</li>
+<li><p>新建CATALINA_HOME变量</p>
+<ul>
+<li>变量名CATALINA_HOME</li>
+<li>变量值同样为解压的Tomcat安装包的路径</li>
+</ul>
+</li>
+<li><p>修改变量Path</p>
+<ul>
+<li>在系统变量中找到Path变量名，双击或点击编辑，在末尾添加如下内容<code>;%TOMCAT_HOME%\bin;%CATALINA_HOME%\lib</code></li>
+<li>这里要注意，各个变量值之间一定要用;分隔。</li>
+</ul>
+</li>
+<li><p>在cmd命令窗口下输入startup回车（或者点击bin目录下的startup.bat文件），如果没有报错就说明成功</p>
+</li>
+<li><p>在浏览器中输入<code>http://localhost:8080</code>或<code>http://127.0.0.1:8080</code>，如果出现tomcat服务器页面即为配置成功。</p>
+</li>
+</ul>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2019/03/16/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93-%E7%AC%AC%E4%B8%80%E5%91%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1261,82 +1355,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2018/08/31/JAVA-WEB%E5%9F%BA%E7%A1%80-%E5%88%9D%E5%AD%A6Spring%E6%A1%86%E6%9E%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="熊乾坤">
-      <meta itemprop="description" content="爱坤坤|爱生活">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="孤独飞行员">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/31/JAVA-WEB%E5%9F%BA%E7%A1%80-%E5%88%9D%E5%AD%A6Spring%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="url">Spring-装配bean</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-31 14:23:00" itemprop="dateCreated datePublished" datetime="2018-08-31T14:23:00+08:00">2018-08-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-22 16:54:55" itemprop="dateModified" datetime="2021-07-22T16:54:55+08:00">2021-07-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在前几天，通过学习《Spring in action》这本书的前7章，我学习了Spring框架的基础以及SpringMVC部分的知识，对Spring框架有了比较浅显的认识，接下来的几天，我准备将所学习到的知识记录一下，方便以后查询，因为Spring配置算是比较繁琐的过程，记录下来方便以后查询。Spring其他部分暂时不做研究，等以后用的时候在去折腾。</p>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1408,7 +1426,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1421,7 +1439,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
