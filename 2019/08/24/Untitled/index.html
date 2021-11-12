@@ -1,260 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
-  </script>
-
-  <meta name="description" content="今天周六，没啥事干，看书也看不进去T_T，华农兄弟：这样下去不行的。刚好前几天跟风买了个阿里云1H2G1M的云服务器，一年114块，肉疼。。，想着把电脑里面的Hexo乱七八糟的都搬到云服务器上去，这样在公司也可以瞎鸡儿写点东西了，建站的话目前还不想弄，放到GitHub上既稳定，又省力。 现在使用的Hexo是便携版的，安装没有什么技术含量，一键安装，这次想试一试使用完整版的Hexo,如果失败了再用便">
-<meta property="og:type" content="article">
-<meta property="og:title" content="在云服务器上搭建Hexo之一顿百度加谷歌">
-<meta property="og:url" content="https://super-aviator.github.io/2019/08/24/Untitled/index.html">
-<meta property="og:site_name" content="孤独飞行员">
-<meta property="og:description" content="今天周六，没啥事干，看书也看不进去T_T，华农兄弟：这样下去不行的。刚好前几天跟风买了个阿里云1H2G1M的云服务器，一年114块，肉疼。。，想着把电脑里面的Hexo乱七八糟的都搬到云服务器上去，这样在公司也可以瞎鸡儿写点东西了，建站的话目前还不想弄，放到GitHub上既稳定，又省力。 现在使用的Hexo是便携版的，安装没有什么技术含量，一键安装，这次想试一试使用完整版的Hexo,如果失败了再用便">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://super-aviator.github.io/images/githubAddSSH.png">
-<meta property="og:image" content="https://super-aviator.github.io/images/deployDir.png">
-<meta property="og:image" content="https://super-aviator.github.io/images/hexoVersion.png">
-<meta property="og:image" content="https://super-aviator.github.io/images/showImage.png">
-<meta property="og:image" content="https://super-aviator.github.io/images/nohupBackgroup.png">
-<meta property="article:published_time" content="2019-08-24T07:46:00.000Z">
-<meta property="article:modified_time" content="2021-07-22T08:51:00.957Z">
-<meta property="article:author" content="熊乾坤">
-<meta property="article:tag" content="Hexo">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://super-aviator.github.io/images/githubAddSSH.png">
-
-<link rel="canonical" href="https://super-aviator.github.io/2019/08/24/Untitled/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>在云服务器上搭建Hexo之一顿百度加谷歌 | 孤独飞行员</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">孤独飞行员</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content post posts-expand">
-            
-
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2019/08/24/Untitled/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="熊乾坤">
-      <meta itemprop="description" content="爱坤坤|爱生活">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="孤独飞行员">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          在云服务器上搭建Hexo之一顿百度加谷歌
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-24 15:46:00" itemprop="dateCreated datePublished" datetime="2019-08-24T15:46:00+08:00">2019-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-22 16:51:00" itemprop="dateModified" datetime="2021-07-22T16:51:00+08:00">2021-07-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Daily/" itemprop="url" rel="index"><span itemprop="name">Daily</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>今天周六，没啥事干，看书也看不进去T_T，<del>华农兄弟：这样下去不行的</del>。刚好前几天跟风买了个阿里云1H2G1M的云服务器，一年114块，肉疼。。，想着把电脑里面的Hexo乱七八糟的都搬到云服务器上去，这样在公司也可以瞎鸡儿写点东西了，建站的话目前还不想弄，放到GitHub上既稳定，又省力。</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="爱坤坤|爱生活"><title>在云服务器上搭建Hexo之一顿百度加谷歌 | 孤独飞行员</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">在云服务器上搭建Hexo之一顿百度加谷歌</h1><a id="logo" href="/.">孤独飞行员</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">在云服务器上搭建Hexo之一顿百度加谷歌</h1><div class="post-meta">2019-08-24<span> | </span><span class="category"><a href="/categories/Daily/">Daily</a></span></div><div class="post-content"><p>今天周六，没啥事干，看书也看不进去T_T，<del>华农兄弟：这样下去不行的</del>。刚好前几天跟风买了个阿里云1H2G1M的云服务器，一年114块，肉疼。。，想着把电脑里面的Hexo乱七八糟的都搬到云服务器上去，这样在公司也可以瞎鸡儿写点东西了，建站的话目前还不想弄，放到GitHub上既稳定，又省力。</p>
 <p>现在使用的Hexo是便携版的，安装没有什么技术含量，一键安装，这次想试一试使用完整版的Hexo,如果失败了再用便携版；文字编辑使用的是知乎上搜到的<code>hexo-admin</code>插件，非常好用，也不用敲太多命令行，直接点击就可以发布，很方便，但是唯一的缺点就是不能在线编辑，所以在公司精力十足的时候想记录一点学到的东西，但是只能写到别的地方，回来再使用hexo发布，很不方便，同时回到家就想洗了睡，根本不想打开电脑，所以如果能够在公司和家里都能记录，想想都很开心。</p>
 <span id="more"></span>
 
@@ -282,8 +26,8 @@
 </ul>
 <h2 id="安装NodeJS"><a href="#安装NodeJS" class="headerlink" title="安装NodeJS"></a>安装NodeJS</h2><p>我直接使用<code>yum install nodejs</code>yum安装nodejs，hexo要求nodejs必须6.9以后的版本，yum中的版本是6.17，满足要求就OK了。使用<code>node --version</code>查看当前安装的版本是否符合要求</p>
 <h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><p>这步就直接使用hexo文档上的说明进行安装：</p>
-<pre><code class="bash">npm install -g hexo-cli
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
 <p>安装完成使用<code>hexo -version</code>查看版本</p>
 <h2 id="安装hexo-admin插件"><a href="#安装hexo-admin插件" class="headerlink" title="安装hexo-admin插件"></a>安装hexo-admin插件</h2><p>在安装插件之前，需要初始化博客，步骤如下：</p>
 <ol>
@@ -293,53 +37,48 @@
 <li>这里需要删除hexo默认的文章<code>rm source/_posts/hello-world.md</code>,然后执行<code>rm -rf themes/landscape</code>删除默认的主体</li>
 </ol>
 <p>初始化博客之后，就可以安装<code>hexo-admin</code>插件插件了，这个部分可以使用<a target="_blank" rel="noopener" href="https://jaredforsyth.com/hexo-admin/">hexo-admin官网</a>上的教程进行安装</p>
-<pre><code class="bash">npm install --save hexo-admin
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-admin</span><br></pre></td></tr></table></figure>
+
 <p>安装完成后，使用<code>hexo c</code>、<code>hexo s</code>、<code>hexo g</code>、<code>hexo d</code> 命令开始使用了。以前使用便携版时，命令行简化了server，直接使用<code>hexo -s</code>就可以使用。<br>因为以前的文章都在本地的电脑中，需要将source.post文件夹下的文件拷贝到云服务器上，配置文件和主题也可以考过去，省的重新配置麻烦。</p>
 <p>注意，如果这个时候执行<code>hexo d</code>进行部署，会提示:</p>
-<pre><code class="bash">ERROR Deployer not found: git
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR Deployer not found: git</span><br></pre></td></tr></table></figure>
+
 <p>按照网上搜索的，首先需要安装一个插件：</p>
-<pre><code class="bash">npm install --save hexo-deployer-git
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+
 <p>然后使用<code>hexo d</code>命令会提示需要设置git邮箱和用户名，所以按照提示的命令，对git邮箱和名字进行设置：</p>
-<pre><code class="bash">git config --global user.email &quot;邮箱&quot;
-git config --global user.name &quot;名字&quot;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email <span class="string">&quot;邮箱&quot;</span></span><br><span class="line">git config --global user.name <span class="string">&quot;名字&quot;</span></span><br></pre></td></tr></table></figure>
+
 <p>然后就可以使用<code>hexo d</code>进行部署了</p>
 <p>然而在使用hexo-admin插件总的Deploy功能部署时，会提示：</p>
-<pre><code class="bash">Error: Config value &quot;admin.deployCommand&quot; not found
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Config value <span class="string">&quot;admin.deployCommand&quot;</span> not found</span><br></pre></td></tr></table></figure>
+
 <p>需要创建一个脚本，然后点击发布按钮时，会执行这个脚本，步骤如下：</p>
 <ol>
 <li>在_config.yml里面填写好deployCommand的存储路径之后，在该路径下生成脚本；</li>
 </ol>
-<pre><code class="bash">touch deploy.sh;
-vim deploy.sh;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch deploy.sh;</span><br><span class="line">vim deploy.sh;</span><br></pre></td></tr></table></figure>
+
 <ol start="2">
 <li>输入以下内容</li>
 </ol>
-<pre><code class="bash">#!/usr/bin/env sh
-hexo g
-hexo d
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env sh</span></span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
 <ol start="3">
 <li>保存退出，并赋予执行权限：</li>
 </ol>
-<pre><code class="bash">chmod +x deploy.sh
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x deploy.sh</span><br></pre></td></tr></table></figure>
+
 <p>修改配置文件,在hexo的配置文件_config.yml文件中的admin配置下面加入下面的配置，指定脚本的位置：</p>
-<pre><code class="yml">admin:
-  deployCommand: &#39;./hexo-publish.sh&#39;
-</code></pre>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">admin:</span></span><br><span class="line">  <span class="attr">deployCommand:</span> <span class="string">&#x27;./hexo-publish.sh&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p>但是这时候如果使用hexo-admin自带的Deploy按钮进行部署，会发现依旧是部署不成功的，这时，需要配置一下云服务器上的git的SSH，然后需要在hexo的配置文件_config.yml文件中，使用SSH的仓库地址而非https的，具体步骤如下：</p>
 <ol>
 <li>查看是否已经有了ssh密钥：cd ~/.ssh<br>如果没有密钥则不会有此文件夹，有则备份删除</li>
 <li>生成密钥：</li>
 </ol>
-<pre><code class="git">ssh-keygen -t rsa -C &quot;gudujianjsk@gmail.com&quot;
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;gudujianjsk@gmail.com&quot;</span><br></pre></td></tr></table></figure>
+
 <p>按3个回车，密码为空这里一般不使用密钥。<br>最后得到了两个文件：id_rsa和id_rsa.pub</p>
 <ol start="3">
 <li>在github上添加ssh密钥，这要添加的是“id_rsa.pub”里面的公钥。打开<code>http://github.com</code>，登陆。</li>
@@ -352,24 +91,11 @@ hexo d
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zxlovenet/p/4571850.html">为你的git添加SSH</a></li>
 </ul>
 <p>弄完上面的步骤之后，就可以进行编辑和发布了，日常的功能算式满足了。开心，部署的时候会提示下面的错误，但是不用管，这是nodejs版本的问题：</p>
-<pre><code class="txt">WARN  ===============================================================
-WARN  ========================= ATTENTION! ==========================
-WARN  ===============================================================
-WARN   NexT repository is moving here: https://github.com/theme-next 
-WARN  ===============================================================
-WARN   It&#39;s rebase to v6.0.0 and future maintenance will resume there
-WARN  ===============================================================
-fatal: could not read Password for &#39;https://super-aviator@github.com&#39;: No such device or address
-FATAL Something&#39;s wrong. you can find the solution here: https://hexo.io/docs/troubleshooting.html
-Error: Spawn failed
-    at ChildProcess.&lt;anonymous&gt; (/usr/local/hexo/blog/node_modules/hexo-util/lib/spawn.js:52:19)
-    at emitTwo (events.js:106:13)
-    at ChildProcess.emit (events.js:191:7)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:219:12)
-</code></pre>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">WARN  ===============================================================</span><br><span class="line">WARN  ========================= ATTENTION! ==========================</span><br><span class="line">WARN  ===============================================================</span><br><span class="line">WARN   NexT repository is moving here: https://github.com/theme-next </span><br><span class="line">WARN  ===============================================================</span><br><span class="line">WARN   It&#x27;s rebase to v6.0.0 and future maintenance will resume there</span><br><span class="line">WARN  ===============================================================</span><br><span class="line">fatal: could not read Password for &#x27;https://super-aviator@github.com&#x27;: No such device or address</span><br><span class="line">FATAL Something&#x27;s wrong. you can find the solution here: https://hexo.io/docs/troubleshooting.html</span><br><span class="line">Error: Spawn failed</span><br><span class="line">    at ChildProcess.&lt;anonymous&gt; (/usr/local/hexo/blog/node_modules/hexo-util/lib/spawn.js:52:19)</span><br><span class="line">    at emitTwo (events.js:106:13)</span><br><span class="line">    at ChildProcess.emit (events.js:191:7)</span><br><span class="line">    at Process.ChildProcess._handle.onexit (internal/child_process.js:219:12)</span><br></pre></td></tr></table></figure>
+
 <p>如果搜索功能不能用的话，需要重新安装搜索的插件：</p>
-<pre><code class="bash">npm install hexo-generator-searchdb --save
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+
 <h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><p>安装nginx也可以使用yum中的bginx,使用<code>yum install -y nginx</code> 或者<code>yum install nginx</code>安装ngingx，前者与后者的区别是不用手动输入y。。。</p>
 <p>安装之后的nginx的默认目录为：</p>
 <ul>
@@ -395,20 +121,8 @@ Error: Spawn failed
 </ul>
 <h2 id="配置nginx"><a href="#配置nginx" class="headerlink" title="配置nginx"></a>配置nginx</h2><p>到这一步，我已经完成了大部分的安装工作，接下来就需要配置nginx了，因为hexo的命令<code>hexo g</code>会在public文件夹下面生成所有网页的.html文件，所以需要把nginx的root目录指向public文件夹，根目录/设置为index.html，这样当浏览器访问到ip的80端口时，就可以直接进入index.html主页。</p>
 <p>修改<code>etc/nginx/nginx.conf</code>文件，在80端口配置一下：</p>
-<pre><code class="nginx">server &#123;
-        listen       80 default_server;
-        listen       [::]:80 default_server;
-        server_name  xqk;
-        root         /usr/local/hexo/blog/public;
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">80</span> default_server;</span><br><span class="line">        <span class="attribute">listen</span>       [::]:<span class="number">80</span> default_server;</span><br><span class="line">        <span class="attribute">server_name</span>  xqk;</span><br><span class="line">        <span class="attribute">root</span>         /usr/local/hexo/blog/public;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Load configuration files for the default server block.</span></span><br><span class="line">        <span class="attribute">include</span> /etc/nginx/default.d/<span class="regexp">*.conf</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-        # Load configuration files for the default server block.
-        include /etc/nginx/default.d/*.conf;
-
-        location / &#123;
-             index index.html index.htm;
-        &#125;
-&#125;
-</code></pre>
 <p>在这之前，需要开启云服务器的端口80和4000，开启的时候，值得注意的是，<strong>授权对象里面，如果填写0.0.0.0/0则表示允许所有人访问。</strong></p>
 <p>按照上面的操作之后，如果在浏览器直接数据ip地址，就可以访问到hexo -g生成的文章了。</p>
 <p>但是需要注意的是，这个生成的文章不是动态的，在admin页面编辑的文章在这里是不能动态改变的，还是得需要到4000端口去访问，是不是瞬间感觉有点鸡肋了呢。。。</p>
@@ -418,32 +132,16 @@ Error: Spawn failed
 <ol>
 <li>使用下面的命令安装n模块</li>
 </ol>
-<pre><code>npm install-g n
-</code></pre>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span>-g n</span><br></pre></td></tr></table></figure>
+
 <ol start="2">
 <li>升级node.js到最新稳定版</li>
 </ol>
-<pre><code class="bash">n stable
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n stable</span><br></pre></td></tr></table></figure>
+
 <p>npm常用地址：</p>
-<pre><code class="bash">npm -v          #显示版本，检查npm 是否正确安装。
- 
-npm install express   #安装express模块
- 
-npm install -g express  #全局安装express模块
- 
-npm list         #列出已安装模块
- 
-npm show express     #显示模块详情
- 
-npm update        #升级当前目录下的项目的所有模块
- 
-npm update express    #升级当前目录下的项目的指定模块
- 
-npm update -g express  #升级全局安装的express模块
- 
-npm uninstall express  #删除指定的模块
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">npm -v          <span class="comment">#显示版本，检查npm 是否正确安装。</span></span><br><span class="line"> </span><br><span class="line">npm install express   <span class="comment">#安装express模块</span></span><br><span class="line"> </span><br><span class="line">npm install -g express  <span class="comment">#全局安装express模块</span></span><br><span class="line"> </span><br><span class="line">npm list         <span class="comment">#列出已安装模块</span></span><br><span class="line"> </span><br><span class="line">npm show express     <span class="comment">#显示模块详情</span></span><br><span class="line"> </span><br><span class="line">npm update        <span class="comment">#升级当前目录下的项目的所有模块</span></span><br><span class="line"> </span><br><span class="line">npm update express    <span class="comment">#升级当前目录下的项目的指定模块</span></span><br><span class="line"> </span><br><span class="line">npm update -g express  <span class="comment">#升级全局安装的express模块</span></span><br><span class="line"> </span><br><span class="line">npm uninstall express  <span class="comment">#删除指定的模块</span></span><br></pre></td></tr></table></figure>
+
 <p><strong>参考地址：</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/adeyi/article/details/51076274">升级nodejs</a></p>
 <p>当前的hexo版本可使用<code>hexo --version</code> 去查看：<br><img src="/images/hexoVersion.png" alt="upload successful"><br>现在的版本是2.0.0,确实是有点太低了，又一顿百度加谷歌之后，我学会了升级hexo，步骤如下：</p>
 <ol>
@@ -453,317 +151,20 @@ npm uninstall express  #删除指定的模块
 <p>回到hexo-admin中，体验一下markdown中复制粘贴图片所带来的乐趣吧。如果粘贴图片发现不能正常显示的话，尝试点击一下这个按钮:<br><img src="/images/showImage.png" alt="upload successful">然后再切换回来编辑页面，图片就可以正常显示啦。</p>
 <h2 id="后台运行hexo命令"><a href="#后台运行hexo命令" class="headerlink" title="后台运行hexo命令"></a>后台运行hexo命令</h2><p>因为目前是在远程终端中执行的hexo -s命令，所以当终端断开的时候命令也就终止执行了，那么就需要将命令放在后台执行，这样就可以将hexo的命令脱离终端来运行了，网查又又是一顿查，发现可以使用nohup命令来实现，具体操作的步骤如下：</p>
 <p>nohup的使用方式是<code>nohup [command] &amp;</code>，末尾的&amp;也可以不加，加上&amp;表示后台执行。<br>然后命令就会脱离终端自己去撒丫子运行，这时候如果重新登录终端，会发现命令依旧在执行。例如，在云服务器中执行如下命令（<strong>别忘了cd进入博客文件夹内部执行</strong>）：</p>
-<pre><code class="bash">nohup hexo s &amp;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup hexo s &amp;</span><br></pre></td></tr></table></figure>
+
 <p>然后退出终端再次登录终端，<strong>注意</strong>，退出终端需要使用exit命令的方式去退出，否则nohup不能在后台运行。<br>重新登录终端后，使用</p>
-<pre><code class="bash">ps aux |grep hexo
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux |grep hexo</span><br></pre></td></tr></table></figure>
+
 <p>会发现hexo进程在后台执行：<br><img src="/images/nohupBackgroup.png" alt="upload successful"></p>
 <p>使用下面的命令提取hexo进程的pid：</p>
-<pre><code class="bash">ps -aux|grep hexo| grep -v grep | awk &#39;&#123;print $2&#125;&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -aux|grep hexo| grep -v grep | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p>得到hexo进程的pid之后，如果想要终止该进程，可以使用下面的命令去终止掉该PID对应的进程:</p>
-<pre><code class="bash">kill -9 PID
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 PID</span><br></pre></td></tr></table></figure>
+
 <p>好了，启动和终止都学会了，可以满足最基本的需求了嘤嘤嘤。</p>
 <p><strong>参考地址：</strong><br><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/704932">nohup 命令解析</a></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>零零散散弄了三四五六天终于算是完成了，以后也可以在公司也能记东西啦，美滋滋。</p>
 <p>唯一遗憾的是当初买云服务器的时候没有选择<code>轻量应用服务器</code>,选择的是<code>ESC</code>，但是<code>ESC</code>带宽只有1M，所以加载文章列表的时候太慢了，下载速度只有128kb/s，8M大小的文章列表要等一分钟左右才能全部加载完毕。。。<code>轻量应用服务器</code>有5M的峰值带宽，加载的时候会快很多。有点后悔啊，失算失算。</p>
-
-    </div>
-
-    
-    
-    
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2019/07/23/ySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="MySQL常用的数据类型与表设计要点">
-      <i class="fa fa-chevron-left"></i> MySQL常用的数据类型与表设计要点
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/08/30/Spring%E4%B8%AD%E7%9A%84-RequestBody%E6%B3%A8%E8%A7%A3/" rel="next" title="Spring中的@RequestBody注解与常规的HTTP方法的传值方式">
-      Spring中的@RequestBody注解与常规的HTTP方法的传值方式 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BF%85%E9%A1%BB%E7%9A%84%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F%E7%9A%84%E8%BD%AF%E4%BB%B6"><span class="nav-text">安装必须的乱七八糟的软件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Git"><span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85NodeJS"><span class="nav-text">安装NodeJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="nav-text">安装hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85hexo-admin%E6%8F%92%E4%BB%B6"><span class="nav-text">安装hexo-admin插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85nginx"><span class="nav-text">安装nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEnginx"><span class="nav-text">配置nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7nodejs%E5%92%8Chexo%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-text">升级nodejs和hexo的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8Chexo%E5%91%BD%E4%BB%A4"><span class="nav-text">后台运行hexo命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="熊乾坤"
-      src="/images/avatar.jpg">
-  <p class="site-author-name" itemprop="name">熊乾坤</p>
-  <div class="site-description" itemprop="description">爱坤坤|爱生活</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">116</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">13</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">44</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://www.yuque.com/aviator/blog" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;aviator&#x2F;blog" rel="noopener" target="_blank"><i class="fa fa-address-book fa-fw"></i>YuQue</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://github.com/super-aviator" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;super-aviator" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:18062148246@163.com" title="E-Mail → mailto:18062148246@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://weibo.com/u/5966289049" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5966289049" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
-      </span>
-  </div>
-
-
-  <div class="links-of-blogroll motion-element">
-    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
-      友链
-    </div>
-    <ul class="links-of-blogroll-list">
-        <li class="links-of-blogroll-item">
-          <a href="http://fangjian0423.github.io/" title="http:&#x2F;&#x2F;fangjian0423.github.io&#x2F;" rel="noopener" target="_blank">方剑-Format's Notes</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="https://xiaomi-info.github.io/" title="https:&#x2F;&#x2F;xiaomi-info.github.io&#x2F;" rel="noopener" target="_blank">小米信息部技术团队</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="http://www.javaboy.org/" title="http:&#x2F;&#x2F;www.javaboy.org&#x2F;" rel="noopener" target="_blank">江南一点雨</a>
-        </li>
-    </ul>
-  </div>
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2021</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">熊乾坤</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
-  </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
-
-
-
-
-  
-
-
-
-
-  
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
-
-  
-
-</body>
-</html>
+</div><div class="tags"><a href="/tags/Hexo/"><i class="fa fa-tag"></i>Hexo</a></div><div class="post-nav"><a class="pre" href="/2019/08/30/Spring%E4%B8%AD%E7%9A%84-RequestBody%E6%B3%A8%E8%A7%A3/">Spring中的@RequestBody注解与常规的HTTP方法的传值方式</a><a class="next" href="/2019/07/23/ySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">MySQL常用的数据类型与表设计要点</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://super-aviator.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Architecture/">Architecture</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Career/">Career</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Daily/">Daily</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Interview/">Interview</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MyBatis/">MyBatis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NetWork/">NetWork</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OperationSystem/">OperationSystem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Other/">Other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E6%B2%BB%E6%84%88/" style="font-size: 15px;">治愈</a> <a href="/tags/Java%E7%96%91%E6%83%91%E8%A7%A3%E7%AD%94/" style="font-size: 15px;">Java疑惑解答</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 15px;">音乐</a> <a href="/tags/%E5%90%89%E4%BB%96/" style="font-size: 15px;">吉他</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/JUnit/" style="font-size: 15px;">JUnit</a> <a href="/tags/Java-Web/" style="font-size: 15px;">Java Web</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" style="font-size: 15px;">Linux常用命令</a> <a href="/tags/Spring-Data-JPA/" style="font-size: 15px;">Spring Data JPA</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/Mybatis/" style="font-size: 15px;">Mybatis</a> <a href="/tags/HTTP/" style="font-size: 15px;">HTTP</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 15px;">面试</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Windows/" style="font-size: 15px;">Windows</a> <a href="/tags/Hello-World/" style="font-size: 15px;">Hello World</a> <a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 15px;">旅游</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 15px;">循环依赖</a> <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 15px;">时间复杂度</a> <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 15px;">空间复杂度</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" style="font-size: 15px;">深入理解计算机系统</a> <a href="/tags/%E7%AE%97%E6%B3%95%E7%96%91%E6%83%91%E8%A7%A3%E7%AD%94/" style="font-size: 15px;">算法疑惑解答</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93/" style="font-size: 15px;">工作总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/" style="font-size: 15px;">数据库优化</a> <a href="/tags/NoSQL/" style="font-size: 15px;">NoSQL</a> <a href="/tags/Logback/" style="font-size: 15px;">Logback</a> <a href="/tags/%E7%BC%96%E7%A0%81%E6%8A%80%E5%B7%A7/" style="font-size: 15px;">编码技巧</a> <a href="/tags/Lombok/" style="font-size: 15px;">Lombok</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 15px;">函数式编程</a> <a href="/tags/Maven/" style="font-size: 15px;">Maven</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 15px;">架构</a> <a href="/tags/MyBatis/" style="font-size: 15px;">MyBatis</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 15px;">并发</a> <a href="/tags/%E9%94%81/" style="font-size: 15px;">锁</a> <a href="/tags/Spring-Data-Jpa/" style="font-size: 15px;">Spring Data Jpa</a> <a href="/tags/Java-NIO/" style="font-size: 15px;">Java NIO</a> <a href="/tags/Servlet/" style="font-size: 15px;">Servlet</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/TCP-IP/" style="font-size: 15px;">TCP/IP</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/11/04/2021-11-04/">2021-11-04</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/11/01/2021-11-01/">2021-11-01</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/25/%E3%80%90Evaelf%E3%80%91Joker-s-Mask%E5%B0%8F%E4%B8%91%E9%9D%A2%E5%85%B7/">【EvaElf】Joker's Mask小丑面具</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/20/2021-10-20/">2021-10-20</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/19/Java%E4%B8%AD%E7%9A%84Functor%EF%BC%88%E5%87%BD%E5%AD%90%EF%BC%89%E5%92%8CMonad%EF%BC%88%E5%8D%95%E5%AD%90%EF%BC%89/">Java中的Functor（函子）和Monad（单子）</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/18/2021-10-18/">2021-10-18</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/15/%E3%80%8A%E5%B0%8F%E7%8E%8B%E5%AD%90%E3%80%8B%E4%B9%A6%E8%AF%84/">《小王子》书评</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/12/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6%EF%BC%81%E5%BD%BB%E5%BA%95%E5%AD%A6%E4%BC%9A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">【转载】保姆级教学！彻底学会时间复杂度和空间复杂度</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/10/%E3%80%8A%E5%8D%B7%E3%80%8B/">忘记时间</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">【转载】字符串常量池</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2021 <a href="/." rel="nofollow">孤独飞行员.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>

@@ -1,259 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"super-aviator.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":10,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
-  </script>
-
-  <meta name="description" content="参考文章：  Spring Data JPA的官方文档 IMB Develop 博客 CSDN博客  目前的公司的项目需要用到Spring Data JPA，记得刚开始看的时候感觉一脸懵逼，后来稍微看懂了以后感觉项目中如果业务逻辑比较简单的话，使用JPA比Mybatis更省事省力，它不需要使用JDBC中的那套麻烦的API，甚至也不需要写Mybatis那样的映射，定义好接口就可以直接用，感觉非常神奇">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Sping Data JPA入门学习">
-<meta property="og:url" content="https://super-aviator.github.io/2019/03/27/Sping-Data-JPA%E5%85%A5%E9%97%A8%E4%BB%8B%E7%BB%8D/index.html">
-<meta property="og:site_name" content="孤独飞行员">
-<meta property="og:description" content="参考文章：  Spring Data JPA的官方文档 IMB Develop 博客 CSDN博客  目前的公司的项目需要用到Spring Data JPA，记得刚开始看的时候感觉一脸懵逼，后来稍微看懂了以后感觉项目中如果业务逻辑比较简单的话，使用JPA比Mybatis更省事省力，它不需要使用JDBC中的那套麻烦的API，甚至也不需要写Mybatis那样的映射，定义好接口就可以直接用，感觉非常神奇">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.ax1x.com/2019/03/28/AwJlIf.png">
-<meta property="og:image" content="https://s2.ax1x.com/2019/03/27/Ade71f.png">
-<meta property="article:published_time" content="2019-03-27T11:23:00.000Z">
-<meta property="article:modified_time" content="2021-07-22T08:52:11.669Z">
-<meta property="article:author" content="熊乾坤">
-<meta property="article:tag" content="Java Web">
-<meta property="article:tag" content="Spring">
-<meta property="article:tag" content="Spring Data JPA">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.ax1x.com/2019/03/28/AwJlIf.png">
-
-<link rel="canonical" href="https://super-aviator.github.io/2019/03/27/Sping-Data-JPA%E5%85%A5%E9%97%A8%E4%BB%8B%E7%BB%8D/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>Sping Data JPA入门学习 | 孤独飞行员</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">孤独飞行员</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content post posts-expand">
-            
-
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://super-aviator.github.io/2019/03/27/Sping-Data-JPA%E5%85%A5%E9%97%A8%E4%BB%8B%E7%BB%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="熊乾坤">
-      <meta itemprop="description" content="爱坤坤|爱生活">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="孤独飞行员">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Sping Data JPA入门学习
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-03-27 19:23:00" itemprop="dateCreated datePublished" datetime="2019-03-27T19:23:00+08:00">2019-03-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-22 16:52:11" itemprop="dateModified" datetime="2021-07-22T16:52:11+08:00">2021-07-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>参考文章：</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="爱坤坤|爱生活"><title>Sping Data JPA入门学习 | 孤独飞行员</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Sping Data JPA入门学习</h1><a id="logo" href="/.">孤独飞行员</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Sping Data JPA入门学习</h1><div class="post-meta">2019-03-27<span> | </span><span class="category"><a href="/categories/Java/">Java</a></span></div><div class="post-content"><p>参考文章：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://ityouknow.gitbooks.io/spring-data-jpa-reference-documentation/content/Working-with-Spring-Data-Repositories/spring-data-repositories.html">Spring Data JPA的官方文档</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/opensource/os-cn-spring-jpa/index.html">IMB Develop 博客</a></li>
@@ -272,12 +17,8 @@
 <li>基于连接池的数据源（生产环境推荐）</li>
 </ul>
 <p>在配置数据源之前，需要添加MySQL驱动的jar:</p>
-<pre><code class="xml">&lt;dependency&gt;
-    &lt;groupId&gt;mysql&lt;/groupId&gt;
-    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-    &lt;version&gt;5.1.6&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>jar包的版本很重要，有时候版本不兼容是很麻烦的。</p>
 <h2 id="配置JDBC驱动程序定义的数据源"><a href="#配置JDBC驱动程序定义的数据源" class="headerlink" title="配置JDBC驱动程序定义的数据源"></a>配置JDBC驱动程序定义的数据源</h2><p>不支持池化的链接，推荐开发时使用。</p>
 <h2 id="配置JNDI数据源"><a href="#配置JNDI数据源" class="headerlink" title="配置JNDI数据源"></a>配置JNDI数据源</h2><p>可以在应用之外对数据源进行控制。</p>
@@ -288,81 +29,21 @@
 <li>BoneCP</li>
 </ul>
 <p>记录一下第一种配置DataSource的方式，其他的方式类似，首先导入需要的jar包：</p>
-<pre><code class="xml">&lt;dependency&gt;
-    &lt;groupId&gt;commons-dbcp&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-dbcp&lt;/artifactId&gt;
-    &lt;version&gt;1.4&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-dbcp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-dbcp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>然后通过xml文件配置的方式：</p>
-<pre><code class="xml">&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
-        &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://127.0.0.1:3306/spring_data_jpa?
-        characterEncoding=utf8&amp;amp;userSSL=false&quot;/&gt;
-        &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
-        &lt;property name=&quot;password&quot; value=&quot;123456&quot;/&gt;
-        &lt;property name=&quot;initialSize&quot; value=&quot;10&quot;/&gt;
-&lt;/bean&gt;
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.apache.commons.dbcp.BasicDataSource&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driverClassName&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://127.0.0.1:3306/spring_data_jpa?</span></span></span><br><span class="line"><span class="tag"><span class="string">        characterEncoding=utf8<span class="symbol">&amp;amp;</span>userSSL=false&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123456&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;initialSize&quot;</span> <span class="attr">value</span>=<span class="string">&quot;10&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>或者可以通过注解的方式获得一个bean：</p>
-<pre><code class="java">@Bean
-    public DataSource dataSource()&#123;
-        BasicDataSource dataSource=new BasicDataSource();
-        dataSource.setDriverClassName(&quot;com.mysql.jdbc.Driver&quot;);
-        dataSource.setUrl(&quot;jdbc:mysql://127.0.0.1:3306/spring_data_jpa?
-        characterEncoding=utf8&amp;amp;userSSL=false&quot;);
-        dataSource.setUsername(&quot;root&quot;);
-        dataSource.setPassword(&quot;123456&quot;);
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">        BasicDataSource dataSource=<span class="keyword">new</span> BasicDataSource();</span><br><span class="line">        dataSource.setDriverClassName(<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line">        dataSource.setUrl(<span class="string">&quot;jdbc:mysql://127.0.0.1:3306/spring_data_jpa?</span></span><br><span class="line"><span class="string">        characterEncoding=utf8&amp;amp;userSSL=false&quot;</span>);</span><br><span class="line">        dataSource.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">        dataSource.setPassword(<span class="string">&quot;123456&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>也可以在.properties后缀的文件中写入配置项，然后使用<code>$&#123;配置项名称&#125;</code>的方式在xml文件中引用配置项，如下是在jdbcConfiguration.properties文件中定义jdbc配置项：</p>
-<pre><code class="txt">jdbcConfiguration.properties
-jdbc.driverClassName=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/springdata?useSSL=false&amp;characterEncoding=utf-8
-jdbc.username=root
-jdbc.password=123456
-</code></pre>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jdbcConfiguration.properties</span><br><span class="line">jdbc.driverClassName=com.mysql.jdbc.Driver</span><br><span class="line">jdbc.url=jdbc:mysql://localhost:3306/springdata?useSSL=false&amp;characterEncoding=utf-8</span><br><span class="line">jdbc.username=root</span><br><span class="line">jdbc.password=123456</span><br></pre></td></tr></table></figure>
+
 <p><strong>这里需要注意的是，在properties文件中<code>&amp;</code>不需要转译成<code>&amp;amp;</code>，否则所有中文会变成???，而在xml文件中配置时则需要转译成<code>&amp;amp;</code></strong></p>
 <p>对DataSource进行测试：</p>
-<pre><code class="java">import org.apache.commons.dbcp.BasicDataSource;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.commons.dbcp.BasicDataSource;</span><br><span class="line"><span class="keyword">import</span> org.junit.jupiter.api.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.sql.DataSource;</span><br><span class="line"><span class="keyword">import</span> java.sql.Connection;</span><br><span class="line"><span class="keyword">import</span> java.sql.SQLException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ApplicationContext context;</span><br><span class="line">    <span class="keyword">private</span> Connection con;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;WEB-INF/applicationContext.xml&quot;</span>);</span><br><span class="line">        DataSource dataSource = context.getBean(DataSource.class);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            con = dataSource.getConnection();</span><br><span class="line">            System.out.println(con);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (con != <span class="keyword">null</span>)</span><br><span class="line">                    con.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output:</span><br><span class="line">jdbc:mysql:<span class="comment">//127.0.0.1:3306/spring_data_jpa?characterEncoding=utf8&amp;userSSL=false</span></span><br><span class="line">,UserName=root<span class="meta">@localhost</span>, MySQL-AB JDBC Driver</span><br></pre></td></tr></table></figure>
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-public class DataSourceTest &#123;
-    private ApplicationContext context;
-    private Connection con;
-
-    @Test
-    public void testDataSource() &#123;
-        context = new ClassPathXmlApplicationContext(&quot;WEB-INF/applicationContext.xml&quot;);
-        DataSource dataSource = context.getBean(DataSource.class);
-        try &#123;
-            con = dataSource.getConnection();
-            System.out.println(con);
-        &#125; catch (SQLException e) &#123;
-            e.printStackTrace();
-        &#125; finally &#123;
-            try &#123;
-                if (con != null)
-                    con.close();
-            &#125; catch (SQLException e) &#123;
-                e.printStackTrace();
-            &#125;
-        &#125;
-    &#125;
-
-&#125;
-
-output:
-jdbc:mysql://127.0.0.1:3306/spring_data_jpa?characterEncoding=utf8&amp;userSSL=false
-,UserName=root@localhost, MySQL-AB JDBC Driver
-</code></pre>
 <h1 id="配置实体管理器（EntityManager）"><a href="#配置实体管理器（EntityManager）" class="headerlink" title="配置实体管理器（EntityManager）"></a>配置实体管理器（EntityManager）</h1><p>实体管理器是负责管理Entity的对象。对Entity的操作包括添加、删除、修改和查询，都是通过实体管理器来实现的。使用JPA的第一个步骤就是配置一下EntityManager，而EntityManager都是通过EntityManagerFactory得到的，JPA定义了两种类型的实体管理器：</p>
 <ul>
 <li>应用程序类型管理器<br>适用于不是运行在JavaEE容器中的独立应用程序，用户需要对其进行打开、关闭、事物处理等控制，配置比较繁琐。由<code>LocalEntityManagerFactoryBean</code>生成对应的<code>EntityManager</code>。</li>
@@ -377,122 +58,30 @@ jdbc:mysql://127.0.0.1:3306/spring_data_jpa?characterEncoding=utf8&amp;userSSL=f
 <li>TopLinkJpaVneterAdapter</li>
 </ul>
 <p>在applicatinContext.xml文件中进行配置：</p>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xmlns:jpa=&quot;http://www.springframework.org/schema/data/jpa&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd 
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/data/jpa
-       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd&quot;&gt;
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:jpa</span>=<span class="string">&quot;http://www.springframework.org/schema/data/jpa&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">       http://www.springframework.org/schema/beans/spring-beans.xsd </span></span></span><br><span class="line"><span class="tag"><span class="string">       http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="tag"><span class="string">       http://www.springframework.org/schema/context/spring-context.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">       http://www.springframework.org/schema/data/jpa</span></span></span><br><span class="line"><span class="tag"><span class="string">       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--引入jdbc配置文件--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">&quot;jdbcConfiguration.properties&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">&lt;!--使用jpa命名空间开启Repository接口自动扫描--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">jpa:repositories</span> <span class="attr">base-package</span>=<span class="string">&quot;com.spring.model&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--配置数据源--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.apache.commons.dbcp.BasicDataSource&quot;</span> &gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driverClassName&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.driverClassName&#125;&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.url&#125;&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.username&#125;&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.password&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--配置Jpa实现供应商--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jpaVendorAdapter&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.orm.jpa.vendor</span></span></span><br><span class="line"><span class="tag"><span class="string">    .HibernateJpaVendorAdapter&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;database&quot;</span> <span class="attr">value</span>=<span class="string">&quot;MYSQL&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;databasePlatform&quot;</span> <span class="attr">value</span>=<span class="string">&quot;org.hibernate.dialect.MySQLDialect&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;showSql&quot;</span> <span class="attr">value</span>=<span class="string">&quot;false&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;generateDdl&quot;</span> <span class="attr">value</span>=<span class="string">&quot;false&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--配置实体管理器工厂--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;entityManagerFactory&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">&quot;org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;dataSource&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;jpaVendorAdapter&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jpaVendorAdapter&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;packagesToScan&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.spring.model&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--配置事务管理器--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;transactionManager&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.orm.jpa.JpaTransactionManager&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;dataSource&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;entityManagerFactory&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;entityManagerFactory&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-    &lt;!--引入jdbc配置文件--&gt;
-    &lt;context:property-placeholder location=&quot;jdbcConfiguration.properties&quot;/&gt;
-
-   &lt;!--使用jpa命名空间开启Repository接口自动扫描--&gt;
-    &lt;jpa:repositories base-package=&quot;com.spring.model&quot;/&gt;
-
-    &lt;!--配置数据源--&gt;
-    &lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; &gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driverClassName&#125;&quot; /&gt;
-        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot; /&gt;
-        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot; /&gt;
-        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot; /&gt;
-    &lt;/bean&gt;
-
-    &lt;!--配置Jpa实现供应商--&gt;
-    &lt;bean id=&quot;jpaVendorAdapter&quot; class=&quot;org.springframework.orm.jpa.vendor
-    .HibernateJpaVendorAdapter&quot;&gt;
-        &lt;property name=&quot;database&quot; value=&quot;MYSQL&quot; /&gt;
-        &lt;property name=&quot;databasePlatform&quot; value=&quot;org.hibernate.dialect.MySQLDialect&quot; /&gt;
-        &lt;property name=&quot;showSql&quot; value=&quot;false&quot; /&gt;
-        &lt;property name=&quot;generateDdl&quot; value=&quot;false&quot; /&gt;
-    &lt;/bean&gt;
-
-    &lt;!--配置实体管理器工厂--&gt;
-    &lt;bean id=&quot;entityManagerFactory&quot; 
-    class=&quot;org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean&quot;&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
-        &lt;property name=&quot;jpaVendorAdapter&quot; ref=&quot;jpaVendorAdapter&quot; /&gt;
-        &lt;property name=&quot;packagesToScan&quot; value=&quot;com.spring.model&quot; /&gt;
-    &lt;/bean&gt;
-
-    &lt;!--配置事务管理器--&gt;
-    &lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.orm.jpa.JpaTransactionManager&quot;&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
-        &lt;property name=&quot;entityManagerFactory&quot; ref=&quot;entityManagerFactory&quot; /&gt;
-    &lt;/bean&gt;
-
-&lt;/beans&gt;
-</code></pre>
 <h1 id="继承接口继承Repository接口"><a href="#继承接口继承Repository接口" class="headerlink" title="继承接口继承Repository接口"></a>继承接口继承Repository接口</h1><h2 id="Repository接口"><a href="#Repository接口" class="headerlink" title="Repository接口"></a>Repository接口</h2><p>Repository是一个标记接口，所有继承（或者间接继承）了这个接口的接口都会被Spring自动扫描到，然后自动创建这个接口的实现类。<br>如果用户只需要定义自己特有的方法，而不使用CrudRepository接口中自带的方法，则只需要继承Repository接口：</p>
-<pre><code class="java">interface PersonRepository extends Repository&lt;Person, Long&gt; &#123;
-  List&lt;Person&gt; findByLastname(String lastname);
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">PersonRepository</span> <span class="keyword">extends</span> <span class="title">Repository</span>&lt;<span class="title">Person</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">  <span class="function">List&lt;Person&gt; <span class="title">findByLastname</span><span class="params">(String lastname)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>也可以使用下面的这种方式：</p>
-<pre><code class="java">@RepositoryDefinition(domainClass = AccountInfo.class, idClass = Long.class) 
-public interface UserDao &#123; …… &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RepositoryDefinition(domainClass = AccountInfo.class, idClass = Long.class)</span> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123; …… &#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="CrudRepository接口"><a href="#CrudRepository接口" class="headerlink" title="CrudRepository接口"></a>CrudRepository接口</h2><p>以下部分内容来自Spring Data JPA的<a target="_blank" rel="noopener" href="https://ityouknow.gitbooks.io/spring-data-jpa-reference-documentation/content/Working-with-Spring-Data-Repositories/spring-data-repositories.html">官方文档</a>以及<a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/opensource/os-cn-spring-jpa/index.html">IBM Develop的大神</a>的文章。</p>
 <p>Spring Data库的核心接口是<code>Repository</code>。它使用domain类去管理，domain类中的id类型作为类型参数。这个接口主要作为一个标记接口(没有任何方法)，依靠具体的类型运作并帮助您发现接口，CrudRepository 提供丰富的CRUD功能去管理实体类。</p>
-<pre><code class="java">import java.io.Serializable;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="meta">@NoRepositoryBean</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CrudRepository</span>&lt;<span class="title">T</span>, <span class="title">ID</span> <span class="keyword">extends</span> <span class="title">Serializable</span>&gt; <span class="keyword">extends</span> <span class="title">Repository</span>&lt;<span class="title">T</span>, <span class="title">ID</span>&gt; </span>&#123;</span><br><span class="line">    &lt;S extends T&gt; <span class="function">S <span class="title">save</span><span class="params">(S var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    &lt;S extends T&gt; <span class="function">Iterable&lt;S&gt; <span class="title">save</span><span class="params">(Iterable&lt;S&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">T <span class="title">findOne</span><span class="params">(ID var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">exists</span><span class="params">(ID var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Iterable&lt;T&gt; <span class="title">findAll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Iterable&lt;T&gt; <span class="title">findAll</span><span class="params">(Iterable&lt;ID&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">count</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(ID var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(T var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(Iterable&lt;? extends T&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">deleteAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@NoRepositoryBean
-public interface CrudRepository&lt;T, ID extends Serializable&gt; extends Repository&lt;T, ID&gt; &#123;
-    &lt;S extends T&gt; S save(S var1);
-
-    &lt;S extends T&gt; Iterable&lt;S&gt; save(Iterable&lt;S&gt; var1);
-
-    T findOne(ID var1);
-
-    boolean exists(ID var1);
-
-    Iterable&lt;T&gt; findAll();
-
-    Iterable&lt;T&gt; findAll(Iterable&lt;ID&gt; var1);
-
-    long count();
-
-    void delete(ID var1);
-
-    void delete(T var1);
-
-    void delete(Iterable&lt;? extends T&gt; var1);
-
-    void deleteAll();
-&#125;
-</code></pre>
 <p>有@NoRepositoryBean注解的接口Spring不会为其创建实现类。两个接口的中间接口一般需要使用@NoRepositoryBean注解。<br>通过CrudRepository类的定义可以看到，CrudRepository类定义了11种对数据库操作的常用方法。</p>
 <p><strong>如果持久层接口较多，且每一个接口都需要声明相似的增删改查方法，直接继承 Repository 就显得有些啰嗦，这时可以继承 CrudRepository，它会自动为域对象创建增删改查方法，供业务层直接使用。开发者只是多写了 “Crud” 四个字母，即刻便为域对象提供了开箱即用的十个增删改查方法。</strong></p>
 <p>**但是，使用 CrudRepository 也有副作用，它可能暴露了你不希望暴露给业务层的方法。比如某些接口你只希望提供增加的操作而不希望提供删除的方法。针对这种情况，开发者只能退回到 Repository 接口，然后到 CrudRepository 中把希望保留的方法声明复制到自定义的接口中即可。 **</p>
 <p>用户可以定义一个接口继承CrudRepository类来定义访问数据库的方法，当然也可以使用CrudRepository接口中自带的方法：</p>
-<pre><code class="java">public interface UserRepository extends CrudRepository&lt;User, Long&gt; &#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserRepository</span> <span class="keyword">extends</span> <span class="title">CrudRepository</span>&lt;<span class="title">User</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//查询并统计</span></span><br><span class="line">  <span class="function">Long <span class="title">countByLastname</span><span class="params">(String lastname)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//查询并删除</span></span><br><span class="line">  <span class="function">Long <span class="title">deleteByLastname</span><span class="params">(String lastname)</span></span>;</span><br><span class="line">  <span class="function">List&lt;User&gt; <span class="title">removeByLastname</span><span class="params">(String lastname)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-  //查询并统计
-  Long countByLastname(String lastname);
-  
-  //查询并删除
-  Long deleteByLastname(String lastname);
-  List&lt;User&gt; removeByLastname(String lastname);
-&#125;
-</code></pre>
 <h2 id="PagingAndSortingRepository接口"><a href="#PagingAndSortingRepository接口" class="headerlink" title="PagingAndSortingRepository接口"></a>PagingAndSortingRepository接口</h2><p><code>CrudRepository</code>有一个<code>PagingAndSortingRepository</code> 抽象,增加了额外的方法来简化对实体的分页访问:</p>
-<pre><code class="java">public interface PagingAndSortingRepository&lt;T, ID extends Serializable&gt;
-  extends CrudRepository&lt;T, ID&gt; &#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PagingAndSortingRepository</span>&lt;<span class="title">T</span>, <span class="title">ID</span> <span class="keyword">extends</span> <span class="title">Serializable</span>&gt;</span></span><br><span class="line"><span class="class">  <span class="keyword">extends</span> <span class="title">CrudRepository</span>&lt;<span class="title">T</span>, <span class="title">ID</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">Iterable&lt;T&gt; <span class="title">findAll</span><span class="params">(Sort sort)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function">Page&lt;T&gt; <span class="title">findAll</span><span class="params">(Pageable pageable)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-  Iterable&lt;T&gt; findAll(Sort sort);
-
-  Page&lt;T&gt; findAll(Pageable pageable);
-&#125;
-</code></pre>
 <p>进入用户类别的第二页（每一页的条目是20），可以照下面这样来分页</p>
-<pre><code class="java">PagingAndSortingRepository&lt;User, Long&gt; repository = // … get access to a bean
-Page&lt;User&gt; users = repository.findAll(new PageRequest(1, 20));
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PagingAndSortingRepository&lt;User, Long&gt; repository = <span class="comment">// … get access to a bean</span></span><br><span class="line">Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> PageRequest(<span class="number">1</span>, <span class="number">20</span>));</span><br></pre></td></tr></table></figure>
+
 <h2 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h2><p><strong>上述四个接口，开发者到底该如何选择？其实依据很简单，根据具体的业务需求，选择其中之一。笔者建议在通常情况下优先选择 Repository 接口。因为 Repository 接口已经能满足日常需求，其他接口能做到的在 Repository 中也能做到，彼此之间并不存在功能强弱的问题。只是 Repository 需要显示声明需要的方法，而其他则可能已经提供了相关的方法，不需要再显式声明，但如果对 Spring Data JPA 不熟悉，别人在检视代码或者接手相关代码时会有疑惑，他们不明白为什么明明在持久层接口中声明了三个方法，而在业务层使用该接口时，却发现有七八个方法可用，从这个角度而言，应该优先考虑使用 Repository 接口。</strong></p>
 <h2 id="为接口的方法声明自定义查询"><a href="#为接口的方法声明自定义查询" class="headerlink" title="为接口的方法声明自定义查询"></a>为接口的方法声明自定义查询</h2><p>方法名定义查询的规则：</p>
 <ul>
@@ -512,104 +101,31 @@ Page&lt;User&gt; users = repository.findAll(new PageRequest(1, 20));
 <li>NotIn — 等价于 SQL 中的 “not in”，比如 findByUsernameNotIn(Collection<String> userList) ，方法的参数可以是 Collection 类型，也可以是数组或者不定长参数；</li>
 </ul>
 <p>在使用方法名定义查询时，会有一些限制，比如方法名太长、想要的查询很难用方法名去表达时，我们可以通过@Query注解自定义查询：</p>
-<pre><code class="java">import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.Query;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">User</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Query(&quot;SELECT a FROM User AS a WHERE a.user_id= ?1&quot;)</span><span class="comment">//指定SQL语句</span></span><br><span class="line">    <span class="function">User <span class="title">findById</span><span class="params">(Long id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-public interface UserRepository extends JpaRepository&lt;User, Long&gt; &#123;
-    @Query(&quot;SELECT a FROM User AS a WHERE a.user_id= ?1&quot;)//指定SQL语句
-    User findById(Long id);
-&#125;
-</code></pre>
 <p><strong>需要注意的是，占位符？后面必须按顺序接上数字。同时FROM后面的表明需要为实体类名，具体的原因还没弄清楚，可能是JPQL的特定语法</strong></p>
 <p>很多开发者在创建 JPQL 时喜欢使用命名参数来代替位置编号，@Query 也对此提供了支持。JPQL 语句中通过”: 变量”的格式来指定参数，同时在方法的参数前面使用 @Param 将方法参数与 JPQL 中的命名参数对应，示例如下：</p>
-<pre><code class="java">public interface UserDao extends Repository&lt;AccountInfo, Long&gt; &#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> <span class="keyword">extends</span> <span class="title">Repository</span>&lt;<span class="title">AccountInfo</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AccountInfo <span class="title">save</span><span class="params">(AccountInfo accountInfo)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query(&quot;from AccountInfo a where a.accountId = :id&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AccountInfo <span class="title">findByAccountId</span><span class="params">(<span class="meta">@Param(&quot;id&quot;)</span>Long accountId)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query(&quot;from AccountInfo a where a.balance &gt; :balance&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Page&lt;AccountInfo&gt; <span class="title">findByBalanceGreaterThan</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="meta">@Param(&quot;balance&quot;)</span>Integer balance,Pageable pageable)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    public AccountInfo save(AccountInfo accountInfo);
-
-    @Query(&quot;from AccountInfo a where a.accountId = :id&quot;)
-    public AccountInfo findByAccountId(@Param(&quot;id&quot;)Long accountId);
-
-    @Query(&quot;from AccountInfo a where a.balance &gt; :balance&quot;)
-    public Page&lt;AccountInfo&gt; findByBalanceGreaterThan(
-            @Param(&quot;balance&quot;)Integer balance,Pageable pageable);
-&#125;
-</code></pre>
 <p>此外，开发者也可以通过使用 @Query 来执行一个更新操作，为此，我们需要在使用 @Query 的同时，用 @Modifying 来将该操作标识为修改查询，这样框架最终会生成一个更新的操作，而非查询。如下所示：</p>
-<pre><code class="java">@Modifying 
-@Query(&quot;update AccountInfo a set a.salary = ?1 where a.salary &lt; ?2&quot;) 
-public int increaseSalary(int after, int before);//返回值必须为void、Integer/int
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Modifying</span> </span><br><span class="line"><span class="meta">@Query(&quot;update AccountInfo a set a.salary = ?1 where a.salary &lt; ?2&quot;)</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">increaseSalary</span><span class="params">(<span class="keyword">int</span> after, <span class="keyword">int</span> before)</span></span>;<span class="comment">//返回值必须为void、Integer/int</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="定义实体类（Entity）"><a href="#定义实体类（Entity）" class="headerlink" title="定义实体类（Entity）"></a>定义实体类（Entity）</h2><p>对于接口中要使用到的实体类，需要使用以下方法定义：</p>
-<pre><code class="java">import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.persistence.Entity;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Id;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Table;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Entity</span><span class="comment">//声明一个实体类</span></span><br><span class="line"><span class="meta">@Table(name = &quot;user&quot;)</span><span class="comment">//定义表名</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> Long user_id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String user_name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> user_age;</span><br><span class="line">    <span class="keyword">private</span> String user_addr;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Long user_id, String user_name, <span class="keyword">int</span> user_age, String user_addr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.user_id = user_id;</span><br><span class="line">        <span class="keyword">this</span>.user_name = user_name;</span><br><span class="line">        <span class="keyword">this</span>.user_age = user_age;</span><br><span class="line">        <span class="keyword">this</span>.user_addr = user_addr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getUser_id</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> user_id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    setter/getter方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@Entity//声明一个实体类
-@Table(name = &quot;user&quot;)//定义表名
-public class User &#123;
-
-    public User() &#123;
-    &#125;
-
-    @Id
-    private Long user_id;
-
-    private String user_name;
-    private int user_age;
-    private String user_addr;
-
-    public User(Long user_id, String user_name, int user_age, String user_addr) &#123;
-        this.user_id = user_id;
-        this.user_name = user_name;
-        this.user_age = user_age;
-        this.user_addr = user_addr;
-    &#125;
-
-    public Long getUser_id() &#123;
-        return user_id;
-    &#125;
-
-    setter/getter方法
-&#125;
-</code></pre>
 <p>** 需要注意的是所有的POJO都要有默认构造器，因为反射需要有默认构造器。同时，在使用AutoIncrement时，需要在自增的属性上使用@GeneratedValue(strategy=GenerationType.IDENTITY) 或者添加注解：<code>&lt;property name=&quot;hibernate.id.new_generator_mappings&quot;&gt;false&lt;/property&gt;</code> **</p>
 <p>可以在配置LocalContainerEntityManagerFactoryBean时，调用方法<code>setPackageToScan</code>来定义扫描Entity类的路径:</p>
-<pre><code class="java">emf.setPackagesToScan(new String[]&#123;&quot;com.rick.entities&quot;&#125;);
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emf.setPackagesToScan(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;com.rick.entities&quot;</span>&#125;);</span><br></pre></td></tr></table></figure>
+
 <h1 id="为这些接口创建代理实例"><a href="#为这些接口创建代理实例" class="headerlink" title="为这些接口创建代理实例"></a>为这些接口创建代理实例</h1><p>有了自定义的Repository接口，我们并不需要为这些接口提供实现类，我们只需要像配置<code>&lt;context:component-scan base-package=&quot;com.spring&quot; /&gt; </code>一样开启自动的Repository扫描，在<strong>启动</strong>时Spring就会扫描指定目录下的所有实现了Repository接口的接口，并自动为我们创建实现类，实现类的行为都是通过方法名实现的，专业名词叫做(领域特定语言)DSL，我也不懂是个啥，反正非常的炫酷。开启扫描有两种方式：<br>在xml中开启：</p>
-<pre><code class="xml">&lt;jpa:repositories base-package=&quot;com.spring.model&quot;/&gt;
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">jpa:repositories</span> <span class="attr">base-package</span>=<span class="string">&quot;com.spring.model&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>通过Java配置类开启：</p>
-<pre><code class="java">import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.config.EnableJpaRepositories;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EnableJpaRepositories(&quot;com.acme.repositories&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Config</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
 
-@EnableJpaRepositories(&quot;com.acme.repositories&quot;)
-class Config &#123;&#125;
-</code></pre>
 <h1 id="获得repository-实例注入并使用它。"><a href="#获得repository-实例注入并使用它。" class="headerlink" title="获得repository 实例注入并使用它。"></a>获得repository 实例注入并使用它。</h1><p>在需要对数据库进行操作的地方，直接注入一个repository，然后就可以调用我们定义的那些方法啦：</p>
-<pre><code class="java">import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.ContextConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringJUnit4ClassRunner.class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(locations= &quot;classpath:spring-config.xml&quot;)</span><span class="comment">//得到xml配置文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepositoryIntegrationTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserRepository repository;<span class="comment">//注入自定义的Repository接口</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sampleTestCase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User result = repository.findById(<span class="number">10002l</span>);</span><br><span class="line">        User user=<span class="keyword">new</span> User(<span class="number">10003l</span>,<span class="string">&quot;caf&quot;</span>,<span class="number">123</span>,<span class="string">&quot;新洲蘑菇棒&quot;</span>);</span><br><span class="line">        repository.save(user);</span><br><span class="line">        System.out.println(result);</span><br><span class="line">        System.out.println(repository.count());</span><br><span class="line">        System.out.println(repository.findById(<span class="number">10003l</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations= &quot;classpath:spring-config.xml&quot;)//得到xml配置文件
-public class UserRepositoryIntegrationTest &#123;
-
-    @Autowired
-    UserRepository repository;//注入自定义的Repository接口
-
-    @Test
-    public void sampleTestCase() &#123;
-        User result = repository.findById(10002l);
-        User user=new User(10003l,&quot;caf&quot;,123,&quot;新洲蘑菇棒&quot;);
-        repository.save(user);
-        System.out.println(result);
-        System.out.println(repository.count());
-        System.out.println(repository.findById(10003l));
-    &#125;
-&#125;
-</code></pre>
 <h1 id="为接口中的部分方法提供自定义实现"><a href="#为接口中的部分方法提供自定义实现" class="headerlink" title="为接口中的部分方法提供自定义实现"></a>为接口中的部分方法提供自定义实现</h1><p>有些时候，开发者可能需要在某些方法中做一些特殊的处理，此时自动生成的代理对象不能完全满足要求。为了享受 Spring Data JPA 带给我们的便利，同时又能够为部分方法提供自定义实现，我们可以采用如下的方法：</p>
 <ol>
 <li>将需要开发者手动实现的方法从持久层接口（假设为 AccountDao ）中抽取出来，独立成一个新的接口（假设为 AccountDaoPlus ），并让 AccountDao 继承 AccountDaoPlus；<code>AccountDap extends CurdRepository&lt;User,long&gt;,AccountDaoPluse</code></li>
@@ -617,403 +133,31 @@ public class UserRepositoryIntegrationTest &#123;
 <li>将 AccountDaoPlusImpl 配置为 Spring Bean；</li>
 <li>在业务层注入并使用AccountDaoPlus；</li>
 </ol>
-<h2 id="指定自定义实现类"><a href="#指定自定义实现类" class="headerlink" title="指定自定义实现类"></a>指定自定义实现类</h2><pre><code class="xml">&lt;jpa:repositories base-package=&quot;footmark.springdata.jpa.dao&quot;&gt; 
-&lt;jpa:repository id=&quot;accountDao&quot; repository-impl-ref=&quot; accountDaoPlus &quot; /&gt; 
-&lt;/jpa:repositories&gt; 
+<h2 id="指定自定义实现类"><a href="#指定自定义实现类" class="headerlink" title="指定自定义实现类"></a>指定自定义实现类</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">jpa:repositories</span> <span class="attr">base-package</span>=<span class="string">&quot;footmark.springdata.jpa.dao&quot;</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">jpa:repository</span> <span class="attr">id</span>=<span class="string">&quot;accountDao&quot;</span> <span class="attr">repository-impl-ref</span>=<span class="string">&quot; accountDaoPlus &quot;</span> /&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">jpa:repositories</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;accountDaoPlus&quot;</span> <span class="attr">class</span>=<span class="string">&quot;.......&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
 
-&lt;bean id=&quot;accountDaoPlus&quot; class=&quot;.......&quot;/&gt;
-</code></pre>
 <p>此外，&lt;jpa:repositories &gt; 提供了一个 repository-impl-postfix 属性，用以指定实现类的后缀。例如如下配置：</p>
-<pre><code class="xml">&lt;--指定自定义实现类为自定义接口名+Impl;--&gt;
-&lt;jpa:repositories base-package=&quot;footmark.springdata.jpa.dao&quot;
-repository-impl-postfix=&quot;Impl&quot;/&gt;
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;--指定自定义实现类为自定义接口名+Impl;--&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">jpa:repositories</span> <span class="attr">base-package</span>=<span class="string">&quot;footmark.springdata.jpa.dao&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">repository-impl-postfix</span>=<span class="string">&quot;Impl&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>基于Java类的配置时做如下配置：</p>
-<pre><code class="java">@EnableRepositories(
-    base-packet=&quot;com.spring.model&quot;
-    repositoryImplementationPostfix=&quot;Helper&quot;//指定自定义实现类为自定义接口名+Helper;
-)
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableRepositories(</span></span><br><span class="line"><span class="meta">    base-packet=&quot;com.spring.model&quot;</span></span><br><span class="line"><span class="meta">    repositoryImplementationPostfix=&quot;Helper&quot;//指定自定义实现类为自定义接口名+Helper;</span></span><br><span class="line"><span class="meta">)</span></span><br></pre></td></tr></table></figure>
+
 <h1 id="启用Spring注解事务"><a href="#启用Spring注解事务" class="headerlink" title="启用Spring注解事务"></a>启用Spring注解事务</h1><p><strong>SpringDataJPA，中在插入修改删除等需要对数据进行修改的操作时需要使用事务，而查找操作则不需要使用事务</strong>要启用Spring的注解事务，需要做如下配置，关于事务我还没有认真学习过，清明节放假好好学习一下：</p>
 <p>首先需要在配置文件中开启注解事务：</p>
-<pre><code class="xml">&lt;!--开启注解事务--&gt;
-&lt;jx:annotation-driven/&gt;
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--开启注解事务--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">jx:annotation-driven</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>同时需要引入jx的命名空间<code>xmlns:jx=&quot;http://www.springframework.org/schema/tx&quot;</code>.</p>
 <p>在开启注解事物之后，就可以使用<code>@Transactional</code>注解来使用事务了。<br><code>@Transactional</code>注解只能使用在public修饰的方法中，对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能，同时需要在业务层使用，而不能在DAO接口层。</p>
 <p><strong>Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是 不能继承 的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因 此，请接受Spring团队的建议并且在具体的类上使用</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zheng0518/article/details/52214310">博客原文</a></p>
 <p>业务层代码：</p>
-<pre><code class="java">import javax.transaction.Transactional;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.transaction.Transactional;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 业务层，用于定义对User的常规操作</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserOptService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserRepository repository;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserOptService</span><span class="params">(UserRepository repository)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.repository = repository;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateUserAddr</span><span class="params">(<span class="keyword">long</span> id, String addr)</span></span>&#123;</span><br><span class="line">        repository.updateUserAddr(id,addr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findByUserId</span><span class="params">(<span class="keyword">long</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> repository.findById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">addUser</span><span class="params">(User user)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> repository.save(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-/**
- * 业务层，用于定义对User的常规操作
- */
-public class UserOptService &#123;
-
-    private UserRepository repository;
-
-    public UserOptService(UserRepository repository) &#123;
-        this.repository = repository;
-    &#125;
-
-    @Transactional
-    public void updateUserAddr(long id, String addr)&#123;
-        repository.updateUserAddr(id,addr);
-    &#125;
-
-    public User findByUserId(long id)&#123;
-        return repository.findById(id);
-    &#125;
-
-    public User addUser(User user)&#123;
-        return repository.save(user);
-    &#125;
-&#125;
-</code></pre>
 <p>在DAO层（也就是Repository接口），对涉及删除、修改、增加的方法添加@Modifying注解：</p>
-<pre><code class="java">import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.Modifying;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.Query;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.repository.query.Param;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">User</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Query(&quot;SELECT a FROM User AS a WHERE a.user_id= ?1&quot;)</span></span><br><span class="line">    <span class="function">User <span class="title">findById</span><span class="params">(Long id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Modifying</span><span class="comment">//增加的注解</span></span><br><span class="line">    <span class="meta">@Query(&quot;UPDATE User SET user_addr = :addr WHERE user_id= :id&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">updateUserAddr</span><span class="params">(<span class="meta">@Param(&quot;id&quot;)</span> Long id, <span class="meta">@Param(&quot;addr&quot;)</span> String addr)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-public interface UserRepository extends JpaRepository&lt;User, Long&gt; &#123;
-    @Query(&quot;SELECT a FROM User AS a WHERE a.user_id= ?1&quot;)
-    User findById(Long id);
-
-    @Modifying//增加的注解
-    @Query(&quot;UPDATE User SET user_addr = :addr WHERE user_id= :id&quot;)
-    void updateUserAddr(@Param(&quot;id&quot;) Long id, @Param(&quot;addr&quot;) String addr);
-&#125;
-</code></pre>
 <p>测试事务是否能正常运行：</p>
-<pre><code class="java">import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.ContextConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringJUnit4ClassRunner.class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(locations= &quot;classpath:spring-config.xml&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepositoryIntegrationTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserOptService service;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sampleTestCase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User result = service.findByUserId(<span class="number">10002l</span>);</span><br><span class="line">        System.out.println(result);</span><br><span class="line">        User user=<span class="keyword">new</span> User(<span class="string">&quot;caf&quot;</span>,<span class="number">134</span>,<span class="string">&quot;新洲蘑菇棒&quot;</span>);</span><br><span class="line">        service.addUser(user);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        String addr=<span class="string">&quot;美丽繁华的魔都嗯嗯嗯！&quot;</span>;</span><br><span class="line">        service.updateUserAddr(<span class="number">10001l</span>,addr);<span class="comment">//可以成功修改</span></span><br><span class="line">        service.updateUserAddr(<span class="number">100011l</span>,addr);<span class="comment">//使用错误的ID，不能成功修改</span></span><br><span class="line">        System.out.println(service.findByUserId(<span class="number">10001l</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations= &quot;classpath:spring-config.xml&quot;)
-public class UserRepositoryIntegrationTest &#123;
-
-    @Autowired
-    UserOptService service;
-
-    @Test
-    public void sampleTestCase() &#123;
-        User result = service.findByUserId(10002l);
-        System.out.println(result);
-        User user=new User(&quot;caf&quot;,134,&quot;新洲蘑菇棒&quot;);
-        service.addUser(user);
-
-
-        String addr=&quot;美丽繁华的魔都嗯嗯嗯！&quot;;
-        service.updateUserAddr(10001l,addr);//可以成功修改
-        service.updateUserAddr(100011l,addr);//使用错误的ID，不能成功修改
-        System.out.println(service.findByUserId(10001l));
-    &#125;
-&#125;
-</code></pre>
 <p>在测试类中，使用正确的ID可以插入，而使用错误的ID则无法插入。(发生异常，数据回滚)</p>
 <hr>
 <p><img src="https://s2.ax1x.com/2019/03/27/Ade71f.png" alt="Ade71f.png"></p>
-
-    </div>
-
-    
-    
-    
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/Java-Web/" rel="tag"><i class="fa fa-tag"></i> Java Web</a>
-              <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
-              <a href="/tags/Spring-Data-JPA/" rel="tag"><i class="fa fa-tag"></i> Spring Data JPA</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2019/03/21/Spring%E4%B8%AD%E4%BD%BF%E7%94%A8Multipart%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" rel="prev" title="Spring中使用Multipart上传文件">
-      <i class="fa fa-chevron-left"></i> Spring中使用Multipart上传文件
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/04/13/CentOS%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85rpm%E5%8C%85%E7%9A%84MySQL/" rel="next" title="CentOS系统下安装rpm格式的MySQL">
-      CentOS系统下安装rpm格式的MySQL <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="nav-text">配置数据源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEJDBC%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="nav-text">配置JDBC驱动程序定义的数据源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEJNDI%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="nav-text">配置JNDI数据源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="nav-text">配置连接池的数据源</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BD%93%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%88EntityManager%EF%BC%89"><span class="nav-text">配置实体管理器（EntityManager）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E6%8E%A5%E5%8F%A3%E7%BB%A7%E6%89%BFRepository%E6%8E%A5%E5%8F%A3"><span class="nav-text">继承接口继承Repository接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Repository%E6%8E%A5%E5%8F%A3"><span class="nav-text">Repository接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CrudRepository%E6%8E%A5%E5%8F%A3"><span class="nav-text">CrudRepository接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PagingAndSortingRepository%E6%8E%A5%E5%8F%A3"><span class="nav-text">PagingAndSortingRepository接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9"><span class="nav-text">如何选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E6%B3%95%E5%A3%B0%E6%98%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9F%A5%E8%AF%A2"><span class="nav-text">为接口的方法声明自定义查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%AE%9E%E4%BD%93%E7%B1%BB%EF%BC%88Entity%EF%BC%89"><span class="nav-text">定义实体类（Entity）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E8%BF%99%E4%BA%9B%E6%8E%A5%E5%8F%A3%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B"><span class="nav-text">为这些接口创建代理实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97repository-%E5%AE%9E%E4%BE%8B%E6%B3%A8%E5%85%A5%E5%B9%B6%E4%BD%BF%E7%94%A8%E5%AE%83%E3%80%82"><span class="nav-text">获得repository 实例注入并使用它。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%B9%E6%B3%95%E6%8F%90%E4%BE%9B%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%9E%E7%8E%B0"><span class="nav-text">为接口中的部分方法提供自定义实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-text">指定自定义实现类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%AF%E7%94%A8Spring%E6%B3%A8%E8%A7%A3%E4%BA%8B%E5%8A%A1"><span class="nav-text">启用Spring注解事务</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="熊乾坤"
-      src="/images/avatar.jpg">
-  <p class="site-author-name" itemprop="name">熊乾坤</p>
-  <div class="site-description" itemprop="description">爱坤坤|爱生活</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">116</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">13</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">44</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://www.yuque.com/aviator/blog" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;aviator&#x2F;blog" rel="noopener" target="_blank"><i class="fa fa-address-book fa-fw"></i>YuQue</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://github.com/super-aviator" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;super-aviator" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:18062148246@163.com" title="E-Mail → mailto:18062148246@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://weibo.com/u/5966289049" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5966289049" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
-      </span>
-  </div>
-
-
-  <div class="links-of-blogroll motion-element">
-    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
-      友链
-    </div>
-    <ul class="links-of-blogroll-list">
-        <li class="links-of-blogroll-item">
-          <a href="http://fangjian0423.github.io/" title="http:&#x2F;&#x2F;fangjian0423.github.io&#x2F;" rel="noopener" target="_blank">方剑-Format's Notes</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="https://xiaomi-info.github.io/" title="https:&#x2F;&#x2F;xiaomi-info.github.io&#x2F;" rel="noopener" target="_blank">小米信息部技术团队</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="https://tech.meituan.com/" title="https:&#x2F;&#x2F;tech.meituan.com&#x2F;" rel="noopener" target="_blank">美团技术团队</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="http://www.javaboy.org/" title="http:&#x2F;&#x2F;www.javaboy.org&#x2F;" rel="noopener" target="_blank">江南一点雨</a>
-        </li>
-    </ul>
-  </div>
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2021</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">熊乾坤</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
-  </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
-
-
-
-
-  
-
-
-
-
-  
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
-
-  
-
-</body>
-</html>
+</div><div class="tags"><a href="/tags/Java-Web/"><i class="fa fa-tag"></i>Java Web</a><a href="/tags/Spring/"><i class="fa fa-tag"></i>Spring</a><a href="/tags/Spring-Data-JPA/"><i class="fa fa-tag"></i>Spring Data JPA</a></div><div class="post-nav"><a class="pre" href="/2019/04/13/CentOS%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85rpm%E5%8C%85%E7%9A%84MySQL/">CentOS系统下安装rpm格式的MySQL</a><a class="next" href="/2019/03/21/Spring%E4%B8%AD%E4%BD%BF%E7%94%A8Multipart%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/">Spring中使用Multipart上传文件</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://super-aviator.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Architecture/">Architecture</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Career/">Career</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Daily/">Daily</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Interview/">Interview</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MyBatis/">MyBatis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NetWork/">NetWork</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OperationSystem/">OperationSystem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Other/">Other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px;">生活</a> <a href="/tags/%E6%B2%BB%E6%84%88/" style="font-size: 15px;">治愈</a> <a href="/tags/Java%E7%96%91%E6%83%91%E8%A7%A3%E7%AD%94/" style="font-size: 15px;">Java疑惑解答</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 15px;">音乐</a> <a href="/tags/%E5%90%89%E4%BB%96/" style="font-size: 15px;">吉他</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/JUnit/" style="font-size: 15px;">JUnit</a> <a href="/tags/Java-Web/" style="font-size: 15px;">Java Web</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" style="font-size: 15px;">Linux常用命令</a> <a href="/tags/Spring-Data-JPA/" style="font-size: 15px;">Spring Data JPA</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/Mybatis/" style="font-size: 15px;">Mybatis</a> <a href="/tags/HTTP/" style="font-size: 15px;">HTTP</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 15px;">面试</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Windows/" style="font-size: 15px;">Windows</a> <a href="/tags/Hello-World/" style="font-size: 15px;">Hello World</a> <a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 15px;">旅游</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 15px;">循环依赖</a> <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 15px;">时间复杂度</a> <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 15px;">空间复杂度</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" style="font-size: 15px;">深入理解计算机系统</a> <a href="/tags/%E7%AE%97%E6%B3%95%E7%96%91%E6%83%91%E8%A7%A3%E7%AD%94/" style="font-size: 15px;">算法疑惑解答</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93/" style="font-size: 15px;">工作总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/" style="font-size: 15px;">数据库优化</a> <a href="/tags/NoSQL/" style="font-size: 15px;">NoSQL</a> <a href="/tags/Logback/" style="font-size: 15px;">Logback</a> <a href="/tags/%E7%BC%96%E7%A0%81%E6%8A%80%E5%B7%A7/" style="font-size: 15px;">编码技巧</a> <a href="/tags/Lombok/" style="font-size: 15px;">Lombok</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 15px;">函数式编程</a> <a href="/tags/Maven/" style="font-size: 15px;">Maven</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 15px;">架构</a> <a href="/tags/MyBatis/" style="font-size: 15px;">MyBatis</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 15px;">并发</a> <a href="/tags/%E9%94%81/" style="font-size: 15px;">锁</a> <a href="/tags/Spring-Data-Jpa/" style="font-size: 15px;">Spring Data Jpa</a> <a href="/tags/Java-NIO/" style="font-size: 15px;">Java NIO</a> <a href="/tags/Servlet/" style="font-size: 15px;">Servlet</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/TCP-IP/" style="font-size: 15px;">TCP/IP</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/11/04/2021-11-04/">2021-11-04</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/11/01/2021-11-01/">2021-11-01</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/25/%E3%80%90Evaelf%E3%80%91Joker-s-Mask%E5%B0%8F%E4%B8%91%E9%9D%A2%E5%85%B7/">【EvaElf】Joker's Mask小丑面具</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/20/2021-10-20/">2021-10-20</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/19/Java%E4%B8%AD%E7%9A%84Functor%EF%BC%88%E5%87%BD%E5%AD%90%EF%BC%89%E5%92%8CMonad%EF%BC%88%E5%8D%95%E5%AD%90%EF%BC%89/">Java中的Functor（函子）和Monad（单子）</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/18/2021-10-18/">2021-10-18</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/15/%E3%80%8A%E5%B0%8F%E7%8E%8B%E5%AD%90%E3%80%8B%E4%B9%A6%E8%AF%84/">《小王子》书评</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/12/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E5%AD%A6%EF%BC%81%E5%BD%BB%E5%BA%95%E5%AD%A6%E4%BC%9A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">【转载】保姆级教学！彻底学会时间复杂度和空间复杂度</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/10/%E3%80%8A%E5%8D%B7%E3%80%8B/">忘记时间</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/10/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">【转载】字符串常量池</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2021 <a href="/." rel="nofollow">孤独飞行员.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
