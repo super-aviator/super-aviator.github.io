@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Java各版本特性</title>
+      <link href="/2021/11/14/Java%E5%90%84%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"/>
+      <url>/2021/11/14/Java%E5%90%84%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Java-5"><a href="#Java-5" class="headerlink" title="Java 5"></a>Java 5</h1><p>Java5是Java有史以来最大的几次更新之一，对并发提供了更加方便和高性能的java.util.current类库（Doug Lee并发大神实现），同时提供了对泛型的支持</p><h2 id="并发类库"><a href="#并发类库" class="headerlink" title="并发类库"></a>并发类库</h2><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><span id="more"></span><h1 id="Java-6"><a href="#Java-6" class="headerlink" title="Java 6"></a>Java 6</h1><h1 id="Java-7"><a href="#Java-7" class="headerlink" title="Java 7"></a>Java 7</h1><h2 id="Fock-Join"><a href="#Fock-Join" class="headerlink" title="Fock/Join"></a>Fock/Join</h2><h1 id="Java-8"><a href="#Java-8" class="headerlink" title="Java 8"></a>Java 8</h1><p>Java8是继Java5更新以来对Java影响最大的一次更新，包括支持函数式编程、Lambda等，使得Java代码不再像老太太的裹脚布那样又臭又长！</p><h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><p>Java8中新增了Lambda表达式，Lambda表达式由参数、箭头以及主体构成，例如：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(Integer a1,Integer a2)-&gt;&#123;<span class="keyword">return</span> a1.compareTo(a2);&#125;</span><br><span class="line">参数               箭头                           主体</span><br></pre></td></tr></table></figure><p>值得注意的是，Lambda表达式的主体如果不带大括号{}，此时如果主体是一个表达式，则默认带return显示返回语句，如果主体是一个语句，则表示返回Void。如果带了大括号并且需要返回，则必须显示的使用return关键字，例如：</p><ul><li><code>(Integer i)-&gt;&#123;&quot;熊乾坤&quot;;&#125;</code>：此Lambda中的主体是一个表达式而不是语句，所以需要加上return。</li><li><code>(Integer)-&gt;return &quot;熊乾坤&quot;;</code>：此Lambda的主体是一个控制流语句，要使此Lambda有效，则需要使用花括号。</li></ul><h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>Java中<code>一等值</code>指的是可以对其进行操作的类型，例如数值类型、引用等，一等值可以进行操作或者作为方法传递，而其他用于描述或者处理一等值的类型成为<code>二等值</code>，例如方法、类、接口等，Java8中将方法升级成为了一等值，即方法也可以赋值给一个引用，或者作为方法的参数进行传递，这称为方法引用，这也是Lambda使用的基础条件，方法引用使用类名加上::加上方法名构成，例如：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure><h2 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h2><p>Java8中为接口增加了大量的方法，例如Collection接口的filter()、List接口的sort()等方法，此时如果直接将方法声明为抽象方法，则需要Collection接口的所有实现类全部实现该方法，最糟糕的是如果开发者自己实现了Collection接口，则这些代码使用JDK1.8则无法通过编译，必须加上这些新增的方法的实现，这样从而导致大量的工作。</p><p>所以Java8为接口引入了默认方法，新增了关键iopk字default，声明为默认方法的方法，方法的实现在方法的声明处，而不需要接口的实现类给出方法的实现，例如List接口的sort方法如下：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> E&gt; c)</span> </span>&#123;</span><br><span class="line">    Object[] a = <span class="keyword">this</span>.toArray();</span><br><span class="line">    Arrays.sort(a, (Comparator) c);</span><br><span class="line">    ListIterator&lt;E&gt; i = <span class="keyword">this</span>.listIterator();</span><br><span class="line">    <span class="keyword">for</span> (Object e : a) &#123;</span><br><span class="line">        i.next();</span><br><span class="line">        i.set((E) e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><p>函数式接口指的是接口中只定义一个<code>抽象方法</code>的接口，可以使用@FunctionalInterface标记注解显式的去注解该接口为函数式接口（如果接口不是一个函数式接口，则编译会报错），函数式接口用于接受Lambda表达式。</p><h1 id="Java-9"><a href="#Java-9" class="headerlink" title="Java 9"></a>Java 9</h1><h2 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h2><h2 id="反应式编程"><a href="#反应式编程" class="headerlink" title="反应式编程"></a>反应式编程</h2><h1 id="Java-10"><a href="#Java-10" class="headerlink" title="Java 10"></a>Java 10</h1><h1 id="Java-11"><a href="#Java-11" class="headerlink" title="Java 11"></a>Java 11</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java版本特性 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2021-11-04</title>
       <link href="/2021/11/04/2021-11-04/"/>
       <url>/2021/11/04/2021-11-04/</url>
