@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="熊乾坤" />
+  <meta name="description" content="爱坤坤|爱生活" />
+  
+  
+  <title>
+    
+      Spring Data JPA进阶学习 
+      
+      
+      |
+    
+     孤独飞行员
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.ico">
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/favicon.ico" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">孤独飞行员</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Links</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Spring Data JPA进阶学习</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2019-06-20 12:14:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/Spring/" title="Spring">
+                    <b>#</b> Spring
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/Spring-Data-JPA/" title="Spring Data JPA">
+                    <b>#</b> Spring Data JPA
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>这几天静下心来深入学习一下Spring Data Jpa的深入知识，参考书籍为《Spring Data JPA从入门到精通》，感觉作者写的很乱，不过收获应该还是很多的。</p>
+<span id="more"></span>
+
+<h1 id="Repository中方法的关键字"><a href="#Repository中方法的关键字" class="headerlink" title="Repository中方法的关键字"></a>Repository中方法的关键字</h1><p>Repository中的方法有很多关键字可以使用，在阅读书的时候发现了很多以前没有使用到并且没有注意到的细节问题：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/hexo-client/2021/03/10/4a80612f-efe1-4204-ad88-0b656d82338f.png" alt="VjOABt.png"></p>
+<ul>
+<li>小于使用LessThan关键字，大于使用GreaterThan关键字</li>
+<li>小于等于使用LessThanEqual关键字，大于等于使用GreaterThanEqual关键字</li>
+<li>时间的比较需要使用After和Before</li>
+<li>like关键字不会在参数前后加上%,StartingWith关键字会在参数前加%，EndingWith关键字会在参数后加%，而Containing关键字会在参数前后都加上%，一般用于模糊查询。</li>
+<li>In关键字的参数是Collection接口</li>
+<li>对于忽略大小写的比较，可以使用IgnoreCase关键字</li>
+</ul>
+<h1 id="数据的分页和排序"><a href="#数据的分页和排序" class="headerlink" title="数据的分页和排序"></a>数据的分页和排序</h1><p>查询数据时如果想要对数据进行分页，只需要在查询方法中加入Pagable对象，并返回Page或者Slice对象即可，调用时，参数使用PageRequest，并在构造函数中传入起始页以及每页显示的项目数即可。如果想要对分页的数据进行排序，可以在PageRequest构造器中传入Sort对象即可。</p>
+<h1 id="GeneratedValue的四种主键生成策略"><a href="#GeneratedValue的四种主键生成策略" class="headerlink" title="GeneratedValue的四种主键生成策略"></a>GeneratedValue的四种主键生成策略</h1><p>参考文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hongchengshise/p/10612301.html">GenerationType四中类型</a></p>
+<p>JPA提供的四种标准用法为TABLE,SEQUENCE,IDENTITY,AUTO.</p>
+<ul>
+<li>TABLE：使用一个特定的数据库表格来保存主键。</li>
+<li>SEQUENCE：根据底层数据库的序列来生成主键，条件是数据库支持序列。</li>
+<li>IDENTITY：主键由数据库自动生成（主要是自动增长型）</li>
+<li>AUTO：主键由程序控制。</li>
+</ul>
+<h2 id="GenerationType-TABLE"><a href="#GenerationType-TABLE" class="headerlink" title="GenerationType.TABLE"></a>GenerationType.TABLE</h2><p>使用一个特定的数据库表格来保存主键,持久化引擎通过关系数据库的一张特定的表格来生成主键,这种策略的好处就是不依赖于外部环境和数据库的具体实现,在不同数据库间可以很容易的进行移植,但由于其不能充分利用数据库的特性,所以不会优先使用。该策略一般与另外一个注解一起使用@TableGenerator,@TableGenerator注解指定了生成主键的表(可以在实体类上指定也可以在主键字段或属性上指定),然后JPA将会根据注解内容自动生成一张表作为序列表(或使用现有的序列表)。如果不指定序列表,则会生成一张默认的序列表,表中的列名也是自动生成,数据库上会生成一张名为sequence的表(SEQ_NAME,SEQ_COUNT)。序列表一般只包含两个字段:第一个字段是该生成策略的名称,第二个字段是该关系表的最大序号,它会随着数据的插入逐渐累加。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@Column(name=&quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy=GenerationType.TABLE,generator=&quot;table_gen&quot;)</span></span><br><span class="line">    <span class="meta">@TableGenerator(</span></span><br><span class="line"><span class="meta">            name = &quot;table_gen&quot;,  </span></span><br><span class="line"><span class="meta">            table=&quot;fendo_generator&quot;,  </span></span><br><span class="line"><span class="meta">            pkColumnName=&quot;seq_name&quot;,     //指定主键的名字</span></span><br><span class="line"><span class="meta">            pkColumnValue=&quot;fendos&quot;,      //指定下次插入主键时使用默认的值</span></span><br><span class="line"><span class="meta">            valueColumnName=&quot;seq_id&quot;,    //该主键当前所生成的值，它的值将会随着每次创建累加</span></span><br><span class="line"><span class="meta">            initialValue = 1,            //初始化值</span></span><br><span class="line"><span class="meta">            allocationSize=1             //累加值</span></span><br><span class="line"><span class="meta">            )</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getUid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> uid;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="GenerationType-SEQUENCE"><a href="#GenerationType-SEQUENCE" class="headerlink" title="GenerationType.SEQUENCE"></a>GenerationType.SEQUENCE</h2><p>在某些数据库中,不支持主键自增长,比如Oracle,其提供了一种叫做”序列(sequence)”的机制生成主键。此时,GenerationType.SEQUENCE就可以作为主键生成策略。该策略的不足之处正好与TABLE相反,由于只有部分数据库(Oracle,PostgreSQL,DB2)支持序列对象,MYsql不支持序列,所以该策略一般不应用于其他数据库。类似的,该策略一般与另外一个注解一起使用@SequenceGenerator,@SequenceGenerator注解指定了生成主键的序列.然后JPA会根据注解内容创建一个序列(或使用一个现有的序列)。如果不指定序列,则会自动生成一个序列SEQ_GEN_SEQUENCE。</p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="variable">@Id</span>  </span><br><span class="line"><span class="variable">@GeneratedValue</span>(strategy = GenerationType.SEQUENCE,generator=<span class="string">&quot;fendo_seq&quot;</span>)  </span><br><span class="line"><span class="variable">@SequenceGenerator</span>(name=<span class="string">&quot;fendo_seq&quot;</span>, sequenceName=<span class="string">&quot;seq_name&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="GenerationType-IDENTITY"><a href="#GenerationType-IDENTITY" class="headerlink" title="GenerationType.IDENTITY"></a>GenerationType.IDENTITY</h2><p>此种主键生成策略就是通常所说的主键自增长,数据库在插入数据时,会自动给主键赋值,比如MySQL可以在创建表时声明”auto_increment” 来指定主键自增长。该策略在大部分数据库中都提供了支持(指定方法或关键字可能不同),但还是有少数数据库不支持,所以可移植性略差。使用自增长主键生成策略是只需要声明strategy = GenerationType.IDENTITY即可。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Id</span>  </span><br><span class="line"><span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="GenerationType-AUTO"><a href="#GenerationType-AUTO" class="headerlink" title="GenerationType.AUTO"></a>GenerationType.AUTO</h2><p>把主键生成策略交给持久化引擎(persistence engine),持久化引擎会根据数据库在以上三种主键生成策略中选择其中一种。此种主键生成策略比较常用,由于JPA默认的生成策略就是GenerationType.AUTO,所以使用此种策略时.可以显式的指定@GeneratedValue(strategy = GenerationType.AUTO)也可以直接@GeneratedValue。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Id</span>  </span><br><span class="line"><span class="meta">@GeneratedValue(strategy = GenerationType.AUTO)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="各种数据库支持的类型"><a href="#各种数据库支持的类型" class="headerlink" title="各种数据库支持的类型"></a>各种数据库支持的类型</h2><p><img src="https://s2.ax1x.com/2019/06/20/VvNLYd.png" alt="各种数据库支持的类型"></p>
+<h1 id="使用Projections查询部分字段"><a href="#使用Projections查询部分字段" class="headerlink" title="使用Projections查询部分字段"></a>使用Projections查询部分字段</h1><p>在写代码时常常有这样的业务逻辑，就是仅仅查询实体类的部分字段，而忽略其他的字段，比如查询用户，不包括用户的密码等敏感信息。</p>
+<p>Spring Data JPA对Projections有很好的支持，使用方式如下：<br>对于如下的实体类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果只想查询用户的name和email字段，首先需要定义一个接口，包含想要查询的字段的<strong>getter方法</strong>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Aviator</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">String <span class="title">getEmail</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在Repository中，编写查询方法，方法返回的集合中包含该接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserJpaRepository</span> <span class="keyword">extends</span> <span class="title">Repository</span>&lt;<span class="title">User</span>,<span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有name的用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name 字符串类型</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> projection，查询特定字段的值,集合中的User为编写的接口。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">findUserByName</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以查询User实体类的name和email字段了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserJpaRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;UserDTO&gt; <span class="title">getAllUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.findUserByName(<span class="string">&quot;熊乾坤&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">[&#123;<span class="attr">&quot;name&quot;</span>:<span class="string">&quot;熊乾坤&quot;</span>,<span class="attr">&quot;email&quot;</span>:<span class="string">&quot;2372389705@qq.com&quot;</span>&#125;,&#123;<span class="attr">&quot;name&quot;</span>:<span class="string">&quot;熊乾坤&quot;</span>,<span class="attr">&quot;email&quot;</span>:<span class="string">&quot;2372389705@qq.com&quot;</span>&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>除了使用接口的方式，JPA中也可以使用DTO类来实现Projections:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDTO</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用Projection时，字段必须为final修饰</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name, email;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserDTO</span><span class="params">(String name, String email)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.email = email;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>值得注意的是：如果使用DTO类的方式，类中的字段必须使用final修饰，否则会抛出没有转换器的异常，要注意一下。</strong></p>
+<h1 id="使用动态Projections"><a href="#使用动态Projections" class="headerlink" title="使用动态Projections"></a>使用动态Projections</h1><p>上面学习的Projections也支持动态的操作，在Repository定义的方法中，使用泛型，就可以达到动态的映射，可以根据判定条件查询实体类的某些字段：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserJpaRepository</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Repository</span>&lt;<span class="title">User</span>,<span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用模糊查询</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name 字符串类型</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tClass 类型信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 用户列表</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;T&gt; <span class="title">findUserByName</span><span class="params">(String name,Class&lt;T&gt; tClass)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，如果想查询User的所有字段，则调用findUserByName方法时只需要指定tClass参数为User.class,如果只需要查询User的部分参数，则tClass参数传入UserDTO.class即可。</p>
+<h1 id="合理使用-Modifying注解"><a href="#合理使用-Modifying注解" class="headerlink" title="合理使用@Modifying注解"></a>合理使用@Modifying注解</h1><p>在使用Spring Data JPA对数据库中的数据进行修改或者删除操作时，在使用@Query注解的同时，也需要使用到@Modifying注解，但是单独使用@Modifying注解时可能会因为缓存而导致一些问题。</p>
+<p>JPA 的 Repository 提供一种非常易用的机制用于 ORM 方式处理数据，但是如果需要一次性更新一批数据的部分字段，构造所有实体并逐个修改字段再存回数据库就显得有些臃肿。在 JPA 中提供了 @Query 注解用于使用 JPQL 执行数据库操作，如果数据库操作是修改数据而非查询数据，则需要再额外使用 @Modifying 注解提示 JPA 该操作是修改操作。</p>
+<p>当进行 find 操作时，JPA 在 EntityManager 中缓存了 find 生成的对象，当再次 find 时会直接返回该对象。于是可能会出现下面这种情况 ,用@Query 定义一个修改状态的方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">EntityRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">Entity</span>, <span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Modifying</span></span><br><span class="line">    <span class="meta">@Query(&quot;update Entity set status = &#x27;IGNORED&#x27; where id = ?1&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateStatus</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先读取一个对象，再修改对象状态，再次读取对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional&lt;Entity&gt; entityBefore = repository.findById(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">repository.updateStatus(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">Optional&lt;Entity&gt; entityAfter = repository.findById(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>结果会发现 entityBefore 和 entityAfter 中的 Entity 对象 id 是相同的，中间对状态的修改并没有体现出来！当然，其原因也很明确，**@Query 跟 find 和 save 系列方法是两套不同的体系**，@Query 引起的数据库变更 EntityManager 并不能发现，更进一步说，使用其它工具或者其它框架修改数据库中的数据，也不能及时反应到 JPA 的 find 系列方法上来。</p>
+<p>当然，只要有缓存机制就一定不可避免存在此类问题，这仅是个取舍问题而不要认为是 BUG。如果要解决 find 得到的值不是数据库中最新值的问题可以有几种方式，避免使用 @Query 是一种方式，在需要时显式清理 EntityManager 的缓存也是一种方式。Spring Data JPA 提供了另外一种方式则是 @Modifying(clearAutomatically = true)，@Modifying 的 clearAutomatically 属性为 true 时，执行完 modifying query 之后就会清理缓存，从而在下次 find 时就可以读取到数据库中的最新值。</p>
+<p>自动清理之后还会带来一个新的问题，clear 操作清理的缓存中，还包括提交后未 flush 的数据，例如调用 save 而不是 saveAndFlush 就有可能不会立即将修改内容更新到数据库中，在 save 之后 flush 之前调用 @Modifying(clearAutomatically = true) 修饰的方法就有可能导致修改丢失。如果再要解决这个问题，还可以再加上另外一个属性 @Modifying(clearAutomatically = true, flushAutomatically = true)，**@Modifying 的 flushAutomatically 属性为 true 时，执行 modifying query 之前会先调用 flush 操作，从而避免数据丢失问题。**</p>
+<p>在实际运行中，clear 和 flush 操作都可能需要消耗一定的时间，要根据系统实际情况可以选择使用其中的一个或两个属性，以保证系统的正确性。</p>
+<p>参考: flushAutomatically 属性是在 <a target="_blank" rel="noopener" href="https://jira.spring.io/browse/DATAJPA-806">https://jira.spring.io/browse/DATAJPA-806</a> 提出并被采纳的。</p>
+<p><strong>参考地址：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://my.oschina.net/u/1762727/blog/2960653">@Modifying注解详解</a></li>
+</ul>
+<h1 id="Entity中常用的注解"><a href="#Entity中常用的注解" class="headerlink" title="Entity中常用的注解"></a>Entity中常用的注解</h1><p>实体类中有很多可以使用的注解，下面是常用的一些注解：</p>
+<h2 id="Basic-fetch-FetchType-optional-true"><a href="#Basic-fetch-FetchType-optional-true" class="headerlink" title="@Basic(fetch=FetchType,optional=true)"></a>@Basic(fetch=FetchType,optional=true)</h2><p>　　@Basic表示一个简单的属性到数据库表的字段的映射,对于没有任何标注的getXxxx()方法,默认 即为 @Basic</p>
+<p>　　fetch: 表示该属性的读取策略,有EAGER和LAZY两种,分别表示主支抓取和延迟加载,默认为EAGER.</p>
+<ul>
+<li>FetchType.LAZY：懒加载，加载一个实体时，定义懒加载的属性不会马上从数据库中加载。</li>
+<li>FetchType.EAGER：急加载，加载一个实体时，定义急加载的属性会立即从数据库中加载。</li>
+</ul>
+<p>比方User类有两个属性，name跟address，就像百度知道，登录后用户名是需要显示出来的，此属性用到的几率极大，要马上到数据库查，用急加载;而用户地址大多数情况下不需要显示出来，只有在查看用户资料是才需要显示，需要用了才查数据库，用懒加载就好了。所以，并不是一登录就把用户的所有资料都加载到对象中，于是有了这两种加载模式。 optional:表示该属性是否允许为null,默认为true</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Basic(optional=false)</span></span><br><span class="line"></span><br><span class="line">　　<span class="function"><span class="keyword">public</span> String <span class="title">getAddress</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> address; &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Transient"><a href="#Transient" class="headerlink" title="@Transient"></a>@Transient</h2><p>@Transient表示该属性并非一个到数据库表的字段的映射，表示<br>非持久化属性，与@Basic作用相反。JPA映射数据库的时候忽略它。如果一个属性并非数据库表的字段映射,就务必将其标示为 @Transient ,否则,ORM框架默认其注解为 @Basic</p>
+<h2 id="Temporal-TemporalType"><a href="#Temporal-TemporalType" class="headerlink" title="@Temporal(TemporalType)"></a>@Temporal(TemporalType)</h2><p>@Temporal用来设置Date类型的属性映射到对应精度的字段。</p>
+<ul>
+<li>@Temporal(TemporalType.DATE)映射为日期date（只有<br>日期）。</li>
+<li>@Temporal(TemporalType.TIME)映射为时间time（只有<br>时间）。</li>
+<li>@Temporal(TemporalType.TIMESTAMP)映射为日期date+<br>time（日期+时间）。</li>
+</ul>
+<h2 id="Lob"><a href="#Lob" class="headerlink" title="@Lob"></a>@Lob</h2><p>@Lob 将属性映射成数据库支持的大对象类型，支持以下两种数<br>据库类型的字段。</p>
+<ul>
+<li>Clob（Character Large Ojects）类型是长字符串类型，<br>java.sql.Clob、Character[]、char[]和String将被映射为Clob类 型。</li>
+<li>Blob（Binary Large Objects）类型是字节类型，<br>java.sql.Blob、Byte[]、byte[]和实现了Serializable接口的类型 将被映射为Blob类型。</li>
+<li>Clob、Blob占用内存空间较大，一般配合<br>@Basic(fetch=FetchType.LAZY)将其设置为延迟加载。</li>
+</ul>
+<h2 id="Enumerated"><a href="#Enumerated" class="headerlink" title="@Enumerated"></a>@Enumerated</h2><p>在数据库中创建字段时，可以创建枚举类型的字段，例如在User表中，GENDER字段为枚举类型ENUM(‘MALE’,FEMALE)。那么在Entity实体类中需要在字段上使用使用@Enumerated注解，并创建相应的枚举类：</p>
+<p>创建Enum：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Gender</span> </span>&#123;</span><br><span class="line">    <span class="comment">//男性</span></span><br><span class="line">    MALE(<span class="string">&quot;男性&quot;</span>),</span><br><span class="line">    <span class="comment">//女性</span></span><br><span class="line">    FEMALE(<span class="string">&quot;女性&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String value;</span><br><span class="line">    Gender(String str)&#123;</span><br><span class="line">        value=str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在实体类中使用@Enumerated注解：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Table(name = &quot;USER&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;NAME&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;EMAIL&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;ADDRESS&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Enumerated(EnumType.STRING)</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;GENDER&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Gender gender;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以在实体类中使用枚举类型啦。</p>
+<p>值得注意的是，这时插入两条数据，数据库里面的值是MAIL/FMAIL，而不是“男<br>性”/“女性”。<strong>如果我们用@Enumerated(EnumType.ORDINAL)，那么 这时数据库里面的值是0、1。但是实际工作中，不建议用数字下标，因为枚举里面的属性值是会不断新增的，如果新增一个，位置变化了就惨了。</strong></p>
+<h2 id="CreatedDate"><a href="#CreatedDate" class="headerlink" title="@CreatedDate"></a>@CreatedDate</h2><p>用来指定当前的时间字段的数据为数据插入时的时间。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2019/04/13/CentOS%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85rpm%E5%8C%85%E7%9A%84MySQL/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2019-06-20 12:14:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Spring/" title="Spring">
+                        <b>#</b> Spring
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Spring-Data-JPA/" title="Spring Data JPA">
+                        <b>#</b> Spring Data JPA
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2019/06/22/Spring-Data-JPA%E4%B8%AD%E7%9A%84%E4%B8%80%E5%AF%B9%E4%B8%80%EF%BC%8C%E4%B8%80%E5%AF%B9%E5%A4%9A%EF%BC%8C%E5%A4%9A%E5%AF%B9%E5%A4%9A%E6%9F%A5%E8%AF%A2/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Repository%E4%B8%AD%E6%96%B9%E6%B3%95%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">Repository中方法的关键字</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E9%A1%B5%E5%92%8C%E6%8E%92%E5%BA%8F"><span class="toc-text">数据的分页和排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GeneratedValue%E7%9A%84%E5%9B%9B%E7%A7%8D%E4%B8%BB%E9%94%AE%E7%94%9F%E6%88%90%E7%AD%96%E7%95%A5"><span class="toc-text">GeneratedValue的四种主键生成策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GenerationType-TABLE"><span class="toc-text">GenerationType.TABLE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GenerationType-SEQUENCE"><span class="toc-text">GenerationType.SEQUENCE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GenerationType-IDENTITY"><span class="toc-text">GenerationType.IDENTITY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GenerationType-AUTO"><span class="toc-text">GenerationType.AUTO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%84%E7%A7%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E6%94%AF%E6%8C%81%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">各种数据库支持的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Projections%E6%9F%A5%E8%AF%A2%E9%83%A8%E5%88%86%E5%AD%97%E6%AE%B5"><span class="toc-text">使用Projections查询部分字段</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81Projections"><span class="toc-text">使用动态Projections</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8-Modifying%E6%B3%A8%E8%A7%A3"><span class="toc-text">合理使用@Modifying注解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Entity%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%B3%A8%E8%A7%A3"><span class="toc-text">Entity中常用的注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-fetch-FetchType-optional-true"><span class="toc-text">@Basic(fetch&#x3D;FetchType,optional&#x3D;true)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transient"><span class="toc-text">@Transient</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Temporal-TemporalType"><span class="toc-text">@Temporal(TemporalType)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lob"><span class="toc-text">@Lob</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerated"><span class="toc-text">@Enumerated</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreatedDate"><span class="toc-text">@CreatedDate</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Spring%20Data%20JPA%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0 + '&url=' + https%3A%2F%2Fsuper-aviator.github.io%2F2019%2F06%2F20%2FSpring-Data-JPA%25E6%25B7%25B1%25E5%2585%25A5%25E5%25AD%25A6%25E4%25B9%25A0%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://super-aviator.github.io/2019/06/20/Spring-Data-JPA%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

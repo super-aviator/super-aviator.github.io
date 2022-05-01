@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="熊乾坤" />
+  <meta name="description" content="爱坤坤|爱生活" />
+  
+  
+  <title>
+    
+      Docker中搭建Redis环境 
+      
+      
+      |
+    
+     孤独飞行员
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.ico">
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/favicon.ico" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">孤独飞行员</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Links</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Docker中搭建Redis环境</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2021-06-18 00:00:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/Docker/" title="Docker">
+                    <b>#</b> Docker
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/Redis/" title="Redis">
+                    <b>#</b> Redis
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>几天学习了下载Docker中搭建Redis，利用昨天学习的docker中的命令，现学现卖惹。其实过程非常简单，但是踩到了一个大坑，都是由于自己的粗心引起的。</p>
+<p>在搭建之前，首先需要下载一个redis的tar包，然后将其解压，因为docker中下载的redis镜像是不包含redis.cong配置文件的，需要使用-v命令去手动挂载容器外部的配置文件（喵了个咪的，怪不得我找了半天），所以需要把默认的redis配置文件提取出来。</p>
+<span id="more"></span>
+
+<p>下载jar之后，使用tar -zxvf redis.tar.gz命令将redis解压出来，取出其中的redis.conf文件，放置到/home/redis/目录下:<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis1.png"></p>
+<p>然后在docker中pull一个redis的镜像，我这里是以前pull的，所以就用这个吧：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis2.png"></p>
+<p>启动容器之前，需要修改一下redis的配置文件，将bind配置修改为0.0.0.0，这是因为docker默认监听容器的端口默认是0.0.0.0端口，而redis默认的配置绑定端口为127.0.0.1，所以需要统一下：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis3.png"></p>
+<p>然后需要将这个保护模式修改为no，我也不知道这个配置干啥的，后面学习下QAQ：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis3.png"></p>
+<p>最后，修改requirepass，为redis服务指定密码：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis3.png"></p>
+<p>修改以后记得保存一下。</p>
+<p>ok，万事具备，然后就需要进行容器的启动了，启动的命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -itd -v /home/redis-5.0.8/redis.conf:/etc/redis.conf -v /data/redis/data:/data --name redis --network=host redis:latest redis-server /etc/redis.conf</span><br></pre></td></tr></table></figure>
+
+<p>命令具体的解释：</p>
+<ul>
+<li>-it 表示为容器附加一个标准输入，并接受用户的输入，由于有了-d参数，所以这个-it可加可不加</li>
+<li>-d 表示容器启动后以守护态运行</li>
+<li>-v 两个-v操作，一个是将配置文件挂载到容器内部的/etc目录下，用于后面启动时使用，第二个-v操作是将目录/data/redis/data挂载到容器内部的redis的数据目录：/data</li>
+<li>–name指定容器的名称，虽然docker会自动生成一个，但是指定一个名称方便操作</li>
+<li>–network=host 指定docker网络类型为主机模式，这样的话不能进行端口映射，即容器内的端口会附加到主机的端口上去。默认情况下启动的Docker容器，网络类型为桥接模式，可以手动使用-p 主机端口:容器端口来指定端口映射</li>
+<li>后面便是指定镜像的版本以及需要执行的命令和其参数，redis-server /etc/redis.conf命令指定redis使用哪个路径下的配置文件</li>
+</ul>
+<p>启动之后，容器会在后台运行，当进行到这一步时，我怀着万分激动的心情，打开了RedisDesktopManager，填入ip，密码，端口号，点击连接：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis6.png"></p>
+<p>T_T</p>
+<p>花了一上午的时间找问题，还是连不上，然后在segemntfault上看到一个大佬说可能是阿里云服务器的端口未开放，我顿开茅厕，上了个洗手间， 连不上的原因就是端口未开放的原因，我giao。</p>
+<p>马上去控制台开通了6379端口，打开RedisDesktopManager，点击连接：<br><img src="https://resource-1259322763.cos.ap-guangzhou.myqcloud.com/blog/docker%E4%B8%AD%E6%90%AD%E5%BB%BAredis/docker-redis7.png"></p>
+<p>舒服了，舒服了。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/03/24/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E8%AE%BE%E7%BD%AELinux%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2021-06-18 00:00:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Docker/" title="Docker">
+                        <b>#</b> Docker
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Redis/" title="Redis">
+                        <b>#</b> Redis
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/08/16/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E6%BA%90/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83 + '&url=' + https%3A%2F%2Fsuper-aviator.github.io%2F2021%2F06%2F18%2FDocker%25E4%25B8%25AD%25E6%2590%25AD%25E5%25BB%25BARedis%25E7%258E%25AF%25E5%25A2%2583%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://super-aviator.github.io/2021/06/18/Docker%E4%B8%AD%E6%90%AD%E5%BB%BARedis%E7%8E%AF%E5%A2%83/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

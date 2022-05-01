@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="熊乾坤" />
+  <meta name="description" content="爱坤坤|爱生活" />
+  
+  
+  <title>
+    
+      Spring Data JPA中的一对一，一对多，多对多查询 
+      
+      
+      |
+    
+     孤独飞行员
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.ico">
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/favicon.ico" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">孤独飞行员</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Links</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Spring Data JPA中的一对一，一对多，多对多查询</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2019-06-22 19:10:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/Spring/" title="Spring">
+                    <b>#</b> Spring
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/Spring-Data-JPA/" title="Spring Data JPA">
+                    <b>#</b> Spring Data JPA
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>这几天学习一下Spring Data JPA中的一对一、一对多、多对多映射。这些映射还分单向关联和双向关联，在双向关联时还需要考虑对象序列化为JSON字符串时的死循环问题。</p>
+<span id="more"></span>
+
+<h1 id="单向关联和双向关联"><a href="#单向关联和双向关联" class="headerlink" title="单向关联和双向关联"></a>单向关联和双向关联</h1><ul>
+<li><strong>单向关联</strong>  单向关联指的是实体类A中有一个实体类B变量，但是实体类B中没有实体类A变量，即为单向关联。</li>
+<li><strong>双向关联</strong>  双向关联指的是实体类A中有一个实体类B变量，而实体类B中也含有一个实体类A变量，即为双向关联。</li>
+</ul>
+<p><strong>值得注意的是：Spring Data JPA中属性的集合需要使用Set来保存，如果使用List会抛出异常。</strong></p>
+<h1 id="双向关联中序列化的死循环问题"><a href="#双向关联中序列化的死循环问题" class="headerlink" title="双向关联中序列化的死循环问题"></a>双向关联中序列化的死循环问题</h1><p>在双向关联时，可能会存在对象序列化成JSON字符创时的死循环问题，因为A中包含B，B中也包含A，序列化A中的B时，因为B也含有A，A又含有B，所以会死循环。</p>
+<blockquote>
+</blockquote>
+<p>特南克斯<br>首先你要理解这是双向关联，双向关联中你如果从数据库里面查询一个User对象，那么User对象里面有Role，Role里面又有User对象，那么你用syso输出User对象，如果toString方法里面包含有输出User.roles的话，那么是必然会造成死循环的。如果你用sping mvc等框架将后台数据返回给前台也是同理，也会造成返回的JSON数据死循环</p>
+<p>使用Jackson时，可以使用@JsonIgnoreProperties注解来解决：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@JsonIgnoreProperties(value = &#123; &quot;users&quot; &#125;)</span></span><br><span class="line">    <span class="meta">@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)</span></span><br><span class="line">    <span class="meta">@JoinTable(</span></span><br><span class="line"><span class="meta">            name = &quot;TEACHER_USER_RELATION&quot;,</span></span><br><span class="line"><span class="meta">            joinColumns = </span></span><br><span class="line"><span class="meta">            @JoinColumn(name = &quot;UserId&quot;,referencedColumnName = &quot;id&quot;),</span></span><br><span class="line"><span class="meta">            inverseJoinColumns = </span></span><br><span class="line"><span class="meta">            @JoinColumn(name = &quot;TeacherId&quot;,referencedColumnName = &quot;id&quot;)</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="keyword">private</span> Set&lt;Teacher&gt; teachers;</span><br></pre></td></tr></table></figure>
+
+<p>@JsonIgnoreProperties(value = { “users” })注解排除了Teacher中的User字段，从而避免了死循环问题。</p>
+<h1 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h1><p>一对一映射需要@OneToOne注解和@JoinColumn注解配合使用，为了创建测试数据，首先定义一个User实体类，然后定义一个UserDetail实体类，其中User与UserDetail的关系是一对一的关系，即一个User对应一个UserDetail，一个UserDetail对应一个User。具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;USER&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		...</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 一对一</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@JoinColumn(name = &quot;id&quot;,referencedColumnName = &quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@OneToOne(cascade = &#123;CascadeType.ALL&#125;,fetch = FetchType.LAZY)</span>    </span><br><span class="line">    <span class="keyword">private</span> UserDetail userDetail;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在被关联的UserDetail代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Table(name = &quot;USER_DETAIL&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDetail</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;ID&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;CREDIT&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Float credit;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;ENROLLMENT_DATE&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Date enrollmentDate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;USER_ID&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Long userId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>UserDetail中没有User类型成员变量，所以User与UserDetail的关联是单向关联，如果UserDetail中也含有一个User类型的变量，则为双向关联；（单向和双向关联只与是否包含对象有关，和是否使用注解无关。）</p>
+<p>同时需要在User类型的变量名中增加@OneToOne(mappedBy=”userDetail”)注解，表示两者的关系由User实体去维护，如果配置了Cascade，对User的操作也会影响到UserDetail实体。</p>
+<p>上面代码中的@OneToOne注解中，可以定义级联操作，包括级联新建、级联删除、级联更新、级联刷新。</p>
+<p><strong>@JoinColumn注解中的name元素为被关联对象的id，即UserDetail类的id，而referencedColumnName则为关联对象的id,即@JoinColumn所在实体类的id。</strong></p>
+<h1 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h1><p>一对多需要使用@JoinColumn注解和@OneToMany配置使用，如果是双向关联，则还需要在被关联的实体类的成员变量中使用@ManyToOne。</p>
+<p>为了创建测试环境，需要新建一个UserFriend实体类，一个User可以有一个或多个UserFriend。</p>
+<p>User实体类中需要包含一个集合类型的UserFriend成员变量：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;USER&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 一对多</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@OneToMany(cascade = &#123;CascadeType.ALL&#125;,fetch = FetchType.LAZY)</span></span><br><span class="line">    <span class="meta">@JoinColumn(name = &quot;userId&quot;,referencedColumnName = &quot;id&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Set&lt;UserFriend&gt; userFriends;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@OneToMany注解和@JoinColumn注解需要配合使用，@OneToMany注解中同样可以指定级联操作和加载类型。</p>
+<p><strong>@JoinColumn注解中，name元素为被被关联实体类中的id，而referencedColumnName元素为关联实体类中的id,即@JoinColumn所在实体类的id。</strong></p>
+<p>UserFriend实体类代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Table(name = &quot;USER_FRIEND&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserFriend</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;ID&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long userId;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;FRIEND_ID&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Long friendId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于使用的是单向关联，UserFriend实体类没有对应的User成员变量，所以是单向关联，如果需要指定关系的维护方，需要在使用没有@JoinColumn的实体类上使用注解@OneToMany(mappedBy)。</p>
+<h1 id="多对多"><a href="#多对多" class="headerlink" title="多对多"></a>多对多</h1><p>多对多和一对一、一对多不同，需要引入两者之间的关系表，关系表负责维护两者之间的关系，起到至关重要的作用，Spring Data JPA中，需要使用@ManyToMany注解和@JoinTable注解配合使用。</p>
+<p>为了创建多对多的测试环境，需要创建一个Teacher实体类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Table(name = &quot;TEACHER&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Teacher</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;ID&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;NAME&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ManyToMany(mappedBy = &quot;teachers&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;User&gt; users;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Teacher中，由于也包含User的集合，所以Teacher与User是双向关联，在Teacher中使用@ManyToMany(mappedBy)注解申明User类为双方关系的维护方，即删除User也会删除关联的Teacher和关系表中的数据，但删除Teacher不会删除User表中的数据。</p>
+<p>User类中，需要加入@JoinTable和@ManyToMany注解：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 多对多</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@JsonIgnoreProperties(value = &#123; &quot;users&quot; &#125;)</span></span><br><span class="line">    <span class="meta">@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)</span></span><br><span class="line">    <span class="meta">@JoinTable(</span></span><br><span class="line"><span class="meta">            name = &quot;TEACHER_USER_RELATION&quot;,</span></span><br><span class="line"><span class="meta">            joinColumns = </span></span><br><span class="line"><span class="meta">            @JoinColumn(name = &quot;UserId&quot;,referencedColumnName = &quot;id&quot;),</span></span><br><span class="line"><span class="meta">            inverseJoinColumns = </span></span><br><span class="line"><span class="meta">            @JoinColumn(name = &quot;TeacherId&quot;,referencedColumnName = &quot;id&quot;)</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="keyword">private</span> Set&lt;Teacher&gt; teachers;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>@JoinTable中的name需要填写中间关系表的表明</strong></p>
+<p>joinColumns中的name和inverseJoinColumns中的name需要填关系表TEACHER_USER_RELATION的实体的字段名<br>如果关系表TEACHER_USER_RELATION的实体中的字段使用了@Column(name)，那么需要填写注解中指定的名字，即表字段名。<br>referencedColumnName填写的是本实体类中的关联的字段。</p>
+<h1 id="使用-OrderBy进行排序"><a href="#使用-OrderBy进行排序" class="headerlink" title="使用@OrderBy进行排序"></a>使用@OrderBy进行排序</h1><p>在一对多或者多对多映射中，如果想要对得到的集合进行排序，可以使用@OrderBy注解，@OrderBy中只需要指定想要排序的字段以及排序的方向即可：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 一对多</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@OneToMany(cascade = &#123;CascadeType.ALL&#125;,fetch = FetchType.LAZY)</span></span><br><span class="line">    <span class="meta">@JoinColumn(name = &quot;userId&quot;,referencedColumnName = &quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@OrderBy(&quot;friend_id DESC&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Set&lt;UserFriend&gt; userFriends;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，Set中的UserFriend会使用Friend进行倒序排序。</p>
+<p>值得注意的是，即使用Set集合也可以保证有序性，在Hibernate内部使用了自定义集合PersistentSet，此集合是有序集合。</p>
+<h1 id="mappedBy元素说明"><a href="#mappedBy元素说明" class="headerlink" title="mappedBy元素说明"></a>mappedBy元素说明</h1><p>@OneToOne、@OneToMany、@ManyToMany中可以使用mappedBy元素定义被关联着和关联着的关系由谁去维护，即关系的操纵权在那一方，同时<strong>mappedBy不能和@JoinTable、@JoinColumn注解同时存使用</strong>。</p>
+<h1 id="使用-EntityGraph和-NamedEntityGraph解决N-1问题"><a href="#使用-EntityGraph和-NamedEntityGraph解决N-1问题" class="headerlink" title="使用@EntityGraph和@NamedEntityGraph解决N+1问题"></a>使用@EntityGraph和@NamedEntityGraph解决N+1问题</h1><p>在常规的多对多和一对多查询时，会面临N+1问题：<br>N+1问题指的是，如果一个User对应N个Friend，在查询某id的User时，会首先执行一条SQL语句查询该User，然后会执行N条SQL语句查询该User对应的N个Friend,过程中一共使用了N+1条语句，效率会非常低下，正确的做法是使用内连接和外链接，只需要一条语句。</p>
+<p>Spring Data JPA中针对N+1问题有相应的优化，使用@EntityGraph和@NamedEntityGraph就可以解决N+1问题。</p>
+<p>首先需要在User实体类上使用@NamedEntityGraph注解：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;USER&quot;)</span></span><br><span class="line"><span class="meta">@NamedEntityGraph(</span></span><br><span class="line"><span class="meta">        name = &quot;UserEntity&quot;,</span></span><br><span class="line"><span class="meta">        attributeNodes = &#123;</span></span><br><span class="line"><span class="meta">                @NamedAttributeNode(&quot;userDetail&quot;),</span></span><br><span class="line"><span class="meta">                @NamedAttributeNode(&quot;userFriends&quot;),</span></span><br><span class="line"><span class="meta">                @NamedAttributeNode(&quot;teachers&quot;),</span></span><br><span class="line"><span class="meta">        &#125;</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，name可以随便定义，在@EntityGraph中会对其进行引用，@NamedAttributeNode中的value元素即为需要解决N+1问题的字段。</p>
+<p>在Repository中，对需要解决N+1问题的方法上使用的@EntityGraph注解就可以了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserJpaRepository</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">User</span>,<span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">   <span class="meta">@EntityGraph(&quot;UserEntity&quot;)</span></span><br><span class="line">   <span class="function">List&lt;User&gt; <span class="title">findByNameContaining</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注解中的value是@NamedEntityGraph定义的name。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2019/06/20/Spring-Data-JPA%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2019-06-22 19:10:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Spring/" title="Spring">
+                        <b>#</b> Spring
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Spring-Data-JPA/" title="Spring Data JPA">
+                        <b>#</b> Spring Data JPA
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2020/05/06/Docker%E4%B8%AD%E6%90%AD%E5%BB%BAMysql%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%95%E5%90%91%E5%85%B3%E8%81%94%E5%92%8C%E5%8F%8C%E5%90%91%E5%85%B3%E8%81%94"><span class="toc-text">单向关联和双向关联</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E5%85%B3%E8%81%94%E4%B8%AD%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%AD%BB%E5%BE%AA%E7%8E%AF%E9%97%AE%E9%A2%98"><span class="toc-text">双向关联中序列化的死循环问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80"><span class="toc-text">一对一</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A"><span class="toc-text">一对多</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E5%AF%B9%E5%A4%9A"><span class="toc-text">多对多</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-OrderBy%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="toc-text">使用@OrderBy进行排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mappedBy%E5%85%83%E7%B4%A0%E8%AF%B4%E6%98%8E"><span class="toc-text">mappedBy元素说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-EntityGraph%E5%92%8C-NamedEntityGraph%E8%A7%A3%E5%86%B3N-1%E9%97%AE%E9%A2%98"><span class="toc-text">使用@EntityGraph和@NamedEntityGraph解决N+1问题</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Spring%20Data%20JPA%E4%B8%AD%E7%9A%84%E4%B8%80%E5%AF%B9%E4%B8%80%EF%BC%8C%E4%B8%80%E5%AF%B9%E5%A4%9A%EF%BC%8C%E5%A4%9A%E5%AF%B9%E5%A4%9A%E6%9F%A5%E8%AF%A2 + '&url=' + https%3A%2F%2Fsuper-aviator.github.io%2F2019%2F06%2F22%2FSpring-Data-JPA%25E4%25B8%25AD%25E7%259A%2584%25E4%25B8%2580%25E5%25AF%25B9%25E4%25B8%2580%25EF%25BC%258C%25E4%25B8%2580%25E5%25AF%25B9%25E5%25A4%259A%25EF%25BC%258C%25E5%25A4%259A%25E5%25AF%25B9%25E5%25A4%259A%25E6%259F%25A5%25E8%25AF%25A2%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://super-aviator.github.io/2019/06/22/Spring-Data-JPA%E4%B8%AD%E7%9A%84%E4%B8%80%E5%AF%B9%E4%B8%80%EF%BC%8C%E4%B8%80%E5%AF%B9%E5%A4%9A%EF%BC%8C%E5%A4%9A%E5%AF%B9%E5%A4%9A%E6%9F%A5%E8%AF%A2/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
