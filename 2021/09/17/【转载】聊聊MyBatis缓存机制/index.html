@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="熊乾坤" />
+  <meta name="description" content="爱坤坤|爱生活" />
+  
+  
+  <title>
+    
+      【转载】聊聊MyBatis缓存机制 
+      
+      
+      |
+    
+     孤独飞行员
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.ico">
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/favicon.ico" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">孤独飞行员</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Links</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">【转载】聊聊MyBatis缓存机制</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2021-09-17 16:06:12
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/MyBatis/" title="MyBatis">
+                    <b>#</b> MyBatis
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>MyBatis是常见的Java数据库访问层框架。在日常工作中，开发人员多数情况下是使用MyBatis的默认缓存配置，但是MyBatis缓存机制有一些不足之处，在使用中容易引起脏数据，形成一些潜在的隐患。个人在业务开发中也处理过一些由于MyBatis缓存引发的开发问题，带着个人的兴趣，希望从应用及源码的角度为读者梳理MyBatis缓存机制。</p>
+<span id="more"></span>
+
+<p>本次分析中涉及到的代码和数据库表均放在GitHub上，地址： <a target="_blank" rel="noopener" href="https://github.com/kailuncen/mybatis-cache-demo">mybatis-cache-demo</a></p>
+<p><strong>原文链接：</strong> <a target="_blank" rel="noopener" href="https://tech.meituan.com/2018/01/19/mybatis-cache.html">聊聊MyBatis缓存机制</a></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>本文按照以下顺序展开</p>
+<ul>
+<li>一级缓存介绍及相关配置</li>
+<li>一级缓存工作流程及源码分析</li>
+<li>一级缓存总结</li>
+<li>二级缓存介绍及相关配置</li>
+<li>二级缓存源码分析</li>
+<li>二级缓存总结</li>
+<li>全文总结</li>
+</ul>
+<h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><h3 id="一级缓存介绍"><a href="#一级缓存介绍" class="headerlink" title="一级缓存介绍"></a>一级缓存介绍</h3><p>在应用运行过程中，我们有可能在一次数据库会话中，执行多次查询条件完全相同的SQL，MyBatis提供了一级缓存的方案优化这部分场景，如果是相同的SQL语句，会优先命中一级缓存，避免直接对数据库进行查询，提高性能。具体执行过程如下图所示：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/6e38df6a.jpg"></p>
+<p>每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成<code>MappedStatement</code>，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入<code>Local Cache</code>，最后返回结果给用户。具体实现类的类关系图如下图所示。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/d76ec5fe.jpg"><br>hljs</p>
+<h3 id="一级缓存配置"><a href="#一级缓存配置" class="headerlink" title="一级缓存配置"></a>一级缓存配置</h3><p>我们来看看如何使用MyBatis一级缓存。开发者只需在MyBatis的配置文件中，添加如下语句，就可以使用一级缓存。共有两个选项，<code>SESSION</code>或者<code>STATEMENT</code>，默认是<code>SESSION</code>级别，即在一个MyBatis会话中执行的所有语句，都会共享这一个缓存。一种是<code>STATEMENT</code>级别，可以理解为缓存只对当前执行的这一个<code>Statement</code>有效。</p>
+<figure class="highlight xml"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">&quot;localCacheScope&quot;</span> <span class="attr">value</span>=<span class="string">&quot;SESSION&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="一级缓存实验"><a href="#一级缓存实验" class="headerlink" title="一级缓存实验"></a>一级缓存实验</h3><p>接下来通过实验，了解MyBatis一级缓存的效果，每个单元测试后都请恢复被修改的数据。</p>
+<p><strong>注意：</strong> 在未开启事务时，每次查询Spring关闭旧的SqlSesstion，创建一个新的SqlSesstion对象，一级缓存不起作用，而开启事务时，Spring使用ThreadLocal获取当前资源绑定的同一个SqlSesstion，一级缓存起作用。</p>
+<p>首先是创建示例表student，创建对应的POJO类和增改的方法，具体可以在entity包和mapper包中查看：</p>
+<figure class="highlight sql"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) unsigned <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">200</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `age` tinyint(<span class="number">3</span>) unsigned <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">4</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8_bin;</span><br></pre></td></tr></table></figure>
+
+<p>在以下实验中，id为1的学生名称是凯伦。</p>
+<h4 id="实验1"><a href="#实验1" class="headerlink" title="实验1"></a>实验1</h4><p>开启一级缓存，范围为会话级别，调用三次<code>getStudentById</code>，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getStudentById</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession = factory.openSession(<span class="keyword">true</span>); <span class="comment">// 自动提交事务</span></span><br><span class="line">        StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);</span><br><span class="line">        System.out.println(studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/9e996384.jpg"></p>
+<p>我们可以看到，只有第一次真正查询了数据库，后续的查询使用了一级缓存。</p>
+<h4 id="实验2"><a href="#实验2" class="headerlink" title="实验2"></a>实验2</h4><p>增加了对数据库的修改操作，验证在一次数据库会话中，如果对数据库发生了修改操作，一级缓存是否会失效。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addStudent</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession = factory.openSession(<span class="keyword">true</span>); <span class="comment">// 自动提交事务</span></span><br><span class="line">        StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);</span><br><span class="line">        System.out.println(studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;增加了&quot;</span> + studentMapper.addStudent(buildStudent()) + <span class="string">&quot;个学生&quot;</span>);</span><br><span class="line">        System.out.println(studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        sqlSession.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/fb6a78e0.jpg"></p>
+<p>我们可以看到，在修改操作后执行的相同查询，查询了数据库，<strong>一级缓存失效</strong>。</p>
+<h4 id="实验3"><a href="#实验3" class="headerlink" title="实验3"></a>实验3</h4><p>开启两个<code>SqlSession</code>，在<code>sqlSession1</code>中查询数据，使一级缓存生效，在<code>sqlSession2</code>中更新数据库，验证一级缓存只在数据库会话内部共享。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLocalCacheScope</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession1 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession2 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line"></span><br><span class="line">        StudentMapper studentMapper = sqlSession1.getMapper(StudentMapper.class);</span><br><span class="line">        StudentMapper studentMapper2 = sqlSession2.getMapper(StudentMapper.class);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2更新了&quot;</span> + studentMapper2.updateStudentName(<span class="string">&quot;小岑&quot;</span>,<span class="number">1</span>) + <span class="string">&quot;个学生的数据&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentById(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/f480ac76.jpg"></p>
+<p><code>sqlSession2</code>更新了id为1的学生的姓名，从凯伦改为了小岑，但session1之后的查询中，id为1的学生的名字还是凯伦，出现了脏数据，也证明了之前的设想，一级缓存只在数据库会话内部共享。</p>
+<h3 id="一级缓存工作流程-amp-源码分析"><a href="#一级缓存工作流程-amp-源码分析" class="headerlink" title="一级缓存工作流程&amp;源码分析"></a>一级缓存工作流程&amp;源码分析</h3><p>那么，一级缓存的工作流程是怎样的呢？我们从源码层面来学习一下。</p>
+<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><p>一级缓存执行的时序图，如下图所示。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/bb851700.png"></p>
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p>接下来将对MyBatis查询相关的核心类和一级缓存的源码进行走读。这对后面学习二级缓存也有帮助。</p>
+<p><strong>SqlSession</strong>： 对外提供了用户和数据库之间交互需要的所有方法，隐藏了底层的细节。默认实现类是<code>DefaultSqlSession</code>。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/ba96bc7f.jpg"></p>
+<p><strong>Executor</strong>： <code>SqlSession</code>向用户提供操作数据库的方法，但和数据库操作有关的职责都会委托给Executor。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/ef5e0eb3.jpg"></p>
+<p>如下图所示，Executor有若干个实现类，为Executor赋予了不同的能力，大家可以根据类名，自行学习每个类的基本作用。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/83326eb3.jpg"></p>
+<p>在一级缓存的源码分析中，主要学习<code>BaseExecutor</code>的内部实现。</p>
+<p><strong>BaseExecutor</strong>： <code>BaseExecutor</code>是一个实现了Executor接口的抽象类，定义若干抽象方法，在执行的时候，把具体的操作委托给子类进行执行。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">doUpdate</span><span class="params">(MappedStatement ms, Object parameter)</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> List&lt;BatchResult&gt; <span class="title">doFlushStatements</span><span class="params">(<span class="keyword">boolean</span> isRollback)</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">abstract</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">doQuery</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">abstract</span> &lt;E&gt; <span class="function">Cursor&lt;E&gt; <span class="title">doQueryCursor</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException</span>;</span><br></pre></td></tr></table></figure>
+
+<p>在一级缓存的介绍中提到对<code>Local Cache</code>的查询和写入是在<code>Executor</code>内部完成的。在阅读<code>BaseExecutor</code>的代码后发现<code>Local Cache</code>是<code>BaseExecutor</code>内部的一个成员变量，如下代码所示。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line"><span class="keyword">protected</span> ConcurrentLinkedQueue&lt;DeferredLoad&gt; deferredLoads;</span><br><span class="line"><span class="keyword">protected</span> PerpetualCache localCache;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Cache</strong>： MyBatis中的Cache接口，提供了和缓存相关的最基本的操作，如下图所示：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/793031d0.jpg"></p>
+<p>有若干个实现类，使用装饰器模式互相组装，提供丰富的操控缓存的能力，部分实现类如下图所示：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/cdb21712.jpg"></p>
+<p><code>BaseExecutor</code>成员变量之一的<code>PerpetualCache</code>，是对Cache接口最基本的实现，其实现非常简单，内部持有HashMap，对一级缓存的操作实则是对HashMap的操作。如下代码所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PerpetualCache</span> <span class="keyword">implements</span> <span class="title">Cache</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String id;</span><br><span class="line">  <span class="keyword">private</span> Map&lt;Object, Object&gt; cache = <span class="keyword">new</span> HashMap&lt;Object, Object&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>在阅读相关核心类代码后，从源代码层面对一级缓存工作中涉及到的相关代码，出于篇幅的考虑，对源码做适当删减，读者朋友可以结合本文，后续进行更详细的学习。</p>
+<p>为执行和数据库的交互，首先需要初始化<code>SqlSession</code>，通过<code>DefaultSqlSessionFactory</code>开启<code>SqlSession</code>：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> SqlSession <span class="title">openSessionFromDataSource</span><span class="params">(ExecutorType execType, TransactionIsolationLevel level, <span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">    ............</span><br><span class="line">    <span class="keyword">final</span> Executor executor = configuration.newExecutor(tx, execType);     </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DefaultSqlSession(configuration, executor, autoCommit);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在初始化<code>SqlSesion</code>时，会使用<code>Configuration</code>类创建一个全新的<code>Executor</code>，作为<code>DefaultSqlSession</code>构造函数的参数，创建Executor代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Executor <span class="title">newExecutor</span><span class="params">(Transaction transaction, ExecutorType executorType)</span> </span>&#123;</span><br><span class="line">    executorType = executorType == <span class="keyword">null</span> ? defaultExecutorType : executorType;</span><br><span class="line">    executorType = executorType == <span class="keyword">null</span> ? ExecutorType.SIMPLE : executorType;</span><br><span class="line">    Executor executor;</span><br><span class="line">    <span class="keyword">if</span> (ExecutorType.BATCH == executorType) &#123;</span><br><span class="line">      executor = <span class="keyword">new</span> BatchExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ExecutorType.REUSE == executorType) &#123;</span><br><span class="line">      executor = <span class="keyword">new</span> ReuseExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      executor = <span class="keyword">new</span> SimpleExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 尤其可以注意这里，如果二级缓存开关开启的话，是使用CahingExecutor装饰BaseExecutor的子类</span></span><br><span class="line">    <span class="keyword">if</span> (cacheEnabled) &#123;</span><br><span class="line">      executor = <span class="keyword">new</span> CachingExecutor(executor);                      </span><br><span class="line">    &#125;</span><br><span class="line">    executor = (Executor) interceptorChain.pluginAll(executor);</span><br><span class="line">    <span class="keyword">return</span> executor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>SqlSession</code>创建完毕后，根据Statment的不同类型，会进入<code>SqlSession</code>的不同方法中，如果是<code>Select</code>语句的话，最后会执行到<code>SqlSession</code>的<code>selectList</code>，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">selectList</span><span class="params">(String statement, Object parameter, RowBounds rowBounds)</span> </span>&#123;</span><br><span class="line">      MappedStatement ms = configuration.getMappedStatement(statement);</span><br><span class="line">      <span class="keyword">return</span> executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>SqlSession</code>把具体的查询职责委托给了Executor。如果只开启了一级缓存的话，首先会进入<code>BaseExecutor</code>的<code>query</code>方法。代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">query</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    BoundSql boundSql = ms.getBoundSql(parameter);</span><br><span class="line">    CacheKey key = createCacheKey(ms, parameter, rowBounds, boundSql);</span><br><span class="line">    <span class="keyword">return</span> query(ms, parameter, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上述代码中，会先根据传入的参数生成CacheKey，进入该方法查看CacheKey是如何生成的，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line">CacheKey cacheKey = <span class="keyword">new</span> CacheKey();</span><br><span class="line">cacheKey.update(ms.getId());</span><br><span class="line">cacheKey.update(rowBounds.getOffset());</span><br><span class="line">cacheKey.update(rowBounds.getLimit());</span><br><span class="line">cacheKey.update(boundSql.getSql());</span><br><span class="line"><span class="comment">//后面是update了sql中带的参数</span></span><br><span class="line">cacheKey.update(value);</span><br></pre></td></tr></table></figure>
+
+<p>在上述的代码中，将<code>MappedStatement</code>的Id、SQL的offset、SQL的limit、SQL本身以及SQL中的参数传入了CacheKey这个类，最终构成CacheKey。以下是这个类的内部结构：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_MULTIPLYER = <span class="number">37</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_HASHCODE = <span class="number">17</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> multiplier;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> hashcode;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">long</span> checksum;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line"><span class="keyword">private</span> List&lt;Object&gt; updateList;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CacheKey</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.hashcode = DEFAULT_HASHCODE;</span><br><span class="line">    <span class="keyword">this</span>.multiplier = DEFAULT_MULTIPLYER;</span><br><span class="line">    <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">this</span>.updateList = <span class="keyword">new</span> ArrayList&lt;Object&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先是成员变量和构造函数，有一个初始的<code>hachcode</code>和乘数，同时维护了一个内部的<code>updatelist</code>。在<code>CacheKey</code>的<code>update</code>方法中，会进行一个<code>hashcode</code>和<code>checksum</code>的计算，同时把传入的参数添加进<code>updatelist</code>中。如下代码所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> baseHashCode = object == <span class="keyword">null</span> ? <span class="number">1</span> : ArrayUtil.hashCode(object); </span><br><span class="line">    count++;</span><br><span class="line">    checksum += baseHashCode;</span><br><span class="line">    baseHashCode *= count;</span><br><span class="line">    hashcode = multiplier * hashcode + baseHashCode;</span><br><span class="line">    </span><br><span class="line">    updateList.add(object);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同时重写了<code>CacheKey</code>的<code>equals</code>方法，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">    .............</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; updateList.size(); i++) &#123;</span><br><span class="line">      Object thisObject = updateList.get(i);</span><br><span class="line">      Object thatObject = cacheKey.updateList.get(i);</span><br><span class="line">      <span class="keyword">if</span> (!ArrayUtil.equals(thisObject, thatObject)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>除去hashcode、checksum和count的比较外，只要updatelist中的元素一一对应相等，那么就可以认为是CacheKey相等。只要两条SQL的下列五个值相同，即可以认为是相同的SQL。</p>
+<blockquote>
+<p>Statement Id + Offset + Limmit + Sql + Params</p>
+</blockquote>
+<p>BaseExecutor的query方法继续往下走，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line">list = resultHandler == <span class="keyword">null</span> ? (List&lt;E&gt;) localCache.getObject(key) : <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 这个主要是处理存储过程用的。</span></span><br><span class="line">    handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果查不到的话，就从数据库查，在<code>queryFromDatabase</code>中，会对<code>localcache</code>进行写入。</p>
+<p>在<code>query</code>方法执行的最后，会判断一级缓存级别是否是<code>STATEMENT</code>级别，如果是的话，就清空缓存，这也就是<code>STATEMENT</code>级别的一级缓存无法共享<code>localCache</code>的原因。代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) &#123;</span><br><span class="line">        clearLocalCache();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在源码分析的最后，我们确认一下，如果是<code>insert/delete/update</code>方法，缓存就会刷新的原因。</p>
+<p><code>SqlSession</code>的<code>insert</code>方法和<code>delete</code>方法，都会统一走<code>update</code>的流程，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">insert</span><span class="params">(String statement, Object parameter)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> update(statement, parameter);</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delete</span><span class="params">(String statement)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> update(statement, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>update</code>方法也是委托给了<code>Executor</code>执行。<code>BaseExecutor</code>的执行方法如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">update</span><span class="params">(MappedStatement ms, Object parameter)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    ErrorContext.instance().resource(ms.getResource()).activity(<span class="string">&quot;executing an update&quot;</span>).object(ms.getId());</span><br><span class="line">    <span class="keyword">if</span> (closed) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ExecutorException(<span class="string">&quot;Executor was closed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    clearLocalCache();</span><br><span class="line">    <span class="keyword">return</span> doUpdate(ms, parameter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每次执行<code>update</code>前都会清空<code>localCache</code>。</p>
+<p>至此，一级缓存的工作流程讲解以及源码分析完毕。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>MyBatis一级缓存的生命周期和SqlSession一致。</li>
+<li>MyBatis一级缓存内部设计简单，只是一个没有容量限定的HashMap，在缓存的功能性上有所欠缺。</li>
+<li>MyBatis的一级缓存最大范围是SqlSession内部，有多个SqlSession或者分布式的环境下，数据库写操作会引起脏数据，建议设定缓存级别为Statement。</li>
+</ol>
+<h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h2><h3 id="二级缓存介绍"><a href="#二级缓存介绍" class="headerlink" title="二级缓存介绍"></a>二级缓存介绍</h3><p>在上文中提到的一级缓存中，其最大的共享范围就是一个SqlSession内部，如果多个SqlSession之间需要共享缓存，则需要使用到二级缓存。开启二级缓存后，会使用CachingExecutor装饰Executor，进入一级缓存的查询流程前，先在CachingExecutor进行二级缓存的查询，具体的工作流程如下所示。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/28399eba.png"></p>
+<p>二级缓存开启后，同一个namespace下的所有操作语句，都影响着同一个Cache，即二级缓存被多个SqlSession共享，是一个全局的变量。</p>
+<p>当开启缓存后，数据的查询执行的流程就是 二级缓存 -&gt; 一级缓存 -&gt; 数据库。</p>
+<h3 id="二级缓存配置"><a href="#二级缓存配置" class="headerlink" title="二级缓存配置"></a>二级缓存配置</h3><p>要正确的使用二级缓存，需完成如下配置的。</p>
+<ol>
+<li>在MyBatis的配置文件中开启二级缓存。</li>
+</ol>
+<figure class="highlight xml"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">&quot;cacheEnabled&quot;</span> <span class="attr">value</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>在MyBatis的映射XML中配置cache或者 cache-ref 。</li>
+</ol>
+<p>cache标签用于声明这个namespace使用二级缓存，并且可以自定义配置。</p>
+<figure class="highlight xml"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">cache</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>type</code>：cache使用的类型，默认是<code>PerpetualCache</code>，这在一级缓存中提到过。</li>
+<li><code>eviction</code>： 定义回收的策略，常见的有FIFO，LRU。</li>
+<li><code>flushInterval</code>： 配置一定时间自动刷新缓存，单位是毫秒。</li>
+<li><code>size</code>： 最多缓存对象的个数。</li>
+<li><code>readOnly</code>： 是否只读，若配置可读写，则需要对应的实体类能够序列化。</li>
+<li><code>blocking</code>： 若缓存中找不到对应的key，是否会一直blocking，直到有对应的数据进入缓存。</li>
+</ul>
+<p><code>cache-ref</code>代表引用别的命名空间的Cache配置，两个命名空间的操作使用的是同一个Cache。</p>
+<figure class="highlight xml"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">cache-ref</span> <span class="attr">namespace</span>=<span class="string">&quot;mapper.StudentMapper&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="二级缓存实验"><a href="#二级缓存实验" class="headerlink" title="二级缓存实验"></a>二级缓存实验</h3><p>接下来我们通过实验，了解MyBatis二级缓存在使用上的一些特点。</p>
+<p>在本实验中，id为1的学生名称初始化为点点。</p>
+<h4 id="实验1-1"><a href="#实验1-1" class="headerlink" title="实验1"></a>实验1</h4><p>测试二级缓存效果，不提交事务，<code>sqlSession1</code>查询完数据后，<code>sqlSession2</code>相同的查询是否会从缓存中获取数据。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCacheWithoutCommitOrClose</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession1 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession2 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        </span><br><span class="line">        StudentMapper studentMapper = sqlSession1.getMapper(StudentMapper.class);</span><br><span class="line">        StudentMapper studentMapper2 = sqlSession2.getMapper(StudentMapper.class);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentById(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/71e2bfdc.jpg"></p>
+<p>我们可以看到，当<code>sqlsession</code>没有调用<code>commit()</code>方法时，二级缓存并没有起到作用。</p>
+<h4 id="实验2-1"><a href="#实验2-1" class="headerlink" title="实验2"></a>实验2</h4><p>测试二级缓存效果，当提交事务时，<code>sqlSession1</code>查询完数据后，<code>sqlSession2</code>相同的查询是否会从缓存中获取数据。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCacheWithCommitOrClose</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession1 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession2 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        </span><br><span class="line">        StudentMapper studentMapper = sqlSession1.getMapper(StudentMapper.class);</span><br><span class="line">        StudentMapper studentMapper2 = sqlSession2.getMapper(StudentMapper.class);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        sqlSession1.commit();</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentById(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/f366f34e.jpg"></p>
+<p>从图上可知，<code>sqlsession2</code>的查询，使用了缓存，缓存的命中率是0.5。</p>
+<h4 id="实验3-1"><a href="#实验3-1" class="headerlink" title="实验3"></a>实验3</h4><p>测试<code>update</code>操作是否会刷新该<code>namespace</code>下的二级缓存。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCacheWithUpdate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession1 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession2 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession3 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        </span><br><span class="line">        StudentMapper studentMapper = sqlSession1.getMapper(StudentMapper.class);</span><br><span class="line">        StudentMapper studentMapper2 = sqlSession2.getMapper(StudentMapper.class);</span><br><span class="line">        StudentMapper studentMapper3 = sqlSession3.getMapper(StudentMapper.class);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentById(<span class="number">1</span>));</span><br><span class="line">        sqlSession1.commit();</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentById(<span class="number">1</span>));</span><br><span class="line">        </span><br><span class="line">        studentMapper3.updateStudentName(<span class="string">&quot;方方&quot;</span>,<span class="number">1</span>);</span><br><span class="line">        sqlSession3.commit();</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentById(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/3ad93c3a.jpg"></p>
+<p>我们可以看到，在<code>sqlSession3</code>更新数据库，并提交事务后，<code>sqlsession2</code>的<code>StudentMapper namespace</code>下的查询走了数据库，没有走Cache。</p>
+<h4 id="实验4"><a href="#实验4" class="headerlink" title="实验4"></a>实验4</h4><p>验证MyBatis的二级缓存不适应用于映射文件中存在多表查询的情况。</p>
+<p>通常我们会为每个单表创建单独的映射文件，由于MyBatis的二级缓存是基于<code>namespace</code>的，多表查询语句所在的<code>namspace</code>无法感应到其他<code>namespace</code>中的语句对多表查询中涉及的表进行的修改，引发脏数据问题。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCacheWithDiffererntNamespace</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession1 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession2 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">        SqlSession sqlSession3 = factory.openSession(<span class="keyword">true</span>); </span><br><span class="line">    </span><br><span class="line">        StudentMapper studentMapper = sqlSession1.getMapper(StudentMapper.class);</span><br><span class="line">        StudentMapper studentMapper2 = sqlSession2.getMapper(StudentMapper.class);</span><br><span class="line">        ClassMapper classMapper = sqlSession3.getMapper(ClassMapper.class);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper读取数据: &quot;</span> + studentMapper.getStudentByIdWithClassInfo(<span class="number">1</span>));</span><br><span class="line">        sqlSession1.close();</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentByIdWithClassInfo(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        classMapper.updateClassName(<span class="string">&quot;特色一班&quot;</span>,<span class="number">1</span>);</span><br><span class="line">        sqlSession3.commit();</span><br><span class="line">        System.out.println(<span class="string">&quot;studentMapper2读取数据: &quot;</span> + studentMapper2.getStudentByIdWithClassInfo(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/5265ed97.jpg"></p>
+<p>在这个实验中，我们引入了两张新的表，一张class，一张classroom。class中保存了班级的id和班级名，classroom中保存了班级id和学生id。我们在<code>StudentMapper</code>中增加了一个查询方法<code>getStudentByIdWithClassInfo</code>，用于查询学生所在的班级，涉及到多表查询。在<code>ClassMapper</code>中添加了<code>updateClassName</code>，根据班级id更新班级名的操作。</p>
+<p>当<code>sqlsession1</code>的<code>studentmapper</code>查询数据后，二级缓存生效。保存在StudentMapper的namespace下的cache中。当<code>sqlSession3</code>的<code>classMapper</code>的<code>updateClassName</code>方法对class表进行更新时，<code>updateClassName</code>不属于<code>StudentMapper</code>的<code>namespace</code>，所以<code>StudentMapper</code>下的cache没有感应到变化，没有刷新缓存。当<code>StudentMapper</code>中同样的查询再次发起时，从缓存中读取了脏数据。</p>
+<h4 id="实验5"><a href="#实验5" class="headerlink" title="实验5"></a>实验5</h4><p>为了解决实验4的问题呢，可以使用Cache ref，让<code>ClassMapper</code>引用<code>StudenMapper</code>命名空间，这样两个映射文件对应的SQL操作都使用的是同一块缓存了。</p>
+<p>执行结果：</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/a2e4c2d8.jpg"></p>
+<p>不过这样做的后果是，缓存的粒度变粗了，多个<code>Mapper namespace</code>下的所有操作都会对缓存使用造成影响。</p>
+<h3 id="二级缓存源码分析"><a href="#二级缓存源码分析" class="headerlink" title="二级缓存源码分析"></a>二级缓存源码分析</h3><p>MyBatis二级缓存的工作流程和前文提到的一级缓存类似，只是在一级缓存处理前，用<code>CachingExecutor</code>装饰了<code>BaseExecutor</code>的子类，在委托具体职责给<code>delegate</code>之前，实现了二级缓存的查询和写入功能，具体类关系图如下图所示。</p>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/090216b1.jpg"></p>
+<h4 id="源码分析-1"><a href="#源码分析-1" class="headerlink" title="源码分析"></a>源码分析</h4><p>源码分析从<code>CachingExecutor</code>的<code>query</code>方法展开，源代码走读过程中涉及到的知识点较多，不能一一详细讲解，读者朋友可以自行查询相关资料来学习。</p>
+<p><code>CachingExecutor</code>的<code>query</code>方法，首先会从<code>MappedStatement</code>中获得在配置初始化时赋予的Cache。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line">Cache cache = ms.getCache();</span><br></pre></td></tr></table></figure>
+
+<p>本质上是装饰器模式的使用，具体的装饰链是：</p>
+<blockquote>
+<p>SynchronizedCache -&gt; LoggingCache -&gt; SerializedCache -&gt; LruCache -&gt; PerpetualCache。</p>
+</blockquote>
+<p><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018a/1f5233b2.jpg"></p>
+<p>以下是具体这些Cache实现类的介绍，他们的组合为Cache赋予了不同的能力。</p>
+<ul>
+<li><code>SynchronizedCache</code>：同步Cache，实现比较简单，直接使用synchronized修饰方法。</li>
+<li><code>LoggingCache</code>：日志功能，装饰类，用于记录缓存的命中率，如果开启了DEBUG模式，则会输出命中率日志。</li>
+<li><code>SerializedCache</code>：序列化功能，将值序列化后存到缓存中。该功能用于缓存返回一份实例的Copy，用于保存线程安全。</li>
+<li><code>LruCache</code>：采用了Lru算法的Cache实现，移除最近最少使用的Key/Value。</li>
+<li><code>PerpetualCache</code>： 作为为最基础的缓存类，底层实现比较简单，直接使用了HashMap。</li>
+</ul>
+<p>然后是判断是否需要刷新缓存，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line">flushCacheIfRequired(ms);</span><br></pre></td></tr></table></figure>
+
+<p>在默认的设置中<code>SELECT</code>语句不会刷新缓存，<code>insert/update/delte</code>会刷新缓存。进入该方法。代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flushCacheIfRequired</span><span class="params">(MappedStatement ms)</span> </span>&#123;</span><br><span class="line">    Cache cache = ms.getCache();</span><br><span class="line">    <span class="keyword">if</span> (cache != <span class="keyword">null</span> &amp;&amp; ms.isFlushCacheRequired()) &#123;      </span><br><span class="line">      tcm.clear(cache);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>MyBatis的<code>CachingExecutor</code>持有了<code>TransactionalCacheManager</code>，即上述代码中的tcm。</p>
+<p><code>TransactionalCacheManager</code>中持有了一个Map，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> Map&lt;Cache, TransactionalCache&gt; transactionalCaches = <span class="keyword">new</span> HashMap&lt;Cache, TransactionalCache&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>这个Map保存了Cache和用<code>TransactionalCache</code>包装后的Cache的映射关系。</p>
+<p><code>TransactionalCache</code>实现了Cache接口，<code>CachingExecutor</code>会默认使用他包装初始生成的Cache，作用是如果事务提交，对缓存的操作才会生效，如果事务回滚或者不提交事务，则不对缓存产生影响。</p>
+<p>在<code>TransactionalCache</code>的clear，有以下两句。清空了需要在提交时加入缓存的列表，同时设定提交时清空缓存，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	clearOnCommit = <span class="keyword">true</span>;</span><br><span class="line">	entriesToAddOnCommit.clear();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>CachingExecutor</code>继续往下走，<code>ensureNoOutParams</code>主要是用来处理存储过程的，暂时不用考虑。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (ms.isUseCache() &amp;&amp; resultHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">	ensureNoOutParams(ms, parameterObject, boundSql);</span><br></pre></td></tr></table></figure>
+
+<p>之后会尝试从tcm中获取缓存的列表。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line">List&lt;E&gt; list = (List&lt;E&gt;) tcm.getObject(cache, key);</span><br></pre></td></tr></table></figure>
+
+<p>在<code>getObject</code>方法中，会把获取值的职责一路传递，最终到<code>PerpetualCache</code>。如果没有查到，会把key加入Miss集合，这个主要是为了统计命中率。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line">Object object = delegate.getObject(key);</span><br><span class="line"><span class="keyword">if</span> (object == <span class="keyword">null</span>) &#123;</span><br><span class="line">	entriesMissedInCache.add(key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>CachingExecutor</code>继续往下走，如果查询到数据，则调用<code>tcm.putObject</code>方法，往缓存中放入值。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">	list = delegate.&lt;E&gt; query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">	tcm.putObject(cache, key, list); <span class="comment">// issue #578 and #116</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>tcm的<code>put</code>方法也不是直接操作缓存，只是在把这次的数据和key放入待提交的Map中。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putObject</span><span class="params">(Object key, Object object)</span> </span>&#123;</span><br><span class="line">    entriesToAddOnCommit.put(key, object);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从以上的代码分析中，我们可以明白，如果不调用<code>commit</code>方法的话，由于<code>TranscationalCache</code>的作用，并不会对二级缓存造成直接的影响。因此我们看看<code>Sqlsession</code>的<code>commit</code>方法中做了什么。代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">commit</span><span class="params">(<span class="keyword">boolean</span> force)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      executor.commit(isCommitOrRollbackRequired(force));</span><br></pre></td></tr></table></figure>
+
+<p>因为我们使用了CachingExecutor，首先会进入CachingExecutor实现的commit方法。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">commit</span><span class="params">(<span class="keyword">boolean</span> required)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    delegate.commit(required);</span><br><span class="line">    tcm.commit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会把具体commit的职责委托给包装的<code>Executor</code>。主要是看下<code>tcm.commit()</code>，tcm最终又会调用到<code>TrancationalCache</code>。</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">commit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (clearOnCommit) &#123;</span><br><span class="line">      delegate.clear();</span><br><span class="line">    &#125;</span><br><span class="line">    flushPendingEntries();</span><br><span class="line">    reset();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看到这里的<code>clearOnCommit</code>就想起刚才<code>TrancationalCache</code>的<code>clear</code>方法设置的标志位，真正的清理Cache是放到这里来进行的。具体清理的职责委托给了包装的Cache类。之后进入<code>flushPendingEntries</code>方法。代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flushPendingEntries</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;Object, Object&gt; entry : entriesToAddOnCommit.entrySet()) &#123;</span><br><span class="line">      delegate.putObject(entry.getKey(), entry.getValue());</span><br><span class="line">    &#125;</span><br><span class="line">    ................</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>flushPending</code>Entries中，将待提交的Map进行循环处理，委托给包装的Cache类，进行<code>putObject</code>的操作。</p>
+<p>后续的查询操作会重复执行这套流程。如果是<code>insert|update|delete</code>的话，会统一进入<code>CachingExecutor</code>的<code>update</code>方法，其中调用了这个函数，代码如下所示：</p>
+<figure class="highlight java"><figcaption><span>hljs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flushCacheIfRequired</span><span class="params">(MappedStatement ms)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在二级缓存执行流程后就会进入一级缓存的执行流程，因此不再赘述。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>MyBatis的二级缓存相对于一级缓存来说，实现了<code>SqlSession</code>之间缓存数据的共享，同时粒度更加的细，能够到<code>namespace</code>级别，通过Cache接口实现类不同的组合，对Cache的可控性也更强。</li>
+<li>MyBatis在多表查询时，极大可能会出现脏数据，有设计上的缺陷，安全使用二级缓存的条件比较苛刻。</li>
+<li>在分布式环境下，由于默认的MyBatis Cache实现都是基于本地的，分布式环境下必然会出现读取到脏数据，需要使用集中式缓存将MyBatis的Cache接口实现，有一定的开发成本，直接使用Redis、Memcached等分布式缓存可能成本更低，安全性也更高。</li>
+</ol>
+<h2 id="全文总结"><a href="#全文总结" class="headerlink" title="全文总结"></a>全文总结</h2><p>本文对介绍了MyBatis一二级缓存的基本概念，并从应用及源码的角度对MyBatis的缓存机制进行了分析。最后对MyBatis缓存机制做了一定的总结，个人建议MyBatis缓存特性在生产环境中进行关闭，单纯作为一个ORM框架使用可能更为合适。</p>
+<h2 id="作者简介"><a href="#作者简介" class="headerlink" title="作者简介"></a>作者简介</h2><ul>
+<li>凯伦，美团点评后端研发工程师，2016年毕业于上海海事大学，现从事美团点评餐饮平台相关的开发工作。</li>
+</ul>
+<h2 id="招聘信息"><a href="#招聘信息" class="headerlink" title="招聘信息"></a>招聘信息</h2><p>美团点评点餐事业部期待你的加入，上海在招岗位：Java后台，数据开发，前端，QA，产品，产品运营，商业分析等。内推简历邮箱：weiyanping#meituan.com</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/08/16/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E6%BA%90/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2021-09-17 16:06:12
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/MyBatis/" title="MyBatis">
+                        <b>#</b> MyBatis
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/01/31/2022-01-31%20%E6%98%A5%E8%8A%82/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">一级缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E4%BB%8B%E7%BB%8D"><span class="toc-text">一级缓存介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-text">一级缓存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E5%AE%9E%E9%AA%8C"><span class="toc-text">一级缓存实验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C1"><span class="toc-text">实验1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C2"><span class="toc-text">实验2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C3"><span class="toc-text">实验3</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-amp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">一级缓存工作流程&amp;源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">二级缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E4%BB%8B%E7%BB%8D"><span class="toc-text">二级缓存介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-text">二级缓存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E5%AE%9E%E9%AA%8C"><span class="toc-text">二级缓存实验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C1-1"><span class="toc-text">实验1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C2-1"><span class="toc-text">实验2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C3-1"><span class="toc-text">实验3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C4"><span class="toc-text">实验4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C5"><span class="toc-text">实验5</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">二级缓存源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E6%96%87%E6%80%BB%E7%BB%93"><span class="toc-text">全文总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E8%80%85%E7%AE%80%E4%BB%8B"><span class="toc-text">作者简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF"><span class="toc-text">招聘信息</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E8%81%8A%E8%81%8AMyBatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6 + '&url=' + https%3A%2F%2Fsuper-aviator.github.io%2F2021%2F09%2F17%2F%25E3%2580%2590%25E8%25BD%25AC%25E8%25BD%25BD%25E3%2580%2591%25E8%2581%258A%25E8%2581%258AMyBatis%25E7%25BC%2593%25E5%25AD%2598%25E6%259C%25BA%25E5%2588%25B6%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://super-aviator.github.io/2021/09/17/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E8%81%8A%E8%81%8AMyBatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
